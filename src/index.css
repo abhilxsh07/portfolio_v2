@@ -1,0 +1,114 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    background: #0b0b0b;
+}
+
+/* ---------- Config ---------- */
+:root {
+    /* Layer 1 (fine) */
+    --sq1-size: 28px;
+    --sq1-color: rgba(0, 0, 0, 0.16);
+    --sq1-speed: 36s;
+
+    /* Layer 2 (coarse) */
+    --sq2-size: 52px;
+    --sq2-color: rgba(0, 0, 0, 0.28);
+    --sq2-speed: 90s;
+
+    /* Distance per loop (positive = down/right) */
+    --move-x: 640px;
+    --move-y: 640px;
+
+    /* Content offsets */
+    --content-top: 200px;
+    --content-left: 250px;
+}
+
+/* Full-page host */
+body.parallax-squares {
+    position: relative;
+    min-height: 100svh;
+}
+
+/* Two fixed layers behind content */
+.parallax-squares::before,
+.parallax-squares::after {
+    content: "";
+    position: fixed;
+    inset: -12%;
+    pointer-events: none;
+    z-index: 0;
+    background-repeat: repeat;
+    will-change: background-position;
+}
+
+/* Layer 1: finer, faster — axis-aligned checkerboard via conic-gradient */
+.parallax-squares::before {
+    opacity: 0.85;
+    background-image: conic-gradient(
+            at 50% 50%,
+            var(--sq1-color) 0 25%,
+            transparent 0 50%,
+            var(--sq1-color) 0 75%,
+            transparent 0 100%
+    );
+    background-size: var(--sq1-size) var(--sq1-size);
+    background-position: 0 0;
+    animation: squares-diag var(--sq1-speed) linear infinite;
+}
+
+/* Layer 2: larger, slower */
+.parallax-squares::after {
+    opacity: 0.95;
+    filter: blur(0.2px);
+    background-image: conic-gradient(
+            at 50% 50%,
+            var(--sq2-color) 0 25%,
+            transparent 0 50%,
+            var(--sq2-color) 0 75%,
+            transparent 0 100%
+    );
+    background-size: var(--sq2-size) var(--sq2-size);
+    background-position: 0 0;
+    animation: squares-diag var(--sq2-speed) linear infinite;
+}
+
+/* One keyframe for both layers */
+@keyframes squares-diag {
+    to {
+        background-position: var(--move-x) var(--move-y);
+    }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .parallax-squares::before,
+    .parallax-squares::after {
+        animation: none;
+    }
+}
+
+.page-content {
+    position: relative;
+    z-index: 1;
+}
+
+p.mainLine {
+    color: white;
+}
+
+p.introLine {
+    color: white;
+    font-size: 23px;
+}
+
+/* Content offsets */
+.page-content > nav + * {
+    margin-top: var(--content-top);
+}
+
+.page-content > nav ~ * {
+    margin-left: var(--content-left);
+}
