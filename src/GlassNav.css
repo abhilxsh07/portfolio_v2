@@ -1,9 +1,11 @@
 .glass-nav-wrapper {
     position: fixed;
     top: 1.5rem;
-    left: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 100;
 }
+
 
 .glass-nav {
     display: flex;
