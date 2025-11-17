@@ -1,9 +1,28 @@
 import Aurora from "./Aurora.jsx";
 import GlassNav from "./GlassNav.jsx";
 import RotatingText from "./rotatingText.jsx";
-import Plasma from "./Plasma";
+import Waves from "./waves.jsx";
+import BlurText from "./BlurText";
+import GradientText from "./GradientText";
+import FlowingMenu from "./FlowingMenu";
+import webDevImg from "./assets/webDev.png";
+import softwareImg from "./assets/software.png";
+import frameworkImg from "./assets/Frameworks.png";
+import frameworkImg2 from "./assets/Frameworks2.png";
+// demo items for FlowingMenu
+const demoItems = [
+    { link: "#", text: "HTML5 CSS3 JavaScript",   image: webDevImg },
+    { link: "#", text: "Python, C, C++",   image: softwareImg },
+    { link: "#", text: "React, BootStrap, Mongo, ", image: frameworkImg },
+    { link: "#", text: "MATLAB, NumPy, Node.js, Express",  image: frameworkImg2 }
+];
 
 function App() {
+    const handleAnimationComplete = () => {
+        // optional: do something when the BlurText animation finishes
+        // console.log("BlurText animation complete");
+    };
+
     return (
         <main className="page-content">
             <GlassNav />
@@ -17,43 +36,66 @@ function App() {
                 />
             </div>
 
-            {/* Centered hero card */}
+            {/* Centered hero block */}
             <div className="hero-center">
-                <div className="hero-card">
-                    {/* Plasma background filling the card */}
-                    <div className="hero-plasma-bg">
-                        <Plasma
-                            color="#ff6b35"
-                            speed={0.6}
-                            direction="forward"
-                            scale={1.1}
-                            opacity={0.8}
-                            mouseInteractive={true}
-                        />
+                {/* Inner wrapper so BlurText and hero card share the same left edge */}
+                <div className="hero-inner">
+                    <BlurText
+                        text="Hello. I'm Abhilash Kar."
+                        delay={750}
+                        animateBy="words"
+                        direction="top"
+                        onAnimationComplete={handleAnimationComplete}
+                        className="text-2xl mb-8"
+                    />
 
+                    <div className="hero-card">
+                        {/* Waves background filling the card */}
+                        <div className="hero-waves-bg">
+                            <Waves
+                                lineColor="#2e8b57"
+                                backgroundColor="rgba(255, 255, 255, 0.2)"
+                                waveSpeedX={0.02}
+                                waveSpeedY={0.01}
+                                waveAmpX={40}
+                                waveAmpY={20}
+                                friction={0.9}
+                                tension={0.01}
+                                maxCursorMove={120}
+                                xGap={12}
+                                yGap={36}
+                            />
+                        </div>
+
+                        {/* Foreground content */}
+                        <div className="hero-role">
+                            <span className="hero-prefix">I am a</span>
+
+                            <button type="button" className="btn btn-primary rotating-btn">
+                                <span className="rotating-text-wrapper">
+                                    <RotatingText
+                                        texts={["Full Stack Developer", "Software Developer", "API Engineer", "MERN Stack Developer", "Tech Enthusiast"]}
+                                        mainClassName="rotating-text-inner"
+                                        staggerFrom={"last"}
+                                        initial={{ y: "100%" }}
+                                        animate={{ y: 0 }}
+                                        exit={{ y: "-120%" }}
+                                        staggerDuration={0.025}
+                                        splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                                        transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                                        rotationInterval={2000}
+                                    />
+                                </span>
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    {/* Foreground content */}
-                    <div className="hero-role">
-                        <span className="hero-prefix">I am a</span>
-
-                        <button type="button" className="btn btn-primary rotating-btn">
-                            <span className="rotating-text-wrapper">
-                                <RotatingText
-                                    texts={["Web Developer", "Software Developer", "Backend Developer"]}
-                                    mainClassName="rotating-text-inner"
-                                    staggerFrom={"last"}
-                                    initial={{ y: "100%" }}
-                                    animate={{ y: 0 }}
-                                    exit={{ y: "-120%" }}
-                                    staggerDuration={0.025}
-                                    splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-                                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                                    rotationInterval={2000}
-                                />
-                            </span>
-                        </button>
-                    </div>
+            {/* Flowing menu below the hero-inner */}
+            <div className="flowing-menu-container">
+                <div style={{ height: "600px", position: "relative", width: "80%" }}>
+                    <FlowingMenu items={demoItems} />
                 </div>
             </div>
         </main>
