@@ -30,6 +30,7 @@ function App() {
                             opacity={0.8}
                             mouseInteractive={true}
                         />
+
                     </div>
 
                     {/* Foreground content */}
