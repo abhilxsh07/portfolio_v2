@@ -11,10 +11,10 @@ import frameworkImg from "./assets/Frameworks.png";
 import frameworkImg2 from "./assets/Frameworks2.png";
 // demo items for FlowingMenu
 const demoItems = [
-    { link: "#", text: "HTML5 CSS3 JavaScript",   image: webDevImg },
     { link: "#", text: "Python, C, C++",   image: softwareImg },
-    { link: "#", text: "React, BootStrap, Mongo, ", image: frameworkImg },
-    { link: "#", text: "MATLAB, NumPy, Node.js, Express",  image: frameworkImg2 }
+    { link: "#", text: "HTML5 CSS3 JavaScript",   image: webDevImg },
+    { link: "#", text: "Mongo, Express, React, Node ", image: frameworkImg },
+    { link: "#", text: "MATLAB, NumPy, Pandas, Django, Flask",  image: frameworkImg2 }
 ];
 
 function App() {
