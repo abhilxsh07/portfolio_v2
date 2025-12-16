@@ -1,0 +1,21 @@
+.scroll-reveal {
+    display: flex;
+    justify-content: center;
+    margin-top: 10rem;      /* more space above  */
+    margin-bottom: 7rem;   /* more space below */
+    color: #6f6fbe;
+}
+
+
+.scroll-reveal-text {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    line-height: 1.5;
+    font-weight: 600;
+    max-width: 1000px;
+
+    text-align: center;         /* was: justify */
+}
+
+.word {
+    display: inline-block;
+}

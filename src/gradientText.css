@@ -1,18 +1,4 @@
-.animated-gradient-text {
-    position: relative;
-    margin: 0 auto;
-    display: flex;
-    max-width: fit-content;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1.25rem;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
-    transition: box-shadow 0.5s ease-out;
-    overflow: hidden;
-    cursor: pointer;
-}
+
 
 .gradient-overlay {
     position: absolute;
@@ -56,6 +42,24 @@
     }
 }
 
+
+.animated-gradient-text {
+    position: relative;
+    margin: 5rem auto;        /* centers + vertical space above/below */
+    padding: 0.8rem 1.8rem;   /* some breathing room around text */
+    display: flex;
+    max-width: fit-content;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.25rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    transition: box-shadow 0.5s ease-out;
+    overflow: hidden;
+    cursor: pointer;
+}
+
 .text-content {
     display: inline-block;
     position: relative;
@@ -65,4 +69,6 @@
     -webkit-background-clip: text;
     color: transparent;
     animation: gradient linear infinite;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);  /* bigger font */
+    text-align: center;                     /* center multi-line text */
 }
