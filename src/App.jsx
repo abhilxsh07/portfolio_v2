@@ -14,6 +14,8 @@ import GradientText from './GradientText.jsx';
 import ColorBends from './ColorBends.jsx';
 import ChromaGrid from './ChromaGrid';
 import TextType from './TextType';
+import ContactMe from './ContactMe';
+
 
 const items = [
 
@@ -228,7 +230,10 @@ function App() {
                     ease="power3.out"
                 />
             </div>
-
+            <div className="spacemore">            </div>
+            <div className="contact-me-container">
+                <ContactMe />
+            </div>
 
 
 

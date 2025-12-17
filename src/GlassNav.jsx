@@ -1,7 +1,7 @@
 import "./GlassNav.css";
 
 const GlassNav = () => {
-    const items = ["Projects", "About", "Blog", "Contact"];
+    const items = ["About", "Education", "Projects", "Contact"];
 
     return (
         <div className="glass-nav-wrapper">

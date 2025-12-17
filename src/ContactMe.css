@@ -1,0 +1,81 @@
+.contact-section {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+}
+
+.contact-heading {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    line-height: 1.4;
+    margin: 0 0 2rem 0;
+}
+
+.contact-form {
+    width: 100%;
+}
+
+.contact-input,
+.contact-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 1.1rem 1.2rem;
+    font-size: 1rem;
+}
+
+.contact-input {
+    height: 58px;
+    margin-bottom: 0.9rem;
+}
+
+.contact-textarea {
+    resize: none;
+    padding-top: 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.contact-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.contact-submit {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.35em;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.6rem 0;
+    cursor: pointer;
+    position: relative;
+}
+
+.contact-submit::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    background: #ff2d2d;
+}
+
+.contact-me-container {
+    margin-top: 8rem;
+    margin-bottom: 6rem;
+}
