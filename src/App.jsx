@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Aurora from "./Aurora.jsx";
 import GlassNav from "./GlassNav.jsx";
 import RotatingText from "./rotatingText.jsx";
@@ -10,15 +11,14 @@ import mern from "./assets/mern.png";
 import frameworkImg2 from "./assets/Frameworks2.png";
 import ProfileCard from "./ProfileCard";
 import MagicBento from "./MagicBento";
-import GradientText from './GradientText.jsx';
-import ColorBends from './ColorBends.jsx';
-import ChromaGrid from './ChromaGrid';
-import TextType from './TextType';
-import ContactMe from './ContactMe';
-
+import GradientText from "./GradientText.jsx";
+import ColorBends from "./ColorBends.jsx";
+import ChromaGrid from "./ChromaGrid";
+import TextType from "./TextType";
+import ContactMe from "./ContactMe";
+import TargetCursor from "./TargetCursor";
 
 const items = [
-
     {
         image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
         title: "Reflex Arc Demonstration and lots of other things",
@@ -28,7 +28,6 @@ const items = [
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
         url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
     },
-
     {
         image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
         title: "Reflex Arc Demonstration",
@@ -74,8 +73,8 @@ const items = [
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
         url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
     }
-
 ];
+
 const demoItems = [
     { link: "#", text: "Python, C, C++", image: softwareImg },
     { link: "#", text: "HTML5 CSS3 JavaScript", image: webDevImg },
@@ -84,8 +83,9 @@ const demoItems = [
 ];
 
 function App() {
-    const handleAnimationComplete = () => {
-    };
+    const [chromaCursorOn, setChromaCursorOn] = useState(false);
+
+    const handleAnimationComplete = () => {};
 
     const colorBendsBoxStyle = {
         width: "80%",
@@ -94,6 +94,15 @@ function App() {
 
     return (
         <main className="page-content">
+            {chromaCursorOn && (
+                <TargetCursor
+                    targetSelector=".chroma-card"
+                    spinDuration={2}
+                    hideDefaultCursor={true}
+                    parallaxOn={true}
+                />
+            )}
+
             <GlassNav />
 
             <div>
@@ -138,26 +147,26 @@ function App() {
                                 <span className="hero-prefix">I am a</span>
 
                                 <button type="button" className="btn btn-primary rotating-btn">
-                                    <span className="rotating-text-wrapper">
-                                        <RotatingText
-                                            texts={[
-                                                "Full Stack Developer",
-                                                "Software Developer",
-                                                "API Engineer",
-                                                "MERN Stack Developer",
-                                                "Tech Enthusiast"
-                                            ]}
-                                            mainClassName="rotating-text-inner"
-                                            staggerFrom={"last"}
-                                            initial={{ y: "100%" }}
-                                            animate={{ y: 0 }}
-                                            exit={{ y: "-120%" }}
-                                            staggerDuration={0.025}
-                                            splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
-                                            transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                                            rotationInterval={2000}
-                                        />
-                                    </span>
+                  <span className="rotating-text-wrapper">
+                    <RotatingText
+                        texts={[
+                            "Full Stack Developer",
+                            "Software Developer",
+                            "API Engineer",
+                            "MERN Stack Developer",
+                            "Tech Enthusiast"
+                        ]}
+                        mainClassName="rotating-text-inner"
+                        staggerFrom={"last"}
+                        initial={{ y: "100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "-120%" }}
+                        staggerDuration={0.025}
+                        splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                        transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                        rotationInterval={2000}
+                    />
+                  </span>
                                 </button>
                             </div>
 
@@ -167,7 +176,7 @@ function App() {
                 </div>
             </div>
 
-            <div className="space">            </div>
+            <div className="space"> </div>
 
             <GradientText
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
@@ -177,7 +186,6 @@ function App() {
             >
                 Things I dabble in
             </GradientText>
-
 
             <div className="colorbends-section">
                 <div className="colorbends-box" style={colorBendsBoxStyle}>
@@ -194,8 +202,8 @@ function App() {
                             noise={0.08}
                             transparent
                         />
+                    </div>
 
-                        </div>
                     <div className="flowing-menu-container">
                         <div style={{ height: "600px", position: "relative", width: "80%" }}>
                             <FlowingMenu items={demoItems} />
@@ -204,39 +212,37 @@ function App() {
                 </div>
             </div>
 
-
             <div className="magic-bento-container">
                 <MagicBento />
             </div>
 
-
             <div className="texttype-section">
                 <TextType
-                    text={["Projects I've worked on", "Things I've messed around with", "What I'm currently working on"]}
+                    text={[
+                        "Projects I've worked on",
+                        "Things I've messed around with",
+                        "What I'm currently working on"
+                    ]}
                     typingSpeed={75}
                     pauseDuration={1500}
-                    showCursor={true}
+                    showCursor={false}
                     cursorCharacter="|"
                 />
             </div>
 
-
-            <div style={{ height: '600px', position: 'relative' }}>
-                <ChromaGrid
-                    items={items}
-                    radius={300}
-                    damping={0.45}
-                    fadeOut={0.6}
-                    ease="power3.out"
-                />
+            <div
+                style={{ height: "600px", position: "relative" }}
+                onMouseEnter={() => setChromaCursorOn(true)}
+                onMouseLeave={() => setChromaCursorOn(false)}
+            >
+                <ChromaGrid items={items} radius={300} damping={0.45} fadeOut={0.6} ease="power3.out" />
             </div>
-            <div className="spacemore">            </div>
+
+            <div className="spacemore"> </div>
+
             <div className="contact-me-container">
                 <ContactMe />
             </div>
-
-
-
         </main>
     );
 }

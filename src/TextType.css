@@ -1,6 +1,12 @@
 .text-type {
-    display: inline-block;
+    display: block;
+    line-height: 1.15;
+    min-height: 1.15em;
     white-space: pre-wrap;
+}
+
+.text-type:empty::before {
+    content: "\00A0";
 }
 
 .text-type__cursor {
@@ -10,5 +16,5 @@
 }
 
 .text-type__cursor--hidden {
-    display: none;
+    visibility: hidden;
 }
