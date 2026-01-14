@@ -21,13 +21,41 @@ import TargetCursor from "./TargetCursor";
 
 const items = [
     {
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
-        title: "Reflex Arc Demonstration and lots of other things",
-        subtitle: "BioTech",
+        image: "public/myUltron.webp",
+        title: "Hackathon Web Application",
+        subtitle: "Typescript, React, Tailwind, Node, PHP, MySQL, PDO, OGL, Vite ",
         handle: "",
         borderColor: "#3B82F6",
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
-        url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
+        url: "https://github.com/abhilxsh07/futurixUltron9.0"
+    },
+    {
+        image: "public/CollabUltron.webp",
+        title: "Hackathon Web App (collaborated)",
+        subtitle: "Next.JS, React, TypeScript, Tailwind, PostCSS, JS, Radix, Vite",
+        handle: "",
+        borderColor: "#3B82F6",
+        gradient: "linear-gradient(145deg, #3B82F6, #000)",
+        url: "https://github.com/Sharveswar007/ultron-futurix"
+    },
+    {
+        image: "public/Portfolio.webp",
+        title: "Portfolio Website",
+        subtitle: "JSX, CSS, React, WebGL, Vite, JS",
+        handle: "",
+        borderColor: "#3B82F6",
+        gradient: "linear-gradient(145deg, #3B82F6, #000)",
+        url: "https://github.com/abhilxsh07/portfolio_v2"
+    },
+
+    {
+        image: "public/PyMySQL.webp",
+        title: "Student DB Manager",
+        subtitle: "Python, MySQL",
+        handle: "",
+        borderColor: "#3B82F6",
+        gradient: "linear-gradient(145deg, #3B82F6, #000)",
+        url: "https://github.com/abhilxsh07/funny/blob/main/Python/studDatabase.py"
     },
     {
         image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
@@ -39,41 +67,15 @@ const items = [
         url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
     },
     {
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
-        title: "Reflex Arc Demonstration",
-        subtitle: "BioTech",
+        image: "public/C.webp",
+        title: "C/C++ (Learning)",
+        subtitle: "Compile-Time programming, structs, classes, Polymorphism/Inheritance, RAII, Algorithms, RegEx ",
         handle: "",
         borderColor: "#3B82F6",
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
-        url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
+        url: "https://devdocs.io/cpp/"
     },
-    {
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
-        title: "Reflex Arc Demonstration",
-        subtitle: "BioTech",
-        handle: "",
-        borderColor: "#3B82F6",
-        gradient: "linear-gradient(145deg, #3B82F6, #000)",
-        url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
-    },
-    {
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
-        title: "Reflex Arc Demonstration",
-        subtitle: "BioTech",
-        handle: "",
-        borderColor: "#3B82F6",
-        gradient: "linear-gradient(145deg, #3B82F6, #000)",
-        url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
-    },
-    {
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
-        title: "Reflex Arc Demonstration",
-        subtitle: "BioTech",
-        handle: "",
-        borderColor: "#3B82F6",
-        gradient: "linear-gradient(145deg, #3B82F6, #000)",
-        url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
-    }
+
 ];
 
 const demoItems = [
@@ -342,6 +344,7 @@ function App() {
                                 justifyContent: "flex-start"
                             }}
                         >
+
                             <TextType
                                 text={[
                                     "Projects I've worked on",
@@ -354,6 +357,7 @@ function App() {
                                 cursorCharacter="|"
                             />
                         </div>
+                        <div className="spacebit"></div>
 
                         <div style={{ height: "840px", position: "relative", padding: "0 2rem 2rem 2rem" }}>
                             <ChromaGrid items={items} radius={300} damping={0.45} fadeOut={0.6} ease="power3.out" />
