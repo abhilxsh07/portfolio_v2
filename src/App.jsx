@@ -18,10 +18,17 @@ import TextType from "./TextType";
 import ContactMe from "./ContactMe";
 import Iridescence from "./Iridescence";
 import TargetCursor from "./TargetCursor";
+import myUltronImg from "./assets/myUltron.webp";
+import collabUltronImg from "./assets/CollabUltron.webp";
+import portfolioImg from "./assets/Portfolio.webp";
+import pyMySQLImg from "./assets/PyMySQL.webp";
+import cImg from "./assets/C.webp";
+
+
 
 const items = [
     {
-        image: "/myUltron.webp",
+        image: myUltronImg,
         title: "Hackathon Web Application",
         subtitle: "Typescript, React, Tailwind, Node, PHP, MySQL, PDO, OGL, Vite ",
         handle: "",
@@ -30,7 +37,7 @@ const items = [
         url: "https://github.com/abhilxsh07/futurixUltron9.0"
     },
     {
-        image: "/CollabUltron.webp",
+        image: collabUltronImg,
         title: "Hackathon Web App (collaborated)",
         subtitle: "Next.JS, React, TypeScript, Tailwind, PostCSS, JS, Radix, Vite",
         handle: "",
@@ -39,7 +46,7 @@ const items = [
         url: "https://github.com/Sharveswar007/ultron-futurix"
     },
     {
-        image: "/Portfolio.webp",
+        image: portfolioImg,
         title: "Portfolio Website",
         subtitle: "JSX, CSS, React, WebGL, Vite, JS",
         handle: "",
@@ -47,9 +54,8 @@ const items = [
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
         url: "https://github.com/abhilxsh07/portfolio_v2"
     },
-
     {
-        image: "/PyMySQL.webp",
+        image: pyMySQLImg,
         title: "Student DB Manager",
         subtitle: "Python, MySQL",
         handle: "",
@@ -67,16 +73,16 @@ const items = [
         url: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py"
     },
     {
-        image: "/C.webp",
+        image: cImg,
         title: "C/C++ (Learning)",
         subtitle: "Compile-Time programming, structs, classes, Polymorphism/Inheritance, RAII, Algorithms, RegEx ",
         handle: "",
         borderColor: "#3B82F6",
         gradient: "linear-gradient(145deg, #3B82F6, #000)",
         url: "https://devdocs.io/cpp/"
-    },
-
+    }
 ];
+
 
 const demoItems = [
     { link: "#", text: "Python, C, C++", image: softwareImg },
