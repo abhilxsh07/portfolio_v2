@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #0a0a0a;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Inter', system-ui, sans-serif;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.animate-blink {
+    animation: blink 0.8s step-end infinite;
+}
+
+/* Constrain and isolate ProfileCard in hero */
+.hero-card-wrapper {
+    isolation: isolate;
+    contain: layout paint style;
+    position: relative;
+    z-index: 0;
+}
+
+.hero-card-wrapper .pc-card {
+    height: 70svh;
+    max-height: 480px;
+}
