@@ -26,7 +26,7 @@ export default function Navbar() {
                     onClick={scrollToTop}
                     className="font-mono text-sm text-neutral-300 hover:text-white transition-colors"
                 >
-                    <span className="text-neutral-500">&gt;_</span> Abhilash Kar
+                    <span className="text-neutral-500">&gt;_</span> abhilashkar.dev
 
                 </a>
 
