@@ -6,6 +6,7 @@ import collabUltronImg from "../assets/CollabUltron.webp";
 import portfolioImg from "../assets/Portfolio.webp";
 import pyMySQLImg from "../assets/PyMySQL.webp";
 import cImg from "../assets/C.webp";
+import reflexImg from "../assets/reflex.webp";
 
 const projects = [
     {
@@ -30,7 +31,7 @@ const projects = [
         title: "Portfolio Website (legacy)",
         tech: ["JSX", "CSS", "React", "WebGL", "Vite", "JS"],
         description: "Personal portfolio site with WebGL effects, terminal interface, and custom animations.",
-        link: "https://github.com/abhilxsh07/webPortfolio-legacy-",
+        link: "https://github.com/abhilxsh07/webPortfolio-legacy",
         image: portfolioImg,
         featured: false
     },
@@ -47,17 +48,10 @@ const projects = [
         tech: ["BioTech"],
         description: "Interactive demonstration of the biological reflex arc mechanism for educational purposes.",
         link: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py",
-        image: "https://www.medschoolcoach.com/wp-content/uploads/2023/01/ReflexArcs-Fig2.jpg",
+        image: reflexImg,
         featured: false
     },
-    {
-        title: "C/C++ (Learning)",
-        tech: ["Compile-Time Programming", "Structs", "Classes", "Polymorphism", "RAII", "Algorithms", "RegEx"],
-        description: "Structured learning project covering core C/C++ concepts from memory management to template metaprogramming.",
-        link: "https://devdocs.io/cpp/",
-        image: cImg,
-        featured: false
-    }
+
 ];
 
 function ProjectCard({ project, index }) {

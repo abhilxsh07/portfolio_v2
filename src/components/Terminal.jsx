@@ -33,26 +33,101 @@ function getOutput(cmd) {
         case "skills":
             return [
                 { text: "", color: "" },
-                ...[
-                    { cat: "Languages:", items: "Java, Python, Go, JavaScript, TypeScript, C/C++, SQL, PHP" },
-                    { cat: "Frontend:", items: "React, Next.js, HTML/CSS, Tailwind CSS, WebGL/OGL, GSAP" },
-                    { cat: "Backend:", items: "Spring Boot, Netty, Kafka, Spark, Node.js, Express, Django/Flask, gRPC" },
-                    { cat: "Databases:", items: "PostgreSQL, MySQL, MongoDB, Redis, Elasticsearch" },
-                    { cat: "DevOps:", items: "Docker, Kubernetes, AWS, CI/CD, Terraform, Git" },
-                    { cat: "Other:", items: "REST, Microservices, System Design, LangChain, Streamlit, NumPy/Pandas, Vite, MATLAB" }
-                ].map(({ cat, items }) => ({
-                    text: `${cat} { ${items} }`,
+                {
+                    text: "Proficient:",
+                    color: "text-green-400",
+                    html: true,
+                    content: <span className="text-green-400 font-bold">Proficient:</span>
+                },
+                {
+                    text: "  Java 90  |  Python 85  |  JavaScript 85  |  TypeScript 80",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span className="text-neutral-300">
+                            {"  "}Java 90{"  |  "}Python 85{"  |  "}JavaScript 85{"  |  "}TypeScript 80
+                        </span>
+                    )
+                },
+                {
+                    text: "  React 85  |  Spring Boot 80  |  Node.js 80  |  Kafka 75",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span className="text-neutral-300">
+                            {"  "}React 85{"  |  "}Spring Boot 80{"  |  "}Node.js 80{"  |  "}Kafka 75
+                        </span>
+                    )
+                },
+                {
+                    text: "  PostgreSQL 80  |  MySQL 80  |  MongoDB 75  |  Docker 75",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span className="text-neutral-300">
+                            {"  "}PostgreSQL 80{"  |  "}MySQL 80{"  |  "}MongoDB 75{"  |  "}Docker 75
+                        </span>
+                    )
+                },
+                {
+                    text: "  Git 90  |  HTML/CSS 85  |  Tailwind CSS 85",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span className="text-neutral-300">
+                            {"  "}Git 90{"  |  "}HTML/CSS 85{"  |  "}Tailwind CSS 85
+                        </span>
+                    )
+                },
+                { text: "", color: "" },
+                {
+                    text: "Familiar:",
+                    color: "text-green-400",
+                    html: true,
+                    content: <span className="text-green-400 font-bold">Familiar:</span>
+                },
+                {
+                    text: "  { Go, C/C++, SQL, PHP, Next.js, WebGL/OGL, GSAP, Netty, Spark, ... }",
                     color: "text-neutral-300",
                     html: true,
                     content: (
                         <span>
-                            <span className="text-green-400 font-bold">{cat}</span>
-                            <span className="text-neutral-500"> {"{"} </span>
-                            <span className="text-neutral-300">{items}</span>
-                            <span className="text-neutral-500"> {"}"}</span>
+                            {"  "}<span className="text-neutral-500">{"{"}</span>
+                            <span className="text-neutral-300"> Go, C/C++, SQL, PHP, Next.js, WebGL/OGL, GSAP, Netty, Spark,</span>
                         </span>
                     )
-                }))
+                },
+                {
+                    text: "    Express, Django/Flask, gRPC, Redis, Elasticsearch, Kubernetes, ...",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span>
+                            {"    "}<span className="text-neutral-300">Express, Django/Flask, gRPC, Redis, Elasticsearch, Kubernetes,</span>
+                        </span>
+                    )
+                },
+                {
+                    text: "    AWS, CI/CD, Terraform, REST, Microservices, System Design, ... }",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span>
+                            {"    "}<span className="text-neutral-300">AWS, CI/CD, Terraform, REST, Microservices, System Design,</span>
+                        </span>
+                    )
+                },
+                {
+                    text: "    LangChain, Streamlit, NumPy/Pandas, Vite, MATLAB }",
+                    color: "text-neutral-300",
+                    html: true,
+                    content: (
+                        <span>
+                            {"    "}<span className="text-neutral-300">LangChain, Streamlit, NumPy/Pandas, Vite, MATLAB </span>
+                            <span className="text-neutral-500">{"}"}</span>
+                        </span>
+                    )
+                }
             ];
         case "experience":
             return [
