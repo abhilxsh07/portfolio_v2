@@ -24,10 +24,10 @@ export default function Navbar() {
                 <a
                     href="#"
                     onClick={scrollToTop}
-                    className="font-mono text-sm text-neutral-300 hover:text-white transition-colors"
+                    className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                 >
-                    <span className="text-neutral-500">&gt;_</span> abhilashkar.dev
-
+                    <img src="/favicon.svg" alt="AK" className="w-6 h-6 rounded" />
+                    <span className="font-mono text-sm text-neutral-300">abhilashkar.dev</span>
                 </a>
 
                 <div className="flex items-center gap-6 md:gap-8">
