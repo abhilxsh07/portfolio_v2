@@ -101,8 +101,11 @@ export default function Contact() {
                 >
                     <p className="text-green-500 text-sm font-mono font-medium mb-4">// or drop a message</p>
                     <form onSubmit={handleSubmit}>
+                        <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
                         <div className="mb-4">
                             <label className="block text-xs text-neutral-500 font-mono mb-1.5">Name</label>
+
                             <input
                                 type="text"
                                 required
@@ -134,6 +137,7 @@ export default function Contact() {
                                 className="w-full bg-neutral-950 border border-neutral-800 rounded-lg px-4 py-2.5 text-sm text-white font-mono placeholder-neutral-600 outline-none focus:border-neutral-600 transition-colors resize-none"
                             />
                         </div>
+
                         <button
                             type="submit"
                             disabled={status === "sending"}
