@@ -12,6 +12,8 @@ import DoomPopup from "./components/DoomPopup";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
 import ShootingStars from "./components/ui/ShootingStars";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
     const [terminalOpen, setTerminalOpen] = useState(false);
@@ -64,6 +66,9 @@ export default function App() {
             />
 
             <DoomPopup isOpen={doomOpen} onClose={closeDoom} />
+
+            <Analytics />
+            <SpeedInsights />
         </div>
     );
 }
