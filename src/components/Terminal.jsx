@@ -3,17 +3,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IconX } from "@tabler/icons-react";
 
 const COMMANDS = [
-    { name: "help", desc: "- Show all available commands" },
     { name: "about", desc: "- Learn about me" },
-    { name: "skills", desc: "- View my tech stack" },
-    { name: "experience", desc: "- See my work history" },
-    { name: "projects", desc: "- See my work" },
+    { name: "cat resume.txt", desc: "- View resume summary" },
+    { name: "coffee", desc: "- Brew some coffee" },
     { name: "contact", desc: "- Get in touch" },
     { name: "doom", desc: "- Guys will run Doom on anything huh?" },
-    { name: "coffee", desc: "- Brew some coffee" },
+    { name: "experience", desc: "- See my work history" },
+    { name: "help", desc: "- Show all available commands" },
     { name: "ls", desc: "- List files" },
+    { name: "neofetch", desc: "- System info" },
     { name: "ping", desc: "- Check connection" },
-    { name: "clear", desc: "- Clear terminal" },
+    { name: "projects", desc: "- See my work" },
+    { name: "skills", desc: "- View my tech stack" },
+    { name: "whoami", desc: "- Who are you?" },
+    { name: "cls", desc: "- Clear terminal" },
     { name: "exit", desc: "- Close terminal" }
 ];
 
@@ -208,6 +211,68 @@ function getOutput(cmd) {
                         </span>
                     )
                 }
+            ];
+        case "neofetch":
+            return [
+                {
+                    text: "", color: "", html: true,
+                    content: (
+                        <div className="flex gap-6 items-start">
+                            <span className="text-green-500 font-bold text-2xl font-mono shrink-0">AK</span>
+                            <div className="text-xs space-y-0.5">
+                                <span className="text-green-400 font-bold">abhilash@dev</span>
+                                <div className="text-neutral-600">──────────────</div>
+                                <div><span className="text-green-400">OS:</span> <span className="text-neutral-300">Win 11</span></div>
+                                <div><span className="text-green-400">Editor:</span> <span className="text-neutral-300">WebStorm / Notepad++</span></div>
+                                <div><span className="text-green-400">Stack:</span> <span className="text-neutral-300">C++, Python, React, Node</span></div>
+                                <div><span className="text-green-400">Terminal:</span> <span className="text-neutral-300">portfolio_v2 ~</span></div>
+                                <div><span className="text-green-400">Uptime:</span> <span className="text-neutral-300"> 2007-07-10</span></div>
+                                <div><span className="text-green-400">Resolution:</span> <span className="text-neutral-300">1920x1080</span></div>
+                            </div>
+                        </div>
+                    )
+                }
+            ];
+        case "cat resume.txt":
+            return [
+                { text: "", color: "" },
+                { text: "┌─── resume.txt ───────────────────────┐", color: "text-neutral-600" },
+                { text: "", color: "" },
+                { text: "  ABHILASH KAR", color: "text-white" },
+                { text: "  Full Stack Developer", color: "text-green-400" },
+                { text: "  Chennai, India | abhilashkar.dev", color: "text-neutral-400" },
+                { text: "", color: "" },
+                { text: "  EDUCATION", color: "text-green-400" },
+                { text: "  B.Tech CSE — SRMIST (2025–2029)", color: "text-neutral-300" },
+                { text: "", color: "" },
+                { text: "  EXPERIENCE", color: "text-green-400" },
+                { text: "  Technical Staff — Futurix (2025–Present)", color: "text-neutral-300" },
+                { text: "", color: "" },
+                { text: "  STACK", color: "text-green-400" },
+                { text: "  Java · Python · TypeScript · React · Spring Boot", color: "text-neutral-300" },
+                { text: "  Node.js · PostgreSQL · Docker · Kafka · AWS", color: "text-neutral-300" },
+                { text: "", color: "" },
+                { text: "  LINKS", color: "text-green-400" },
+                { text: "  github.com/abhilxsh07", color: "text-neutral-300" },
+                { text: "  linkedin.com/in/abhilxsh", color: "text-neutral-300" },
+                { text: "", color: "" },
+                { text: "└──────────────────────────────────────┘", color: "text-neutral-600" },
+                { text: "", color: "" },
+                {
+                    text: "> Full resume: /resume",
+                    color: "text-neutral-500",
+                    html: true,
+                    content: (
+                        <span>
+                            <span className="text-neutral-500">&gt; Full resume: </span>
+                            <a href="/resume" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">/resume</a>
+                        </span>
+                    )
+                }
+            ];
+        case "whoami":
+            return [
+                { text: "abhilash", color: "text-green-400" }
             ];
         default:
             return [
@@ -434,11 +499,27 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     }, [isBrewing]);
 
     useEffect(() => {
-        const handleEsc = (e) => {
+        const handleKeyDown = (e) => {
             if (e.key === "Escape" && isOpen) onClose();
+            // Trap focus inside terminal when open
+            if (e.key === "Tab" && isOpen) {
+                const terminal = document.querySelector('[role="dialog"][aria-label="Interactive terminal"]');
+                if (!terminal) return;
+                const focusable = terminal.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+                if (focusable.length === 0) return;
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
         };
-        window.addEventListener("keydown", handleEsc);
-        return () => window.removeEventListener("keydown", handleEsc);
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, onClose]);
 
     useEffect(() => {
@@ -468,7 +549,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         const trimmed = cmd.trim().toLowerCase();
         if (!trimmed) return;
 
-        if (trimmed === "clear") {
+        if (trimmed === "cls") {
             setHistory([]);
             setIsBrewing(false);
             setInput("");
@@ -615,6 +696,9 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     exit={{ opacity: 0, y: 20, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                     className="fixed bottom-6 right-6 w-[min(500px,calc(100vw-3rem))] max-h-[400px] bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl shadow-black/50 z-50 flex flex-col"
+                    role="dialog"
+                    aria-label="Interactive terminal"
+                    aria-modal="true"
                 >
                     {/* Header */}
                     <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
@@ -714,6 +798,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                 onKeyDown={handleKeyDown}
                                 placeholder='type command or press /'
                                 className="flex-1 bg-transparent text-white font-mono text-sm placeholder-neutral-600 outline-none"
+                                aria-label="Terminal command input"
                             />
                         </div>
                     </div>

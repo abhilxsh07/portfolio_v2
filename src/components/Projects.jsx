@@ -103,6 +103,13 @@ function ProjectCard({ project, index }) {
                         <p className="text-xs text-neutral-500 font-mono mt-0.5">{project.subtitle}</p>
                     )}
 
+                    {/* Description */}
+                    {project.description && (
+                        <p className="text-xs text-neutral-500 font-mono leading-relaxed mt-2">
+                            {project.description}
+                        </p>
+                    )}
+
                     {/* Tech tags */}
                     <div className="flex flex-wrap gap-1.5 mt-3">
                         {project.tech.map((t) => (

@@ -189,6 +189,8 @@ export default function DoomPopup({ isOpen, onClose }) {
                     exit={{ opacity: 0, scale: 0.9, y: 20 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
                     className="fixed z-[60] bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden shadow-2xl shadow-black/60 flex flex-col"
+                    role="dialog"
+                    aria-label="DOOM game window"
                     style={{
                         left: isMaximized ? 0 : pos.x,
                         top: isMaximized ? 0 : pos.y,

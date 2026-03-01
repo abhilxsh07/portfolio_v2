@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconMail, IconExternalLink, IconTerminal2 } from "@tabler/icons-react";
 import TextGenerateEffect from "./ui/TextGenerateEffect";
+import avatarImg from "../assets/newme.webp";
 
 // Lazy-load ProfileCard so its CSS (with mix-blend-mode, filters, etc.)
 // is NOT injected into the page until the card actually renders.
@@ -63,38 +64,66 @@ export default function Hero({ onOpenTerminal }) {
                         </div>
 
                         {/* CTA Buttons — using inline border/bg colors to avoid oklch color-mix green shift */}
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                             <button
                                 onClick={() => {
                                     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
                                 }}
-                                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
+                                className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
                                 style={{ border: '1px solid #404040', background: 'rgba(23,23,23,0.6)' }}
+                                aria-label="Scroll to contact section"
                             >
                                 <IconMail className="w-4 h-4" />
                                 Contact
                             </button>
+
                             <a
                                 href="/resume"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+                                className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium"
                                 style={{ border: '1px solid #404040', background: 'rgba(23,23,23,0.6)' }}
+                                aria-label="View resume (opens in new tab)"
                             >
                                 <IconExternalLink className="w-4 h-4" />
                                 Resume
                             </a>
                             <button
                                 onClick={onOpenTerminal}
-                                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
+                                className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
                                 style={{ border: '1px solid #404040', background: 'rgba(23,23,23,0.6)' }}
+                                aria-label="Open interactive terminal"
                             >
                                 <IconTerminal2 className="w-4 h-4" />
                                 Launch Terminal
+                                <span className="hidden md:inline text-neutral-600 text-xs ml-1">⌘K</span>
                             </button>
                         </div>
                     </div>
                 </div>
+
+                {/* Mobile/Tablet avatar — visible below lg breakpoint */}
+                {showContent && (
+                    <motion.div
+                        className="flex-shrink-0 lg:hidden flex justify-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    >
+                        <div className="relative">
+                            <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-neutral-800 shadow-2xl shadow-black/50">
+                                <img
+                                    src={avatarImg}
+                                    alt="Abhilash Kar"
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                            </div>
+                            {/* Subtle glow ring behind the avatar */}
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-500/10 to-transparent -z-10 blur-xl scale-125" />
+                        </div>
+                    </motion.div>
+                )}
 
                 {/* Right side — ProfileCard (only mounts after content shows) */}
                 <AnimatePresence>
