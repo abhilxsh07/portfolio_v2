@@ -7,6 +7,7 @@ import portfolioImg from "../assets/Portfolio.webp";
 import pyMySQLImg from "../assets/PyMySQL.webp";
 import cImg from "../assets/C.webp";
 import reflexImg from "../assets/reflex.webp";
+import cursusImg from "../assets/Cursus.webp";
 
 const projects = [
     {
@@ -26,6 +27,15 @@ const projects = [
         link: "https://github.com/Sharveswar007/ultron-futurix",
         image: collabUltronImg,
         featured: false
+    },
+    {
+        title: "Cursus",
+        subtitle: "AI Study Workspace",
+        tech: ["Next.js", "TypeScript", "Tailwind", "Supabase", "OpenAI", "pgvector", "Upstash", "Inngest"],
+        description: "Dark, monochrome study workspace with RAG chat grounded in your own uploads, auto-generated summaries and quizzes, and one-way Google Calendar sync. Built with row-level security, per-user AI budgets, and fail-closed rate limiting.",
+        link: "https://github.com/abhilxsh07/cursus",
+        image: cursusImg,
+        featured: true
     },
     {
         title: "Portfolio Website (legacy)",

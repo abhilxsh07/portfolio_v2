@@ -154,6 +154,9 @@ function getOutput(cmd) {
                     )
                 },
                 { text: "", color: "" },
+                { text: "  Cursus", color: "text-neutral-200" },
+                { text: "  Next.js, TypeScript, Tailwind, Supabase, OpenAI, Inngest", color: "text-neutral-500" },
+                { text: "", color: "" },
                 { text: "  Hackathon Web Application", color: "text-neutral-200" },
                 { text: "  TypeScript, React, Tailwind, Node, PHP, MySQL", color: "text-neutral-500" },
                 { text: "", color: "" },
@@ -172,7 +175,7 @@ function getOutput(cmd) {
                 { text: "  C/C++ (Learning)", color: "text-neutral-200" },
                 { text: "  Compile-Time Programming, Structs, Classes, Polymorphism", color: "text-neutral-500" },
                 { text: "", color: "" },
-                { text: "  Total: 6 projects", color: "text-green-400" }
+                { text: "  Total: 7 projects", color: "text-green-400" }
             ];
         case "contact":
             return [
@@ -794,7 +797,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                 ref={inputRef}
                                 type="text"
                                 value={input}
-                                onChange={(e) => setInput(e.target.value)}
+                                onChange={(e)=> setInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 placeholder='type command or press /'
                                 className="flex-1 bg-transparent text-white font-mono text-sm placeholder-neutral-600 outline-none"
