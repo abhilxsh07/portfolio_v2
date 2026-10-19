@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
 import { navigation as routes } from "../data/portfolio";
@@ -7,7 +7,34 @@ import useReducedMotion from "../hooks/useReducedMotion";
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("");
+    const navRef = useRef(null);
+    const menuButtonRef = useRef(null);
     const reducedMotion = useReducedMotion();
+
+    useEffect(() => {
+        if (!menuOpen) return;
+        const desktop = window.matchMedia("(min-width: 768px)");
+        const closeOutside = (event) => {
+            if (!navRef.current?.contains(event.target)) setMenuOpen(false);
+        };
+        const closeOnEscape = (event) => {
+            if (event.key !== "Escape") return;
+            event.preventDefault();
+            setMenuOpen(false);
+            menuButtonRef.current?.focus();
+        };
+        const closeOnDesktop = (event) => { if (event.matches) setMenuOpen(false); };
+        document.addEventListener("pointerdown", closeOutside);
+        document.addEventListener("focusin", closeOutside);
+        document.addEventListener("keydown", closeOnEscape);
+        desktop.addEventListener("change", closeOnDesktop);
+        return () => {
+            document.removeEventListener("pointerdown", closeOutside);
+            document.removeEventListener("focusin", closeOutside);
+            document.removeEventListener("keydown", closeOnEscape);
+            desktop.removeEventListener("change", closeOnDesktop);
+        };
+    }, [menuOpen]);
 
     useEffect(() => {
         const sections = routes.map((route) => document.getElementById(route.href.slice(1))).filter(Boolean);
@@ -30,11 +57,13 @@ export default function Navbar() {
 
     const scrollToTop = (e) => {
         e.preventDefault();
+        setMenuOpen(false);
         window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
     };
 
     return (
         <motion.nav
+            ref={navRef}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -71,8 +100,10 @@ export default function Navbar() {
 
                 {/* Hamburger button — mobile only */}
                 <button
+                    ref={menuButtonRef}
+                    type="button"
                     onClick={() => setMenuOpen((prev) => !prev)}
-                    className="md:hidden text-neutral-400 hover:text-white transition-colors"
+                    className="md:hidden min-w-11 min-h-11 flex items-center justify-center text-neutral-400 hover:text-white transition-colors"
                     aria-label="Toggle menu"
                     aria-expanded={menuOpen}
                     aria-controls="mobile-navigation"
@@ -97,6 +128,7 @@ export default function Navbar() {
                                 <a
                                     key={route.label}
                                     href={route.href}
+                                    aria-current={activeSection === route.href.slice(1) ? "location" : undefined}
                                     onClick={() => setMenuOpen(false)}
                                     className={`font-mono text-sm transition-colors ${
                                         activeSection === route.href.slice(1)
