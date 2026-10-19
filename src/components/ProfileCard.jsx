@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import './profileCard.css';
 import me from "../assets/newme.webp";
+import { profile } from "../data/portfolio";
 
 const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
 
@@ -18,8 +19,8 @@ const adjust = (v, fMin, fMax, tMin, tMax) => round(tMin + ((tMax - tMin) * (v -
 
 const ProfileCardComponent = ({
                                   avatarUrl = me,
-                                  iconUrl = '<Placeholder for icon URL>',
-                                  grainUrl = '<Placeholder for grain URL>',
+                                  iconUrl = null,
+                                  grainUrl = null,
                                   innerGradient,
                                   behindGlowEnabled = false,
                                   behindGlowColor = false,
@@ -32,7 +33,7 @@ const ProfileCardComponent = ({
                                   name = 'Abhilash Kar',
                                   title = '',
                                   handle = 'abhilxsh07',
-                                  status = 'Software Engineer',
+                                  status = profile.role,
                                   contactText = 'Contact',
                                   showUserInfo = true,
                                   onContactClick
@@ -104,9 +105,12 @@ const ProfileCardComponent = ({
 
             const stillFar = Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05;
 
-            if (stillFar || document.hasFocus()) {
+            if (stillFar) {
                 rafId = requestAnimationFrame(step);
             } else {
+                currentX = targetX;
+                currentY = targetY;
+                setVarsFromXY(currentX, currentY);
                 running = false;
                 lastTs = 0;
                 if (rafId) {
@@ -175,6 +179,10 @@ const ProfileCardComponent = ({
             const shell = shellRef.current;
             if (!shell || !tiltEngine) return;
 
+            if (leaveRafRef.current) {
+                cancelAnimationFrame(leaveRafRef.current);
+                leaveRafRef.current = null;
+            }
             shell.classList.add('active');
             shell.classList.add('entering');
             if (enterTimerRef.current) window.clearTimeout(enterTimerRef.current);

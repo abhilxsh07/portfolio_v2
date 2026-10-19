@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
+import EarlierWork from "./components/EarlierWork";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
 import Contact from "./components/Contact";
@@ -14,17 +15,19 @@ import StarsBackground from "./components/ui/StarsBackground";
 import ShootingStars from "./components/ui/ShootingStars";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { MotionConfig } from "motion/react";
+import useReducedMotion from "./hooks/useReducedMotion";
 
 export default function App() {
     const [terminalOpen, setTerminalOpen] = useState(false);
     const [doomOpen, setDoomOpen] = useState(false);
+    const reducedMotion = useReducedMotion();
 
     const openTerminal = useCallback(() => setTerminalOpen(true), []);
     const closeTerminal = useCallback(() => setTerminalOpen(false), []);
     const openDoom = useCallback(() => setDoomOpen(true), []);
     const closeDoom = useCallback(() => setDoomOpen(false), []);
 
-    // Global Ctrl+K / Cmd+K shortcut to toggle terminal
     useEffect(() => {
         const handleKeyDown = (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -37,22 +40,21 @@ export default function App() {
     }, []);
 
     return (
+        <MotionConfig reducedMotion="user">
         <div className="min-h-screen bg-neutral-950 text-white">
-            <StarsBackground starCount={120} />
-            <ShootingStars interval={5000} />
+            {!reducedMotion && <StarsBackground starCount={120} />}
+            {!reducedMotion && <ShootingStars interval={5000} />}
             <Navbar />
 
-            <Hero onOpenTerminal={openTerminal} />
-
-            <Skills />
-
-            <Projects />
-
-            <Building />
-
-            <Experience />
-
-            <Contact />
+            <main id="main-content" tabIndex={-1}>
+                <Hero onOpenTerminal={openTerminal} />
+                <Projects />
+                <Skills />
+                <Experience />
+                <Building />
+                <EarlierWork />
+                <Contact />
+            </main>
 
             <Footer />
 
@@ -70,5 +72,6 @@ export default function App() {
             <Analytics />
             <SpeedInsights />
         </div>
+        </MotionConfig>
     );
 }

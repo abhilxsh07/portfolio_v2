@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
-function ShootingStar({ id, onComplete }) {
-    const startX = Math.random() * 80 + 10;
-    const startY = Math.random() * 40;
-    const angle = Math.random() * 30 + 15;
-    const length = Math.random() * 150 + 100;
-    const duration = Math.random() * 0.8 + 0.6;
-
+function ShootingStar({ id, startX, startY, angle, length, duration, onComplete }) {
     const endX = startX + Math.cos((angle * Math.PI) / 180) * length * 0.3;
     const endY = startY + Math.sin((angle * Math.PI) / 180) * length * 0.3;
 
@@ -39,7 +33,15 @@ export default function ShootingStars({ interval = 4000 }) {
     useEffect(() => {
         const timer = setInterval(() => {
             if (Math.random() > 0.4) {
-                setStars((prev) => [...prev, { id: Date.now() }]);
+                const star = {
+                    id: Date.now(),
+                    startX: Math.random() * 80 + 10,
+                    startY: Math.random() * 40,
+                    angle: Math.random() * 30 + 15,
+                    length: Math.random() * 150 + 100,
+                    duration: Math.random() * 0.8 + 0.6,
+                };
+                setStars((prev) => [...prev, star]);
             }
         }, interval);
 
@@ -54,7 +56,7 @@ export default function ShootingStars({ interval = 4000 }) {
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
             <AnimatePresence>
                 {stars.map((star) => (
-                    <ShootingStar key={star.id} id={star.id} onComplete={removeStar} />
+                    <ShootingStar key={star.id} {...star} onComplete={removeStar} />
                 ))}
             </AnimatePresence>
         </div>

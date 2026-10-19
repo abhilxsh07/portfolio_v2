@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { IconArrowUp } from "@tabler/icons-react";
+import useReducedMotion from "../hooks/useReducedMotion";
 
 export default function BackToTop() {
     const [visible, setVisible] = useState(false);
+    const reducedMotion = useReducedMotion();
 
     useEffect(() => {
         const onScroll = () => {
@@ -14,7 +16,7 @@ export default function BackToTop() {
     }, []);
 
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
     };
 
     return (

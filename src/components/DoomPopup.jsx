@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { IconDeviceGamepad2, IconMinus, IconSquare, IconX, IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 
 const MIN_W = 320;
@@ -10,7 +10,6 @@ const DEFAULT_H = 480;
 
 const DOOM_URL = "https://thedoggybrad.github.io/doom_on_js-dos/";
 
-// Resize handle definitions: position class + cursor + which edges move
 const HANDLES = [
     { id: "n",  cls: "top-0 left-2 right-2 h-1.5 cursor-n-resize",         dx: 0, dy: 1, dw: 0, dh: 1 },
     { id: "s",  cls: "bottom-0 left-2 right-2 h-1.5 cursor-s-resize",      dx: 0, dy: 0, dw: 0, dh: -1 },
@@ -32,17 +31,19 @@ export default function DoomPopup({ isOpen, onClose }) {
     const [isMinimized, setIsMinimized] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [isResizing, setIsResizing] = useState(false);
     const [loadError, setLoadError] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
 
-    // Stored pre-maximize geometry
     const preMax = useRef({ x: 0, y: 0, w: DEFAULT_W, h: DEFAULT_H });
     const dragStart = useRef({ mx: 0, my: 0, px: 0, py: 0 });
     const resizeStart = useRef(null);
     const iframeRef = useRef(null);
 
-    // Center on open
-    useEffect(() => {
+    // Reset geometry when the window opens.
+    const [wasOpen, setWasOpen] = useState(isOpen);
+    if (wasOpen !== isOpen) {
+        setWasOpen(isOpen);
         if (isOpen) {
             const cx = Math.round((window.innerWidth - DEFAULT_W) / 2);
             const cy = Math.round((window.innerHeight - DEFAULT_H) / 2);
@@ -53,14 +54,20 @@ export default function DoomPopup({ isOpen, onClose }) {
             setLoadError(false);
             setIframeLoaded(false);
         }
+    }
+
+    const previousFocus = useRef(null);
+    useEffect(() => {
+        if (isOpen) {
+            previousFocus.current = document.activeElement;
+        } else if (previousFocus.current) {
+            previousFocus.current.focus?.();
+            previousFocus.current = null;
+        }
     }, [isOpen]);
 
-    // Note: Escape key does NOT close the DOOM popup.
-    // The iframe has its own event context, so Escape inside the game
-    // stays in-game. Escape outside the iframe may close the terminal
-    // (which is expected terminal behavior) but not this popup.
+    // Leave Escape to the game; use the window controls to close it.
 
-    // ----- DRAG -----
     const onDragStart = useCallback((e) => {
         if (isMaximized) return;
         e.preventDefault();
@@ -83,12 +90,12 @@ export default function DoomPopup({ isOpen, onClose }) {
         window.addEventListener("mouseup", onUp);
     }, [pos, size.w, isMaximized]);
 
-    // ----- RESIZE -----
     const onResizeStart = useCallback((e, handle) => {
         if (isMaximized || isMinimized) return;
         e.preventDefault();
         e.stopPropagation();
         resizeStart.current = { mx: e.clientX, my: e.clientY, ...pos, ...size, handle };
+        setIsResizing(true);
 
         const onMove = (ev) => {
             const s = resizeStart.current;
@@ -97,7 +104,6 @@ export default function DoomPopup({ isOpen, onClose }) {
 
             let newX = s.x, newY = s.y, newW = s.w, newH = s.h;
 
-            // Horizontal
             if (handle.id.includes("e")) {
                 newW = clamp(s.w + dxMouse, MIN_W, window.innerWidth - s.x);
             }
@@ -105,9 +111,9 @@ export default function DoomPopup({ isOpen, onClose }) {
                 const delta = clamp(s.w - dxMouse, MIN_W, window.innerWidth) - s.w;
                 newW = s.w - delta;
                 newX = s.x + delta;
-                // re-clamp
+
                 newW = clamp(s.w + dxMouse * -1 + (s.w + dxMouse * -1 < MIN_W ? MIN_W - (s.w + dxMouse * -1) : 0), MIN_W, window.innerWidth);
-                // Simpler approach for west edge:
+
                 const proposedW = s.w - dxMouse;
                 if (proposedW >= MIN_W) {
                     newW = proposedW;
@@ -118,7 +124,6 @@ export default function DoomPopup({ isOpen, onClose }) {
                 }
             }
 
-            // Vertical
             if (handle.id.includes("s")) {
                 newH = clamp(s.h + dyMouse, MIN_H, window.innerHeight - s.y);
             }
@@ -142,6 +147,7 @@ export default function DoomPopup({ isOpen, onClose }) {
 
         const onUp = () => {
             resizeStart.current = null;
+            setIsResizing(false);
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("mouseup", onUp);
         };
@@ -149,7 +155,32 @@ export default function DoomPopup({ isOpen, onClose }) {
         window.addEventListener("mouseup", onUp);
     }, [pos, size, isMaximized, isMinimized]);
 
-    // ----- WINDOW CONTROLS -----
+    const onTitleBarKeyDown = useCallback((e) => {
+        if (isMaximized) return;
+        const deltas = {
+            ArrowLeft: [-20, 0],
+            ArrowRight: [20, 0],
+            ArrowUp: [0, -20],
+            ArrowDown: [0, 20]
+        };
+        const delta = deltas[e.key];
+        if (!delta) return;
+        e.preventDefault();
+        const [dx, dy] = delta;
+        if (e.shiftKey) {
+            if (isMinimized) return;
+            setSize((s) => ({
+                w: clamp(s.w + dx, MIN_W, window.innerWidth),
+                h: clamp(s.h + dy, MIN_H, window.innerHeight)
+            }));
+        } else {
+            setPos((p) => ({
+                x: clamp(p.x + dx, 0, window.innerWidth - size.w),
+                y: clamp(p.y + dy, 0, window.innerHeight - HEADER_H)
+            }));
+        }
+    }, [isMaximized, isMinimized, size.w]);
+
     const toggleMinimize = useCallback(() => {
         setIsMinimized((prev) => !prev);
     }, []);
@@ -177,8 +208,7 @@ export default function DoomPopup({ isOpen, onClose }) {
         setIframeLoaded(false);
     }, []);
 
-    // Pointer overlay to prevent iframe from stealing mouse during drag/resize
-    const showOverlay = isDragging || resizeStart.current !== null;
+    const showOverlay = isDragging || isResizing;
 
     return (
         <AnimatePresence>
@@ -198,7 +228,6 @@ export default function DoomPopup({ isOpen, onClose }) {
                         height: isMinimized ? "auto" : (isMaximized ? "100vh" : size.h),
                     }}
                 >
-                    {/* Resize handles */}
                     {!isMaximized && !isMinimized && HANDLES.map((h) => (
                         <div
                             key={h.id}
@@ -206,13 +235,14 @@ export default function DoomPopup({ isOpen, onClose }) {
                             onMouseDown={(e) => onResizeStart(e, h)}
                         />
                     ))}
-
-                    {/* Header / Title Bar */}
                     <div
-                        className={`flex items-center justify-between px-3 py-2 bg-neutral-800 border-b border-neutral-700 shrink-0 select-none ${
+                        className={`flex items-center justify-between px-3 py-2 bg-neutral-800 border-b border-neutral-700 shrink-0 select-none focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-500 ${
                             isDragging ? "cursor-grabbing" : "cursor-grab"
                         }`}
                         onMouseDown={onDragStart}
+                        tabIndex={0}
+                        aria-label="DOOM window title bar. Use arrow keys to move, Shift plus arrow keys to resize"
+                        onKeyDown={onTitleBarKeyDown}
                     >
                         <div className="flex items-center gap-2">
                             <IconDeviceGamepad2 className="w-4 h-4 text-neutral-400" />
@@ -220,25 +250,25 @@ export default function DoomPopup({ isOpen, onClose }) {
                         </div>
 
                         <div className="flex items-center gap-1.5">
-                            {/* Minimize */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMinimize(); }}
+                                aria-label="Minimize"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
                                 <IconMinus className="w-3.5 h-3.5" />
                             </button>
-                            {/* Maximize */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMaximize(); }}
+                                aria-label="Maximize"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
                                 <IconSquare className="w-3 h-3" />
                             </button>
-                            {/* Close */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleClose(); }}
+                                aria-label="Close DOOM"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -246,11 +276,8 @@ export default function DoomPopup({ isOpen, onClose }) {
                             </button>
                         </div>
                     </div>
-
-                    {/* Body */}
                     {!isMinimized && (
                         <div className="flex-1 bg-black relative min-h-0">
-                            {/* Pointer-event overlay during drag/resize */}
                             {showOverlay && (
                                 <div className="absolute inset-0 z-20" />
                             )}
@@ -288,7 +315,8 @@ export default function DoomPopup({ isOpen, onClose }) {
                                         title="DOOM"
                                         className="w-full h-full border-0"
                                         style={{ display: iframeLoaded ? "block" : "block", opacity: iframeLoaded ? 1 : 0 }}
-                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                        sandbox="allow-scripts allow-same-origin"
+                                        referrerPolicy="no-referrer"
                                         allow="autoplay; fullscreen; gamepad"
                                         onLoad={() => setIframeLoaded(true)}
                                         onError={() => setLoadError(true)}
