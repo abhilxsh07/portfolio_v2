@@ -1,164 +1,84 @@
-import { motion } from "motion/react";
-import { IconCode, IconExternalLink } from "@tabler/icons-react";
+import { projects, getProject } from "../data/portfolio";
+import SectionHeading from "./SectionHeading";
+import ProjectLinks from "./ProjectLinks";
+import cursusImage from "../assets/Cursus.webp";
+import ultronImage from "../assets/myUltron.webp";
 
-import myUltronImg from "../assets/myUltron.webp";
-import collabUltronImg from "../assets/CollabUltron.webp";
-import portfolioImg from "../assets/Portfolio.webp";
-import pyMySQLImg from "../assets/PyMySQL.webp";
-import reflexImg from "../assets/reflex.webp";
-import cursusImg from "../assets/Cursus.webp";
-
-const projects = [
-        {
-        title: "Cursus",
-        subtitle: "AI Study Workspace",
-        tech: ["Next.js", "TypeScript", "Tailwind", "Supabase", "OpenAI", "pgvector", "Upstash", "Inngest"],
-        description: "Dark, monochrome study workspace with RAG chat grounded in your own uploads, auto-generated summaries and quizzes, and one-way Google Calendar sync. Built with row-level security, per-user AI budgets, and fail-closed rate limiting.",
-        link: "https://github.com/abhilxsh07/cursus-app",
-        image: cursusImg,
-        featured: true
-    },
-    {
-        title: "Hackathon Web Application",
-        subtitle: "Ultron 9.0",
-        tech: ["TypeScript", "React", "Tailwind", "Node", "PHP", "MySQL", "PDO", "OGL", "Vite"],
-        description: "Full-stack hackathon platform for event management, team registration, and project submissions.",
-        link: "https://github.com/abhilxsh07/futurixUltron9.0",
-        image: myUltronImg,
-        featured: true
-    },
-    {
-        title: "Hackathon Web App (Collaborated)",
-        subtitle: "Event Snapshot",
-        tech: ["Next.js", "React", "TypeScript", "Tailwind", "PostCSS", "JS", "Radix", "Vite"],
-        description: "Collaborative hackathon application built with a team, focused on accessibility and community engagement.",
-        link: "https://github.com/Sharveswar007/ultron-futurix",
-        image: collabUltronImg,
-        featured: false
-    },
-    {
-        title: "Portfolio Website (legacy)",
-        tech: ["JSX", "CSS", "React", "WebGL", "Vite", "JS"],
-        description: "Personal portfolio site with WebGL effects, terminal interface, and custom animations.",
-        link: "https://github.com/abhilxsh07/webPortfolio-legacy",
-        image: portfolioImg,
-        featured: false
-    },
-    {
-        title: "Student DB Manager",
-        tech: ["Python", "MySQL"],
-        description: "Database management tool for student records with CRUD operations and query interface.",
-        link: "https://github.com/abhilxsh07/funny/blob/main/Python/studDatabase.py",
-        image: pyMySQLImg,
-        featured: false
-    },
-    {
-        title: "Reflex Arc Demonstration",
-        tech: ["BioTech"],
-        description: "Interactive demonstration of the biological reflex arc mechanism for educational purposes.",
-        link: "https://github.com/abhilxsh07/collegeProjects/blob/main/reflexArcDemonstration.py",
-        image: reflexImg,
-        featured: false
-    },
-
+const decisions = [
+    ["Keep user data separate", "Supabase row-level security and private storage scope access to each user's material."],
+    ["Bound AI spending", "Per-user daily request and token budgets reserve capacity before model work begins."],
+    ["Fail closed in production", "Protected requests are refused when the production rate limiter is absent or unavailable."],
+    ["Validate the upload itself", "File-size, MIME, extension, and magic-byte checks verify uploads before processing."],
+];
+const pipeline = [
+    ["01 / Upload", "PDFs and images", "Private Supabase Storage"],
+    ["02 / Process", "Convert and index", "Inngest background jobs"],
+    ["03 / Retrieve", "Find relevant chunks", "Postgres + pgvector"],
+    ["04 / Study", "Chat, summaries, quizzes", "Next.js + OpenAI"],
 ];
 
-function ProjectCard({ project, index }) {
-    const hasLink = !!project.link;
-    const Wrapper = hasLink ? "a" : "div";
-    const wrapperProps = hasLink
-        ? { href: project.link, target: "_blank", rel: "noopener noreferrer" }
-        : {};
-
+function CursusFeature() {
+    const project = getProject("cursus");
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.05 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.01 }}
-        >
-            <Wrapper
-                {...wrapperProps}
-                className="group block bg-neutral-900/60 border border-neutral-800 rounded-xl overflow-hidden hover:border-neutral-700 transition-all duration-300 h-full"
-            >
-                {/* Preview Area */}
-                <div className="h-40 bg-neutral-800/40 border-b border-neutral-800 flex items-center justify-center group-hover:bg-neutral-800/60 transition-colors relative overflow-hidden">
-                    {project.image ? (
-                        <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-                        />
-                    ) : (
-                        <IconCode className="w-8 h-8 text-neutral-700" />
-                    )}
-
-                    {/* External link indicator */}
-                    {hasLink && (
-                        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <IconExternalLink className="w-4 h-4 text-neutral-500" />
-                        </div>
-                    )}
+        <article id="cursus" className="rounded-2xl border border-neutral-700 bg-neutral-900/60 overflow-hidden mb-8">
+            <div className="p-6 md:p-9 grid md:grid-cols-[1.15fr_1fr] gap-8 items-center">
+                <div>
+                    <p className="text-xs text-green-400 font-mono mb-4">FEATURED / {project.status.toUpperCase()}</p>
+                    <h3 className="text-4xl md:text-5xl text-white font-light tracking-tight">{project.title}</h3>
+                    <p className="text-lg text-neutral-200 mt-3">{project.subtitle}</p>
+                    <p className="text-sm text-neutral-400 leading-relaxed mt-5">{project.description}</p>
+                    <p className="text-xs text-neutral-400 font-mono mt-5 mb-5">{project.role}</p>
+                    <ProjectLinks project={project} />
                 </div>
-
-                {/* Content Area */}
-                <div className="p-4">
-                    {/* Title */}
-                    <h3 className="text-sm font-medium text-white font-mono">{project.title}</h3>
-
-                    {/* Subtitle */}
-                    {project.subtitle && (
-                        <p className="text-xs text-neutral-500 font-mono mt-0.5">{project.subtitle}</p>
-                    )}
-
-                    {/* Description */}
-                    {project.description && (
-                        <p className="text-xs text-neutral-500 font-mono leading-relaxed mt-2">
-                            {project.description}
-                        </p>
-                    )}
-
-                    {/* Tech tags */}
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                        {project.tech.map((t) => (
-                            <span
-                                key={t}
-                                className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-neutral-800 text-neutral-400 border border-neutral-700"
-                            >
-                                {t}
-                            </span>
-                        ))}
+                <figure>
+                    <a href={cursusImage} target="_blank" rel="noopener noreferrer" aria-label="Open full-size Cursus landing page screenshot">
+                        <img src={cursusImage} width="1919" height="939" loading="lazy" alt="Cursus landing page introducing its study workspace, boards, calendar sync, and grounded chat" className="w-full rounded-lg border border-neutral-800" />
+                    </a>
+                    <figcaption className="text-xs text-neutral-400 mt-3 leading-relaxed">The Cursus landing page. Open the image for a closer look.</figcaption>
+                </figure>
+            </div>
+            <details className="group border-t border-neutral-800">
+                <summary className="cursor-pointer px-6 md:px-9 py-5 text-sm font-mono text-neutral-200 hover:text-green-400">Inside Cursus — architecture & engineering decisions</summary>
+                <div className="px-6 md:px-9 pb-9 space-y-9">
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div><h4 className="text-sm text-white font-mono mb-3">The problem</h4><p className="text-sm text-neutral-400 leading-relaxed">Course material is spread across files and deadlines. I built a workspace where the material itself becomes the starting point for study: organize it, ask questions, and practice from the same source.</p></div>
+                        <div><h4 className="text-sm text-white font-mono mb-3">What I built</h4><p className="text-sm text-neutral-400 leading-relaxed">The full-stack study workspace: collections and views, private uploads, background indexing, grounded AI tools, and one-way Google Calendar sync.</p></div>
                     </div>
+                    <div>
+                        <h4 className="text-sm text-white font-mono mb-4">From upload to answer</h4>
+                        <ol aria-label="Cursus upload and retrieval architecture" className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            {pipeline.map(([step, title, detail]) => <li key={step} className="rounded-lg border border-neutral-700 bg-neutral-950/60 p-4"><p className="text-xs text-green-400 font-mono">{step}</p><p className="text-sm text-white mt-3">{title}</p><p className="text-xs text-neutral-400 mt-2 leading-relaxed">{detail}</p></li>)}
+                        </ol>
+                        <p className="text-xs text-neutral-400 mt-4 leading-relaxed">The Next.js app coordinates authenticated requests. Calendar sync is a separate, one-way integration for dated workspace items.</p>
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {decisions.map(([title, description]) => <div key={title}><h4 className="text-sm text-white mb-2">{title}</h4><p className="text-sm text-neutral-400 leading-relaxed">{description}</p></div>)}
+                    </div>
+                    <div className="border-l-2 border-neutral-600 pl-4"><h4 className="text-sm text-white mb-2">A deliberate tradeoff</h4><p className="text-sm text-neutral-400 leading-relaxed">Background ingestion keeps document processing out of the upload request, but material needs to finish indexing before it can support chat. Calendar sync goes from Cursus to Google Calendar; it does not reconcile edits in both directions.</p></div>
+                    <p className="text-xs text-neutral-400 font-mono leading-relaxed">{project.tech.join(" · ")}</p>
                 </div>
-            </Wrapper>
-        </motion.div>
+            </details>
+        </article>
     );
 }
 
 export default function Projects() {
     return (
-        <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-24">
-            <div className="max-w-6xl mx-auto">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4 }}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-12"
-                >
-                    <div className="flex items-center gap-3">
-                        <IconCode className="w-6 h-6 text-neutral-400" />
-                        <h2 className="text-2xl font-light text-white">Projects</h2>
-                    </div>
-                    <span className="text-sm text-neutral-500 font-mono">// things i've built</span>
-                </motion.div>
-
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {projects.map((project, index) => (
-                        <ProjectCard key={project.title} project={project} index={index} />
+        <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
+            <div className="max-w-5xl mx-auto">
+                <SectionHeading title="Work" note="products, tools, and experiments" />
+                <CursusFeature />
+                <div className="grid md:grid-cols-2 gap-4">
+                    {projects.filter((project) => project.group === "selected").map((project) => (
+                        <article id={project.id} key={project.id} className="flex flex-col p-6 rounded-xl border border-neutral-800 bg-neutral-900/60 hover:border-neutral-600 transition-colors">
+                            {project.id === "ultron" && <img src={ultronImage} loading="lazy" width="1919" height="939" alt="Ultron 9.0 hackathon website" className="w-full aspect-[2/1] object-cover object-top rounded-lg border border-neutral-800 mb-5" />}
+                            <div className="flex flex-wrap justify-between gap-2 items-baseline"><h3 className="text-xl text-white font-mono">{project.title}</h3><span className="text-[11px] font-mono text-neutral-400">{project.status}</span></div>
+                            <p className="text-sm text-neutral-300 mt-3 leading-relaxed">{project.description}</p>
+                            <p className="text-xs text-neutral-400 font-mono mt-4">{project.role}</p>
+                            <p className="text-sm text-neutral-300 border-l-2 border-green-400/40 pl-3 mt-4 leading-relaxed">{project.proof}</p>
+                            <p className="text-xs text-neutral-400 mt-5 mb-5 leading-relaxed">{project.tech.join(" · ")}</p>
+                            <div className="mt-auto"><ProjectLinks project={project} /></div>
+                        </article>
                     ))}
                 </div>
             </div>

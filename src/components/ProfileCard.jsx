@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import './profileCard.css';
 import me from "../assets/newme.webp";
+import { profile } from "../data/portfolio";
 
 const DEFAULT_INNER_GRADIENT = 'linear-gradient(145deg,#60496e8c 0%,#71C4FF44 100%)';
 
@@ -18,8 +19,8 @@ const adjust = (v, fMin, fMax, tMin, tMax) => round(tMin + ((tMax - tMin) * (v -
 
 const ProfileCardComponent = ({
                                   avatarUrl = me,
-                                  iconUrl = '<Placeholder for icon URL>',
-                                  grainUrl = '<Placeholder for grain URL>',
+                                  iconUrl = null,
+                                  grainUrl = null,
                                   innerGradient,
                                   behindGlowEnabled = false,
                                   behindGlowColor = false,
@@ -32,7 +33,7 @@ const ProfileCardComponent = ({
                                   name = 'Abhilash Kar',
                                   title = '',
                                   handle = 'abhilxsh07',
-                                  status = 'Software Engineer',
+                                  status = profile.role,
                                   contactText = 'Contact',
                                   showUserInfo = true,
                                   onContactClick

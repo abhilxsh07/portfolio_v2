@@ -1,45 +1,36 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-
-const routes = [
-    { label: "/skills", href: "#skills" },
-    { label: "/projects", href: "#projects" },
-    { label: "/building", href: "#building" },
-    { label: "/experience", href: "#experience" },
-    { label: "/contact", href: "#contact" }
-];
+import { navigation as routes } from "../data/portfolio";
+import useReducedMotion from "../hooks/useReducedMotion";
 
 export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("");
+    const reducedMotion = useReducedMotion();
 
     useEffect(() => {
-        const sections = ["skills", "projects", "building", "experience", "contact"];
-        const observers = [];
-
-        sections.forEach((id) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-
-            const observer = new IntersectionObserver(
-                ([entry]) => {
-                    if (entry.isIntersecting) {
-                        setActiveSection(id);
-                    }
-                },
-                { threshold: 0.3, rootMargin: "-80px 0px -50% 0px" }
-            );
-            observer.observe(el);
-            observers.push(observer);
-        });
-
-        return () => observers.forEach((obs) => obs.disconnect());
+        const sections = routes.map((route) => document.getElementById(route.href.slice(1))).filter(Boolean);
+        let frame = null;
+        const update = () => {
+            frame = null;
+            const current = sections.filter((section) => section.getBoundingClientRect().top <= 160).at(-1);
+            setActiveSection(current?.id || "");
+        };
+        const schedule = () => { if (frame === null) frame = requestAnimationFrame(update); };
+        schedule();
+        window.addEventListener("scroll", schedule, { passive: true });
+        window.addEventListener("resize", schedule);
+        return () => {
+            window.removeEventListener("scroll", schedule);
+            window.removeEventListener("resize", schedule);
+            if (frame !== null) cancelAnimationFrame(frame);
+        };
     }, []);
 
     const scrollToTop = (e) => {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0, behavior: reducedMotion ? "instant" : "smooth" });
     };
 
     return (
@@ -61,12 +52,13 @@ export default function Navbar() {
                     <span className="font-mono text-sm text-neutral-300">abhilashkar.dev</span>
                 </a>
 
-                <div className="flex items-center gap-6 md:gap-8">
+                <div className="flex items-center gap-5 lg:gap-8">
                     {routes.map((route) => (
                         <a
                             key={route.label}
                             href={route.href}
-                            className={`font-mono text-sm transition-colors hidden sm:inline ${
+                            aria-current={activeSection === route.href.slice(1) ? "location" : undefined}
+                            className={`font-mono text-sm transition-colors hidden md:inline ${
                                 activeSection === route.href.slice(1)
                                     ? "text-white"
                                     : "text-neutral-400 hover:text-white"
@@ -80,8 +72,10 @@ export default function Navbar() {
                 {/* Hamburger button — mobile only */}
                 <button
                     onClick={() => setMenuOpen((prev) => !prev)}
-                    className="sm:hidden text-neutral-400 hover:text-white transition-colors"
+                    className="md:hidden text-neutral-400 hover:text-white transition-colors"
                     aria-label="Toggle menu"
+                    aria-expanded={menuOpen}
+                    aria-controls="mobile-navigation"
                 >
                     {menuOpen ? <IconX size={22} /> : <IconMenu2 size={22} />}
                 </button>
@@ -95,7 +89,8 @@ export default function Navbar() {
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="sm:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800/60 overflow-hidden"
+                        id="mobile-navigation"
+                        className="md:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800/60 overflow-hidden"
                     >
                         <div className="flex flex-col px-6 py-4 gap-4">
                             {routes.map((route) => (

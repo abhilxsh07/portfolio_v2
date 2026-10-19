@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { IconMail, IconExternalLink, IconTerminal2 } from "@tabler/icons-react";
 import TextGenerateEffect from "./ui/TextGenerateEffect";
 import avatarImg from "../assets/newme.webp";
+import { profile, getProject } from "../data/portfolio";
+import { terminalShortcut } from "../lib/platform";
+import useReducedMotion from "../hooks/useReducedMotion";
 
 // Lazy-load ProfileCard so its CSS (with mix-blend-mode, filters, etc.)
 // is NOT injected into the page until the card actually renders.
@@ -10,6 +13,7 @@ const ProfileCard = lazy(() => import("./ProfileCard"));
 
 export default function Hero({ onOpenTerminal }) {
     const [showContent, setShowContent] = useState(false);
+    const reducedMotion = useReducedMotion();
 
     // Trigger the entrance animation after a brief delay (replaces the old status-lines gate)
     useEffect(() => {
@@ -18,7 +22,7 @@ export default function Hero({ onOpenTerminal }) {
     }, []);
 
     return (
-        <section className="relative z-10 min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-20">
+        <section className="relative z-10 min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-28 pb-16">
             <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-between gap-12">
                 {/* Left side — all existing hero content */}
                 <div className="flex-1 max-w-xl">
@@ -27,7 +31,7 @@ export default function Hero({ onOpenTerminal }) {
                         className="transition-all duration-500 ease-out"
                         style={{
                             opacity: showContent ? 1 : 0,
-                            transform: showContent ? 'translateY(0)' : 'translateY(12px)',
+                            transform: showContent || reducedMotion ? 'translateY(0)' : 'translateY(12px)',
                         }}
                     >
                         {/* Location line */}
@@ -41,7 +45,7 @@ export default function Hero({ onOpenTerminal }) {
                         <div className="mb-3">
                             <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-white tracking-tight font-mono inline-flex items-center gap-3">
                                 {showContent ? (
-                                    <TextGenerateEffect text="Abhilash Kar" staggerDelay={0.08} wordDuration={0.4} />
+                                    reducedMotion ? profile.name : <TextGenerateEffect text={profile.name} staggerDelay={0.08} wordDuration={0.4} />
                                 ) : (
                                     <span className="opacity-0">Abhilash Kar</span>
                                 )}
@@ -51,23 +55,25 @@ export default function Hero({ onOpenTerminal }) {
                         {/* Role */}
                         <div className="mb-4">
                             <p className="text-lg md:text-xl font-light text-neutral-400 font-mono">
-                                Full Stack Developer
+                                {profile.role}
                             </p>
                         </div>
 
                         {/* Bio */}
-                        <div className="mb-8 max-w-md">
-                            <p className="text-sm text-neutral-500 font-mono leading-relaxed">
-                                I write systems that scale and code that doesn't apologize. <br/>
-                                Fueled by strong opinions and stronger coffee.
-                            </p>
+                        <div className="mb-8 max-w-lg space-y-4">
+                            <p className="text-xl md:text-2xl text-neutral-100 leading-relaxed">{profile.intro}</p>
+                            <p className="text-sm text-neutral-400 leading-relaxed">{profile.context}</p>
+                            <p className="text-sm text-neutral-300 leading-relaxed">{profile.proof}</p>
                         </div>
 
                         {/* CTA Buttons — using inline border/bg colors to avoid oklch color-mix green shift */}
                         <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                            <a href={getProject("cursus").liveUrl} target="_blank" rel="noopener noreferrer" className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-400 text-neutral-950 hover:bg-green-300 transition-colors text-sm font-medium">
+                                View Cursus <IconExternalLink className="w-4 h-4" aria-hidden="true" />
+                            </a>
                             <button
                                 onClick={() => {
-                                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                    document.getElementById('contact')?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' });
                                 }}
                                 className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
                                 style={{ border: '1px solid #404040', background: 'rgba(23,23,23,0.6)' }}
@@ -78,7 +84,7 @@ export default function Hero({ onOpenTerminal }) {
                             </button>
 
                             <a
-                                href="/resume"
+                                href={profile.resume}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium"
@@ -86,7 +92,7 @@ export default function Hero({ onOpenTerminal }) {
                                 aria-label="View resume (opens in new tab)"
                             >
                                 <IconExternalLink className="w-4 h-4" />
-                                Resume
+                                Résumé
                             </a>
                             <button
                                 onClick={onOpenTerminal}
@@ -96,7 +102,7 @@ export default function Hero({ onOpenTerminal }) {
                             >
                                 <IconTerminal2 className="w-4 h-4" />
                                 Launch Terminal
-                                <span className="hidden md:inline text-neutral-600 text-xs ml-1">⌘K</span>
+                                <span className="hidden md:inline text-neutral-400 text-xs ml-1">{terminalShortcut()}</span>
                             </button>
                         </div>
                     </div>
@@ -139,16 +145,16 @@ export default function Hero({ onOpenTerminal }) {
                             <div className="hero-card-wrapper">
                                 <Suspense fallback={null}>
                                     <ProfileCard
-                                        name="Abhilash Kar"
+                                        name={profile.name}
                                         title=""
-                                        handle="abhilxsh07"
-                                        status="Software Engineer"
+                                        handle={profile.handle}
+                                        status={profile.role}
                                         contactText="Contact"
                                         showUserInfo={true}
-                                        enableTilt={true}
+                                        enableTilt={!reducedMotion}
                                         enableMobileTilt={false}
                                         onContactClick={() => {
-                                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                                            document.getElementById('contact')?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' });
                                         }}
                                     />
                                 </Suspense>

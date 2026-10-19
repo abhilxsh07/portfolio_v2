@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconX } from "@tabler/icons-react";
+import { profile } from "../data/portfolio";
+import { getPortfolioOutput } from "../lib/terminalContent";
 
 const COMMANDS = [
     { name: "about", desc: "- Learn about me" },
@@ -21,266 +23,27 @@ const COMMANDS = [
 ];
 
 function getOutput(cmd) {
+    const portfolioOutput = getPortfolioOutput(cmd);
+    if (portfolioOutput) return portfolioOutput;
     switch (cmd) {
         case "help":
-            return COMMANDS.map((c) => ({
-                text: `  ${c.name.padEnd(14)} ${c.desc}`,
-                color: "text-neutral-300"
-            }));
-        case "about":
-            return [
-                { text: "Abhilash Kar — Software Engineer", color: "text-green-400" },
-                { text: "Engineering systems built for scale.", color: "text-neutral-400" },
-                { text: "B.Tech in CSE from SRMIST.", color: "text-neutral-400" }
-            ];
-        case "skills":
-            return [
-                { text: "", color: "" },
-                {
-                    text: "Proficient:",
-                    color: "text-green-400",
-                    html: true,
-                    content: <span className="text-green-400 font-bold">Proficient:</span>
-                },
-                {
-                    text: "  Java 90  |  Python 85  |  JavaScript 85  |  TypeScript 80",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span className="text-neutral-300">
-                            {"  "}Java 90{"  |  "}Python 85{"  |  "}JavaScript 85{"  |  "}TypeScript 80
-                        </span>
-                    )
-                },
-                {
-                    text: "  React 85  |  Spring Boot 80  |  Node.js 80  |  Kafka 75",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span className="text-neutral-300">
-                            {"  "}React 85{"  |  "}Spring Boot 80{"  |  "}Node.js 80{"  |  "}Kafka 75
-                        </span>
-                    )
-                },
-                {
-                    text: "  PostgreSQL 80  |  MySQL 80  |  MongoDB 75  |  Docker 75",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span className="text-neutral-300">
-                            {"  "}PostgreSQL 80{"  |  "}MySQL 80{"  |  "}MongoDB 75{"  |  "}Docker 75
-                        </span>
-                    )
-                },
-                {
-                    text: "  Git 90  |  HTML/CSS 85  |  Tailwind CSS 85",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span className="text-neutral-300">
-                            {"  "}Git 90{"  |  "}HTML/CSS 85{"  |  "}Tailwind CSS 85
-                        </span>
-                    )
-                },
-                { text: "", color: "" },
-                {
-                    text: "Familiar:",
-                    color: "text-green-400",
-                    html: true,
-                    content: <span className="text-green-400 font-bold">Familiar:</span>
-                },
-                {
-                    text: "  { Go, C/C++, SQL, PHP, Next.js, WebGL/OGL, GSAP, Netty, Spark, ... }",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span>
-                            {"  "}<span className="text-neutral-500">{"{"}</span>
-                            <span className="text-neutral-300"> Go, C/C++, SQL, PHP, Next.js, WebGL/OGL, GSAP, Netty, Spark,</span>
-                        </span>
-                    )
-                },
-                {
-                    text: "    Express, Django/Flask, gRPC, Redis, Elasticsearch, Kubernetes, ...",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span>
-                            {"    "}<span className="text-neutral-300">Express, Django/Flask, gRPC, Redis, Elasticsearch, Kubernetes,</span>
-                        </span>
-                    )
-                },
-                {
-                    text: "    AWS, CI/CD, Terraform, REST, Microservices, System Design, ... }",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span>
-                            {"    "}<span className="text-neutral-300">AWS, CI/CD, Terraform, REST, Microservices, System Design,</span>
-                        </span>
-                    )
-                },
-                {
-                    text: "    LangChain, Streamlit, NumPy/Pandas, Vite, MATLAB }",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span>
-                            {"    "}<span className="text-neutral-300">LangChain, Streamlit, NumPy/Pandas, Vite, MATLAB </span>
-                            <span className="text-neutral-500">{"}"}</span>
-                        </span>
-                    )
-                }
-            ];
-        case "experience":
-            return [
-                { text: "Technical Staff @Futurix", color: "text-white" },
-                { text: "  Aug 2025 - Present | ACTIVE", color: "text-green-500" },
-                { text: "", color: "" },
-                { text: "B.Tech in CSE from SRMIST.", color: "text-white" },
-                { text: "  Aug 2025 - Aug 2029", color: "text-neutral-400" }
-            ];
-        case "projects":
-            return [
-                {
-                    text: "> projects/",
-                    color: "text-white",
-                    html: true,
-                    content: (
-                        <span>
-                            <span className="text-neutral-500">&gt; </span>
-                            <span className="text-white">projects/</span>
-                        </span>
-                    )
-                },
-                { text: "", color: "" },
-                { text: "  Cursus", color: "text-neutral-200" },
-                { text: "  Next.js, TypeScript, Tailwind, Supabase, OpenAI, Inngest", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Hackathon Web Application", color: "text-neutral-200" },
-                { text: "  TypeScript, React, Tailwind, Node, PHP, MySQL", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Hackathon Web App (Collaborated)", color: "text-neutral-200" },
-                { text: "  Next.js, React, TypeScript, Tailwind, PostCSS", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Portfolio Website (legacy)", color: "text-neutral-200" },
-                { text: "  JSX, CSS, React, WebGL, Vite", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Student DB Manager", color: "text-neutral-200" },
-                { text: "  Python, MySQL", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Reflex Arc Demonstration", color: "text-neutral-200" },
-                { text: "  BioTech", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  C/C++ (Learning)", color: "text-neutral-200" },
-                { text: "  Compile-Time Programming, Structs, Classes, Polymorphism", color: "text-neutral-500" },
-                { text: "", color: "" },
-                { text: "  Total: 7 projects", color: "text-green-400" }
-            ];
-        case "contact":
-            return [
-                { text: "Email:    abh6l9sh@protonmail.com", color: "text-neutral-300" },
-                { text: "GitHub:   github.com/abhilxsh07", color: "text-neutral-300" },
-                { text: "LinkedIn: linkedin.com/in/abhilxsh", color: "text-neutral-300" }
-            ];
+            return COMMANDS.map((command) => ({ text: `  ${command.name.padEnd(14)} ${command.desc}`, color: "text-neutral-300" }));
         case "ls":
-            return [
-                {
-                    text: "projects/  skills.json  config/  docker-compose.yml  README.md",
-                    color: "text-neutral-400",
-                    html: true,
-                    content: (
-                        <span>
-                            <span className="text-neutral-200">projects/</span>{"  "}
-                            <span className="text-neutral-400">skills.json</span>{"  "}
-                            <span className="text-neutral-200">config/</span>{"  "}
-                            <span className="text-neutral-400">docker-compose.yml</span>{"  "}
-
-                            <span className="text-neutral-400">README.md</span>
-                        </span>
-                    )
-                }
-            ];
+            return [{ text: "projects/  skills.json  experience.txt  resume.txt", color: "text-neutral-300" }];
         case "ping":
-            return [
-                {
-                    text: "PING 8.8.8.8: 12ms | Connection: STABLE",
-                    color: "text-neutral-300",
-                    html: true,
-                    content: (
-                        <span>
-                            <span className="text-neutral-300">PING 8.8.8.8: 12ms | Connection: </span>
-                            <span className="text-green-500">STABLE</span>
-                        </span>
-                    )
-                }
-            ];
+            return [{ text: "PONG — you're connected to my portfolio.", color: "text-green-400" }];
         case "neofetch":
             return [
-                {
-                    text: "", color: "", html: true,
-                    content: (
-                        <div className="flex gap-6 items-start">
-                            <span className="text-green-500 font-bold text-2xl font-mono shrink-0">AK</span>
-                            <div className="text-xs space-y-0.5">
-                                <span className="text-green-400 font-bold">abhilash@dev</span>
-                                <div className="text-neutral-600">──────────────</div>
-                                <div><span className="text-green-400">OS:</span> <span className="text-neutral-300">Win 11</span></div>
-                                <div><span className="text-green-400">Editor:</span> <span className="text-neutral-300">WebStorm / Notepad++</span></div>
-                                <div><span className="text-green-400">Stack:</span> <span className="text-neutral-300">C++, Python, React, Node</span></div>
-                                <div><span className="text-green-400">Terminal:</span> <span className="text-neutral-300">portfolio_v2 ~</span></div>
-                                <div><span className="text-green-400">Uptime:</span> <span className="text-neutral-300"> 2007-07-10</span></div>
-                                <div><span className="text-green-400">Resolution:</span> <span className="text-neutral-300">1920x1080</span></div>
-                            </div>
-                        </div>
-                    )
-                }
-            ];
-        case "cat resume.txt":
-            return [
-                { text: "", color: "" },
-                { text: "┌─── resume.txt ───────────────────────┐", color: "text-neutral-600" },
-                { text: "", color: "" },
-                { text: "  ABHILASH KAR", color: "text-white" },
-                { text: "  Full Stack Developer", color: "text-green-400" },
-                { text: "  Chennai, India | abhilashkar.dev", color: "text-neutral-400" },
-                { text: "", color: "" },
-                { text: "  EDUCATION", color: "text-green-400" },
-                { text: "  B.Tech CSE — SRMIST (2025–2029)", color: "text-neutral-300" },
-                { text: "", color: "" },
-                { text: "  EXPERIENCE", color: "text-green-400" },
-                { text: "  Technical Staff — Futurix (2025–Present)", color: "text-neutral-300" },
-                { text: "", color: "" },
-                { text: "  STACK", color: "text-green-400" },
-                { text: "  Java · Python · TypeScript · React · Spring Boot", color: "text-neutral-300" },
-                { text: "  Node.js · PostgreSQL · Docker · Kafka · AWS", color: "text-neutral-300" },
-                { text: "", color: "" },
-                { text: "  LINKS", color: "text-green-400" },
-                { text: "  github.com/abhilxsh07", color: "text-neutral-300" },
-                { text: "  linkedin.com/in/abhilxsh", color: "text-neutral-300" },
-                { text: "", color: "" },
-                { text: "└──────────────────────────────────────┘", color: "text-neutral-600" },
-                { text: "", color: "" },
-                {
-                    text: "> Full resume: /resume",
-                    color: "text-neutral-500",
-                    html: true,
-                    content: (
-                        <span>
-                            <span className="text-neutral-500">&gt; Full resume: </span>
-                            <a href="/resume" target="_blank" rel="noopener noreferrer" className="text-green-400 hover:underline">/resume</a>
-                        </span>
-                    )
-                }
+                { text: `${profile.name} / ${profile.role}`, color: "text-green-400" },
+                { text: `Location: ${profile.location}`, color: "text-neutral-300" },
+                { text: "Stack: Next.js · TypeScript · Supabase · Python · C++", color: "text-neutral-300" },
+                { text: "Focus: building products end to end", color: "text-neutral-300" },
+                { text: "Terminal: abhilashkar.dev", color: "text-neutral-400" },
             ];
         case "whoami":
-            return [
-                { text: "abhilash", color: "text-green-400" }
-            ];
+            return [{ text: profile.handle, color: "text-green-400" }];
         default:
-            return [
-                { text: `Command not found: ${cmd}. Type "help" for available commands.`, color: "text-neutral-400" }
-            ];
+            return [{ text: `Command not found: ${cmd}. Type "help" for available commands.`, color: "text-neutral-400" }];
     }
 }
 
@@ -475,7 +238,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             if (e.key === "Tab" && isOpen) {
                 const terminal = document.querySelector('[role="dialog"][aria-label="Interactive terminal"]');
                 if (!terminal) return;
-                const focusable = terminal.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+                const focusable = terminal.querySelectorAll('a[href], input, button, [tabindex]:not([tabindex="-1"])');
                 if (focusable.length === 0) return;
                 const first = focusable[0];
                 const last = focusable[focusable.length - 1];
@@ -509,7 +272,10 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     const [wasOpen, setWasOpen] = useState(isOpen);
     if (wasOpen !== isOpen) {
         setWasOpen(isOpen);
-        if (!isOpen) setIsBrewing(false);
+        if (!isOpen) {
+            setIsBrewing(false);
+            setHistory((previous) => previous.map((entry) => entry.type === "coffee" ? { type: "output", lines: [{ text: "Coffee service stopped when the terminal closed.", color: "text-neutral-400" }] } : entry));
+        }
     }
 
     const executeCommand = useCallback((cmd) => {
@@ -599,6 +365,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
 
     const handleCoffeeDone = useCallback(() => {
         setIsBrewing(false);
+        setHistory((previous) => previous.map((entry) => entry.type === "coffee" ? { type: "output", lines: [{ text: "Coffee ready. Caffeine levels: OPTIMAL", color: "text-green-400" }] } : entry));
     }, []);
 
     const handleKeyDown = (e) => {
@@ -710,7 +477,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                     <div key={i} className="space-y-0.5">
                                         {entry.lines.map((line, j) => (
                                             <div key={j} className={line.color}>
-                                                {line.html ? line.content : line.text}
+                                                {line.href ? <a href={line.href} target={line.href.startsWith("#") ? undefined : "_blank"} rel="noopener noreferrer" onClick={line.href.startsWith("#") ? onClose : undefined} className="underline underline-offset-4 hover:text-white">{line.text}</a> : line.html ? line.content : line.text}
                                             </div>
                                         ))}
                                     </div>

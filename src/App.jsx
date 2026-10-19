@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
+import EarlierWork from "./components/EarlierWork";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
 import Contact from "./components/Contact";
@@ -46,17 +47,15 @@ export default function App() {
             {!reducedMotion && <ShootingStars interval={5000} />}
             <Navbar />
 
-            <Hero onOpenTerminal={openTerminal} />
-
-            <Skills />
-
-            <Projects />
-
-            <Building />
-
-            <Experience />
-
-            <Contact />
+            <main id="main-content" tabIndex={-1}>
+                <Hero onOpenTerminal={openTerminal} />
+                <Projects />
+                <Skills />
+                <Experience />
+                <Building />
+                <EarlierWork />
+                <Contact />
+            </main>
 
             <Footer />
 
