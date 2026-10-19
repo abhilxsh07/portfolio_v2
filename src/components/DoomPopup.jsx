@@ -32,6 +32,7 @@ export default function DoomPopup({ isOpen, onClose }) {
     const [isMinimized, setIsMinimized] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [isResizing, setIsResizing] = useState(false);
     const [loadError, setLoadError] = useState(false);
     const [iframeLoaded, setIframeLoaded] = useState(false);
 
@@ -41,8 +42,10 @@ export default function DoomPopup({ isOpen, onClose }) {
     const resizeStart = useRef(null);
     const iframeRef = useRef(null);
 
-    // Center on open
-    useEffect(() => {
+    // Adjust geometry once per open transition, without a second effect render.
+    const [wasOpen, setWasOpen] = useState(isOpen);
+    if (wasOpen !== isOpen) {
+        setWasOpen(isOpen);
         if (isOpen) {
             const cx = Math.round((window.innerWidth - DEFAULT_W) / 2);
             const cy = Math.round((window.innerHeight - DEFAULT_H) / 2);
@@ -53,7 +56,7 @@ export default function DoomPopup({ isOpen, onClose }) {
             setLoadError(false);
             setIframeLoaded(false);
         }
-    }, [isOpen]);
+    }
 
     // Return focus to whatever opened the popup when it closes
     const previousFocus = useRef(null);
@@ -100,6 +103,7 @@ export default function DoomPopup({ isOpen, onClose }) {
         e.preventDefault();
         e.stopPropagation();
         resizeStart.current = { mx: e.clientX, my: e.clientY, ...pos, ...size, handle };
+        setIsResizing(true);
 
         const onMove = (ev) => {
             const s = resizeStart.current;
@@ -153,6 +157,7 @@ export default function DoomPopup({ isOpen, onClose }) {
 
         const onUp = () => {
             resizeStart.current = null;
+            setIsResizing(false);
             window.removeEventListener("mousemove", onMove);
             window.removeEventListener("mouseup", onUp);
         };
@@ -216,7 +221,7 @@ export default function DoomPopup({ isOpen, onClose }) {
     }, []);
 
     // Pointer overlay to prevent iframe from stealing mouse during drag/resize
-    const showOverlay = isDragging || resizeStart.current !== null;
+    const showOverlay = isDragging || isResizing;
 
     return (
         <AnimatePresence>

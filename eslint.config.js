@@ -23,7 +23,8 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Core ESLint does not track JSX member tags (motion.div) or component arguments.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^(motion$|[A-Z_])', argsIgnorePattern: '^[A-Z_]' }],
     },
   },
 ])

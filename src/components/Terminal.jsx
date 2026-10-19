@@ -316,84 +316,40 @@ function CoffeeAnimation({ onDone }) {
     const [showSummary, setShowSummary] = useState(false);
     const [codeQuality] = useState(() => Math.floor(Math.random() * 71) + 30); // 30-100
     const [summaryLines, setSummaryLines] = useState(0);
-    const intervalRef = useRef(null);
-    const timeoutRef = useRef(null);
-    const mountedRef = useRef(true);
-
-    const cleanup = useCallback(() => {
-        if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-        if (timeoutRef.current) { clearTimeout(timeoutRef.current); timeoutRef.current = null; }
-    }, []);
-
     useEffect(() => {
-        mountedRef.current = true;
-        // Start first step after 300ms
-        timeoutRef.current = setTimeout(() => {
-            if (mountedRef.current) setCurrentStep(0);
-        }, 300);
-        return () => {
-            mountedRef.current = false;
-            cleanup();
+        const timers = new Set();
+        let interval;
+        const later = (callback, delay) => {
+            const timer = setTimeout(() => { timers.delete(timer); callback(); }, delay);
+            timers.add(timer);
         };
-    }, [cleanup]);
-
-    // Drive progress bar for current step
-    useEffect(() => {
-        if (currentStep < 0 || currentStep >= COFFEE_STEPS.length) return;
-        if (completedSteps.includes(currentStep)) return;
-
-        setPercent(0);
-        const tickMs = 70;
-
-        intervalRef.current = setInterval(() => {
-            if (!mountedRef.current) return;
-            setPercent((prev) => {
-                if (prev >= 100) return 100;
-                const remaining = 100 - prev;
-                const step = Math.min(
-                    Math.floor(Math.random() * 6) + 2,
-                    remaining
-                );
-                return prev + step;
-            });
-        }, tickMs);
-
-        return () => {
-            if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+        const runStep = (index) => {
+            setCurrentStep(index);
+            setPercent(0);
+            const started = performance.now();
+            interval = setInterval(() => {
+                const progress = Math.min(100, Math.round((performance.now() - started) / COFFEE_STEPS[index].duration * 100));
+                setPercent(progress);
+                if (progress < 100) return;
+                clearInterval(interval);
+                setCompletedSteps((previous) => [...previous, index]);
+                if (index + 1 < COFFEE_STEPS.length) {
+                    later(() => runStep(index + 1), 200);
+                } else {
+                    later(() => {
+                        setShowSummary(true);
+                        [1, 2, 3].forEach((line) => later(() => setSummaryLines(line), line * 150));
+                        later(() => onDone?.(), 600);
+                    }, 400);
+                }
+            }, 70);
         };
-    }, [currentStep, completedSteps]);
-
-    // When percent hits 100, mark complete and advance
-    useEffect(() => {
-        if (percent < 100) return;
-        if (currentStep < 0 || currentStep >= COFFEE_STEPS.length) return;
-        if (completedSteps.includes(currentStep)) return;
-
-        if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-
-        setCompletedSteps((prev) => [...prev, currentStep]);
-
-        const nextStep = currentStep + 1;
-        if (nextStep < COFFEE_STEPS.length) {
-            timeoutRef.current = setTimeout(() => {
-                if (mountedRef.current) {
-                    setCurrentStep(nextStep);
-                }
-            }, 200);
-        } else {
-            // All steps done — show summary after 400ms
-            timeoutRef.current = setTimeout(() => {
-                if (mountedRef.current) {
-                    setShowSummary(true);
-                    // Reveal summary lines one by one
-                    setTimeout(() => mountedRef.current && setSummaryLines(1), 150);
-                    setTimeout(() => mountedRef.current && setSummaryLines(2), 300);
-                    setTimeout(() => mountedRef.current && setSummaryLines(3), 450);
-                    setTimeout(() => { if (mountedRef.current) onDone?.(); }, 600);
-                }
-            }, 400);
-        }
-    }, [percent, currentStep, completedSteps, onDone]);
+        later(() => runStep(0), 300);
+        return () => {
+            clearInterval(interval);
+            timers.forEach(clearTimeout);
+        };
+    }, [onDone]);
 
     return (
         <div className="space-y-1">
@@ -542,22 +498,19 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         }
     }, [paletteIndex]);
 
-    useEffect(() => {
-        if (input.startsWith("/")) {
-            const query = input.slice(1).toLowerCase();
-            const filtered = COMMANDS.filter((c) => c.name.includes(query));
-            setFilteredCommands(filtered);
-            setShowPalette(true);
-            setPaletteIndex(0);
-        } else {
-            setShowPalette(false);
-        }
-    }, [input]);
+    const updateInput = useCallback((value) => {
+        setInput(value);
+        setFilteredCommands(COMMANDS.filter((command) => command.name.includes(value.slice(1).toLowerCase())));
+        setShowPalette(value.startsWith("/"));
+        setPaletteIndex(0);
+    }, []);
 
-    // Clean up brewing state when terminal closes
-    useEffect(() => {
+    // Reset state when the externally controlled window closes.
+    const [wasOpen, setWasOpen] = useState(isOpen);
+    if (wasOpen !== isOpen) {
+        setWasOpen(isOpen);
         if (!isOpen) setIsBrewing(false);
-    }, [isOpen]);
+    }
 
     const executeCommand = useCallback((cmd) => {
         const trimmed = cmd.trim().toLowerCase();
@@ -682,7 +635,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 if (cmdHistory.length > 0) {
                     const newIdx = Math.min(cmdIndex + 1, cmdHistory.length - 1);
                     setCmdIndex(newIdx);
-                    setInput(cmdHistory[newIdx]);
+                    updateInput(cmdHistory[newIdx]);
                 }
                 return;
             }
@@ -691,7 +644,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 if (cmdIndex > 0) {
                     const newIdx = cmdIndex - 1;
                     setCmdIndex(newIdx);
-                    setInput(cmdHistory[newIdx]);
+                    updateInput(cmdHistory[newIdx]);
                 } else {
                     setCmdIndex(-1);
                     setInput("");
@@ -809,7 +762,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                 ref={inputRef}
                                 type="text"
                                 value={input}
-                                onChange={(e)=> setInput(e.target.value)}
+                                onChange={(e) => updateInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 placeholder='type command or press /'
                                 className="flex-1 bg-transparent text-white font-mono text-sm placeholder-neutral-600 outline-none"

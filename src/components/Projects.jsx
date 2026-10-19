@@ -5,7 +5,6 @@ import myUltronImg from "../assets/myUltron.webp";
 import collabUltronImg from "../assets/CollabUltron.webp";
 import portfolioImg from "../assets/Portfolio.webp";
 import pyMySQLImg from "../assets/PyMySQL.webp";
-import cImg from "../assets/C.webp";
 import reflexImg from "../assets/reflex.webp";
 import cursusImg from "../assets/Cursus.webp";
 
