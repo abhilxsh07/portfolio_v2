@@ -14,10 +14,13 @@ import StarsBackground from "./components/ui/StarsBackground";
 import ShootingStars from "./components/ui/ShootingStars";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { MotionConfig } from "motion/react";
+import useReducedMotion from "./hooks/useReducedMotion";
 
 export default function App() {
     const [terminalOpen, setTerminalOpen] = useState(false);
     const [doomOpen, setDoomOpen] = useState(false);
+    const reducedMotion = useReducedMotion();
 
     const openTerminal = useCallback(() => setTerminalOpen(true), []);
     const closeTerminal = useCallback(() => setTerminalOpen(false), []);
@@ -37,9 +40,10 @@ export default function App() {
     }, []);
 
     return (
+        <MotionConfig reducedMotion="user">
         <div className="min-h-screen bg-neutral-950 text-white">
-            <StarsBackground starCount={120} />
-            <ShootingStars interval={5000} />
+            {!reducedMotion && <StarsBackground starCount={120} />}
+            {!reducedMotion && <ShootingStars interval={5000} />}
             <Navbar />
 
             <Hero onOpenTerminal={openTerminal} />
@@ -70,5 +74,6 @@ export default function App() {
             <Analytics />
             <SpeedInsights />
         </div>
+        </MotionConfig>
     );
 }
