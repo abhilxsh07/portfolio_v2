@@ -21,6 +21,7 @@ export default function Contact() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     access_key: "96aff589-b21e-4732-b72d-b9c92a9dca9e",
+                    botcheck: e.target.elements.botcheck.checked,
                     name: formData.name,
                     email: formData.email,
                     message: formData.message,
