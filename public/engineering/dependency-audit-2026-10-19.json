@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-19",
+  "scope": "npm production dependency advisories; development dependencies omitted",
+  "baseline": {
+    "commit": "45baaff032dc5681dcf8088e095b92d70f7b59a9",
+    "lockfileBlob": "3a13419918e9f40d5d1712e027869405b38f4512",
+    "command": "npm audit --package-lock-only --omit=dev",
+    "advisories": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 3,
+      "critical": 0,
+      "total": 3
+    }
+  },
+  "result": {
+    "commit": "1bee3cbc5adb6dea96fed08037be8dd19c174bbc",
+    "lockfileBlob": "a52321c41ac2433322a6339593751503e5b9b8a4",
+    "command": "npm audit --omit=dev",
+    "advisories": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  "packages": [
+    {
+      "name": "nanoid",
+      "before": "3.3.15",
+      "after": "3.3.20",
+      "advisories": [
+        {
+          "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+          "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+          "severity": "high"
+        },
+        {
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+          "severity": "high"
+        }
+      ]
+    },
+    {
+      "name": "postcss",
+      "before": "8.5.16",
+      "after": "8.5.31",
+      "advisories": [
+        {
+          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+          "severity": "moderate"
+        },
+        {
+          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+          "severity": "high"
+        }
+      ]
+    },
+    {
+      "name": "source-map-js",
+      "before": "1.2.1",
+      "after": "1.2.2",
+      "advisories": [
+        {
+          "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+          "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+          "severity": "high"
+        }
+      ]
+    }
+  ],
+  "limitation": "A dated dependency audit, not a guarantee that the application has no vulnerabilities. The earlier 8-to-0 claim is not used because the original audit report is unavailable."
+}

@@ -1,7 +1,8 @@
 import { projects, getProject } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 import ProjectLinks from "./ProjectLinks";
-import cursusImage from "../assets/Cursus.webp";
+import CursusGallery from "./CursusGallery";
+import EngineeringNotes from "./EngineeringNotes";
 import ultronImage from "../assets/myUltron.webp";
 
 const decisions = [
@@ -30,12 +31,7 @@ function CursusFeature() {
                     <p className="text-xs text-neutral-400 font-mono mt-5 mb-5">{project.role}</p>
                     <ProjectLinks project={project} />
                 </div>
-                <figure>
-                    <a href={cursusImage} target="_blank" rel="noopener noreferrer" aria-label="Open full-size Cursus landing page screenshot">
-                        <img src={cursusImage} width="1919" height="939" loading="lazy" alt="Cursus landing page introducing its study workspace, boards, calendar sync, and grounded chat" className="w-full rounded-lg border border-neutral-800" />
-                    </a>
-                    <figcaption className="text-xs text-neutral-400 mt-3 leading-relaxed">The Cursus landing page. Open the image for a closer look.</figcaption>
-                </figure>
+                <CursusGallery />
             </div>
             <details className="group border-t border-neutral-800">
                 <summary className="cursor-pointer px-6 md:px-9 py-5 text-sm font-mono text-neutral-200 hover:text-green-400">Inside Cursus — architecture & engineering decisions</summary>
@@ -81,6 +77,7 @@ export default function Projects() {
                         </article>
                     ))}
                 </div>
+                <EngineeringNotes />
             </div>
         </section>
     );
