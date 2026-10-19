@@ -288,7 +288,8 @@ export default function DoomPopup({ isOpen, onClose }) {
                                         title="DOOM"
                                         className="w-full h-full border-0"
                                         style={{ display: iframeLoaded ? "block" : "block", opacity: iframeLoaded ? 1 : 0 }}
-                                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                                        sandbox="allow-scripts allow-same-origin"
+                                        referrerPolicy="no-referrer"
                                         allow="autoplay; fullscreen; gamepad"
                                         onLoad={() => setIframeLoaded(true)}
                                         onError={() => setLoadError(true)}
