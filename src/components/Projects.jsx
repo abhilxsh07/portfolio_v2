@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { IconCode, IconExternalLink } from "@tabler/icons-react";
 
 import myUltronImg from "../assets/myUltron.webp";

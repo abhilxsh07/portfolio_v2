@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { IconMail, IconExternalLink, IconTerminal2 } from "@tabler/icons-react";
 import TextGenerateEffect from "./ui/TextGenerateEffect";
 import avatarImg from "../assets/newme.webp";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 
 function ShootingStar({ id, onComplete }) {
     const startX = Math.random() * 80 + 10;

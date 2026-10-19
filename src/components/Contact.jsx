@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { IconMail, IconBrandGithub, IconBrandLinkedin, IconSend } from "@tabler/icons-react";
 
 const links = [

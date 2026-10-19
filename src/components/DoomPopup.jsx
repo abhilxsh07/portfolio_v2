@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { IconDeviceGamepad2, IconMinus, IconSquare, IconX, IconAlertTriangle, IconRefresh } from "@tabler/icons-react";
 
 const MIN_W = 320;

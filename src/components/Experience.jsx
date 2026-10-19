@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { IconBuilding } from "@tabler/icons-react";
 import { cn } from "../lib/utils";
 
