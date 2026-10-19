@@ -484,6 +484,17 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         }
     }, [isOpen]);
 
+    // Return focus to whatever opened the terminal when it closes
+    const previousFocus = useRef(null);
+    useEffect(() => {
+        if (isOpen) {
+            previousFocus.current = document.activeElement;
+        } else if (previousFocus.current) {
+            previousFocus.current.focus?.();
+            previousFocus.current = null;
+        }
+    }, [isOpen]);
+
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -713,6 +724,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                         </div>
                         <button
                             onClick={onClose}
+                            aria-label="Close terminal"
                             className="text-neutral-500 hover:text-white transition-colors cursor-pointer"
                         >
                             <IconX className="w-4 h-4" />

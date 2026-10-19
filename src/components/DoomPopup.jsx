@@ -55,6 +55,17 @@ export default function DoomPopup({ isOpen, onClose }) {
         }
     }, [isOpen]);
 
+    // Return focus to whatever opened the popup when it closes
+    const previousFocus = useRef(null);
+    useEffect(() => {
+        if (isOpen) {
+            previousFocus.current = document.activeElement;
+        } else if (previousFocus.current) {
+            previousFocus.current.focus?.();
+            previousFocus.current = null;
+        }
+    }, [isOpen]);
+
     // Note: Escape key does NOT close the DOOM popup.
     // The iframe has its own event context, so Escape inside the game
     // stays in-game. Escape outside the iframe may close the terminal
@@ -149,6 +160,33 @@ export default function DoomPopup({ isOpen, onClose }) {
         window.addEventListener("mouseup", onUp);
     }, [pos, size, isMaximized, isMinimized]);
 
+    // ----- KEYBOARD MOVE/RESIZE (title bar) -----
+    const onTitleBarKeyDown = useCallback((e) => {
+        if (isMaximized) return;
+        const deltas = {
+            ArrowLeft: [-20, 0],
+            ArrowRight: [20, 0],
+            ArrowUp: [0, -20],
+            ArrowDown: [0, 20]
+        };
+        const delta = deltas[e.key];
+        if (!delta) return;
+        e.preventDefault();
+        const [dx, dy] = delta;
+        if (e.shiftKey) {
+            if (isMinimized) return;
+            setSize((s) => ({
+                w: clamp(s.w + dx, MIN_W, window.innerWidth),
+                h: clamp(s.h + dy, MIN_H, window.innerHeight)
+            }));
+        } else {
+            setPos((p) => ({
+                x: clamp(p.x + dx, 0, window.innerWidth - size.w),
+                y: clamp(p.y + dy, 0, window.innerHeight - HEADER_H)
+            }));
+        }
+    }, [isMaximized, isMinimized, size.w]);
+
     // ----- WINDOW CONTROLS -----
     const toggleMinimize = useCallback(() => {
         setIsMinimized((prev) => !prev);
@@ -209,10 +247,13 @@ export default function DoomPopup({ isOpen, onClose }) {
 
                     {/* Header / Title Bar */}
                     <div
-                        className={`flex items-center justify-between px-3 py-2 bg-neutral-800 border-b border-neutral-700 shrink-0 select-none ${
+                        className={`flex items-center justify-between px-3 py-2 bg-neutral-800 border-b border-neutral-700 shrink-0 select-none focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-500 ${
                             isDragging ? "cursor-grabbing" : "cursor-grab"
                         }`}
                         onMouseDown={onDragStart}
+                        tabIndex={0}
+                        aria-label="DOOM window title bar. Use arrow keys to move, Shift plus arrow keys to resize"
+                        onKeyDown={onTitleBarKeyDown}
                     >
                         <div className="flex items-center gap-2">
                             <IconDeviceGamepad2 className="w-4 h-4 text-neutral-400" />
@@ -223,6 +264,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             {/* Minimize */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMinimize(); }}
+                                aria-label="Minimize"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -231,6 +273,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             {/* Maximize */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMaximize(); }}
+                                aria-label="Maximize"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -239,6 +282,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             {/* Close */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleClose(); }}
+                                aria-label="Close DOOM"
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
