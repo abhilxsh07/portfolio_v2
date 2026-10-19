@@ -47,14 +47,15 @@ export default function StarsBackground({ starCount = 120 }) {
         createStars();
         animationId = requestAnimationFrame(draw);
 
-        window.addEventListener("resize", () => {
+        const onResize = () => {
             resize();
             createStars();
-        });
+        };
+        window.addEventListener("resize", onResize);
 
         return () => {
             cancelAnimationFrame(animationId);
-            window.removeEventListener("resize", resize);
+            window.removeEventListener("resize", onResize);
         };
     }, [starCount]);
 
