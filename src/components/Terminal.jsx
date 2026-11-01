@@ -18,6 +18,7 @@ const COMMANDS = [
     { name: "help", desc: "- Show all available commands" },
     { name: "ls", desc: "- List files" },
     { name: "neofetch", desc: "- System info" },
+    { name: "now", desc: "- What I'm working on this month" },
     { name: "ping", desc: "- Check connection" },
     { name: "projects", desc: "- See my work" },
     { name: "skills", desc: "- View my tech stack" },

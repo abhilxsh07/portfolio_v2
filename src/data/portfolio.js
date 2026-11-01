@@ -15,6 +15,13 @@ export const profile = {
         "Open to internships and full-stack roles. I also take on client projects through Forma Labs."
 };
 
+// Shows up on the home page and in the terminal. Bump the date whenever this changes.
+export const now = {
+    updated: "2026-11-01",
+    text:
+        "Mostly sable. I'm getting it to parity with NightPDF before I add anything of my own. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+};
+
 export const navigation = [
     { label: "Work", href: "/work" },
     { label: "Stack", href: "/stack" },

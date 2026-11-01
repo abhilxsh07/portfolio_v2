@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import Now from "./components/Now";
 import HomeLinks from "./components/HomeLinks";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
@@ -27,6 +28,7 @@ function Page({ path, onOpenTerminal }) {
             return (
                 <>
                     <Hero onOpenTerminal={onOpenTerminal} />
+                    <Now />
                     <HomeLinks />
                 </>
             );

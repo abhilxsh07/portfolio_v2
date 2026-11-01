@@ -5,6 +5,7 @@ import {
     alsoUse,
     learning,
     experience,
+    now,
     getProject,
     contactLinks
 } from "../data/portfolio.js";
@@ -55,6 +56,8 @@ export function getPortfolioOutput(command) {
                 line(entry.date || entry.status),
                 ...(entry.description ? [line(entry.description, "text-neutral-400")] : [])
             ]);
+        case "now":
+            return [line(`now (updated ${now.updated})`, "text-green-400"), line(now.text)];
         case "contact":
             return contactLinks.map((link) => line(link.label, "text-neutral-300", link.href));
         case "cat resume.txt":
