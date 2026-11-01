@@ -5,6 +5,7 @@ export const pages = {
     "/work": "Work · Abhilash Kar",
     "/stack": "Stack · Abhilash Kar",
     "/experience": "Experience · Abhilash Kar",
+    "/uses": "Uses · Abhilash Kar",
     "/contact": "Contact · Abhilash Kar"
 };
 

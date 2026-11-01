@@ -15,7 +15,7 @@ npm run dev
 
 ## Content
 
-The site has five pages: `/`, `/work`, `/stack`, `/experience` and `/contact`. `src/lib/router.js` handles them without a routing library, and `vercel.json` sends every path to `index.html`.
+The site has six pages: `/`, `/work`, `/stack`, `/experience`, `/uses` and `/contact`. `src/lib/router.js` handles them without a routing library, and `vercel.json` sends every path to `index.html`.
 
 Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. Leave missing URLs as `null`.
 

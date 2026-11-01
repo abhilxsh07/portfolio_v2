@@ -26,6 +26,7 @@ export const navigation = [
     { label: "Work", href: "/work" },
     { label: "Stack", href: "/stack" },
     { label: "Experience", href: "/experience" },
+    { label: "Uses", href: "/uses" },
     { label: "Contact", href: "/contact" }
 ];
 
@@ -258,6 +259,30 @@ export const experience = [
         description: null
     }
 ];
+// The /uses page. Only things I actually open most days.
+export const uses = [
+    {
+        heading: "Machine",
+        items: [
+            "An Acer Nitro V 15: i5-13420H, 32 GB of DDR5 and an RTX 4050 with 6 GB. It runs Windows 11, which helps when you're building a Windows app, and the 4050 is what my GPT experiments train on.",
+            "A Nothing Phone (3)."
+        ]
+    },
+    {
+        heading: "Code",
+        items: [
+            "Visual Studio for sable. WinUI 3 more or less expects it.",
+            "JetBrains for everything else: WebStorm for the web stuff, PyCharm for Python, CLion when C++ doesn't need the Windows tooling.",
+            "uv for every Python project. I don't use pip or venv directly anymore.",
+            "Git, and Docker when something needs to run the same way on another machine."
+        ]
+    },
+    {
+        heading: "Off-screen",
+        items: ["Autodesk SketchBook for drawing.", "DaVinci Resolve for cutting video."]
+    }
+];
+
 export function getProject(id) {
     return projects.find((project) => project.id === id);
 }

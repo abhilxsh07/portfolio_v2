@@ -8,6 +8,7 @@ import Projects from "./components/Projects";
 import EarlierWork from "./components/EarlierWork";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
+import Uses from "./components/Uses";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
@@ -50,6 +51,12 @@ function Page({ path, onOpenTerminal }) {
             return (
                 <div className="pt-10">
                     <Experience />
+                </div>
+            );
+        case "/uses":
+            return (
+                <div className="pt-10">
+                    <Uses />
                 </div>
             );
         case "/contact":
