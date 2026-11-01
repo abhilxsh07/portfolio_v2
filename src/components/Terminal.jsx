@@ -22,6 +22,7 @@ const COMMANDS = [
     { name: "ping", desc: "- Check connection" },
     { name: "projects", desc: "- See my work" },
     { name: "skills", desc: "- View my tech stack" },
+    { name: "uses", desc: "- My machine and the tools I use" },
     { name: "whoami", desc: "- Who are you?" },
     { name: "cls", desc: "- Clear terminal" },
     { name: "exit", desc: "- Close terminal" }
@@ -34,7 +35,7 @@ function getOutput(cmd) {
         case "help":
             return COMMANDS.map((command) => ({ text: `  ${command.name.padEnd(14)} ${command.desc}`, color: "text-neutral-300" }));
         case "ls":
-            return [{ text: "projects/  skills.json  experience.txt  resume.txt", color: "text-neutral-300" }];
+            return [{ text: "projects/  skills.json  experience.txt  uses.txt  resume.txt", color: "text-neutral-300" }];
         case "ping":
             return [{ text: "PONG — you're connected to my portfolio.", color: "text-green-400" }];
         case "neofetch":
