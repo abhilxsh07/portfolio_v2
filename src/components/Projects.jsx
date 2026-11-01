@@ -2,6 +2,7 @@ import { projects, getProject } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 import ProjectLinks from "./ProjectLinks";
 import ScreenGallery from "./ScreenGallery";
+import ProjectIndex from "./ProjectIndex";
 import ultronImage from "../assets/myUltron.webp";
 import sableReader from "../assets/sable/reader.png";
 import sableSepia from "../assets/sable/sepia.png";
@@ -261,6 +262,7 @@ export default function Projects() {
         <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-5xl mx-auto">
                 <SectionHeading as="h1" title="Work" note="Selected projects" />
+                <ProjectIndex />
                 <SableFeature />
                 <CursusCaseStudy />
                 <h2 className="text-lg text-white mt-12 mb-5">More work</h2>
