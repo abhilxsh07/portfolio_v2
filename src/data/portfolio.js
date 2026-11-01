@@ -215,6 +215,9 @@ export const builtWith = [
 export const alsoUse = ["Git", "Docker", "PostgreSQL", "NumPy"];
 export const learning = ["GPT architecture", "LoRA fine-tuning"];
 
+export const experienceIntro =
+    "I'm in my second year at SRMIST, so all of this fits around classes. The clubs gave me my first real users. Forma Labs is where I build for clients.";
+
 export const experience = [
     {
         id: "forma",

@@ -1,4 +1,4 @@
-import { experience, getProject } from "../data/portfolio";
+import { experience, experienceIntro, getProject } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 
 export default function Experience() {
@@ -6,6 +6,7 @@ export default function Experience() {
         <section id="experience" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-5xl mx-auto">
                 <SectionHeading as="h1" title="Experience" />
+                <p className="text-sm text-neutral-300 leading-relaxed max-w-2xl -mt-4 mb-10">{experienceIntro}</p>
                 <div className="border-l border-neutral-800 ml-1 space-y-8">
                     {experience.map((entry) => (
                         <article key={entry.id} className="relative pl-7">
