@@ -15,15 +15,19 @@ npm run dev
 
 ## Content
 
-The site has six pages: `/`, `/work`, `/stack`, `/experience`, `/uses` and `/contact`. `src/lib/router.js` handles them without a routing library, and `vercel.json` sends every path to `index.html`.
+The site has six pages: `/`, `/work`, `/stack`, `/experience`, `/uses` and `/contact`. Uses is linked from the footer, not the main nav. `src/lib/router.js` handles them without a routing library, and `vercel.json` sends every path to `index.html`. Hash links that point inside a collapsed `<details>` (Earlier work, the case studies) open it before scrolling.
 
-Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. Leave missing URLs as `null`.
+Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. On project cards, `role` is the "my part" line, `proof` is the "outcome" line, and `note` holds status or credit text. Leave missing URLs as `null`; the card just drops that link.
 
-sable screens live in `src/assets/sable/` and use a sample document; Cursus screens live in `src/assets/cursus/` and use sample study data. Metadata is in `index.html`; the social image is `public/og-preview.png`.
+sable screenshots live in `src/assets/sable/` (alpha build, sample document). Cursus is shown with an illustration, `src/components/CursusOverview.jsx`, not a screenshot; the old captures in `src/assets/cursus/` aren't used. Metadata is in `index.html`; the social image is `public/og-preview.png`.
+
+## Work page
+
+Each case study has three layers: the card, a short write-up inside "Inside …: how it works", and the full architecture map behind "Explore the full architecture". The map is lazy-loaded, so it isn't in the main bundle. [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
 
 ## Terminal
 
-Click Terminal or press Ctrl+K (Cmd+K on macOS). Type `help` for commands or `/` to search. Escape closes it. Doom opens in a separate sandboxed window on desktop.
+Click terminal or press Ctrl+K (Cmd+K on macOS). Type `help` for commands or `/` to search. Escape closes it. Doom opens in a separate sandboxed window on desktop. Both load the first time they're opened and stay mounted after that.
 
 ## Deployment
 
