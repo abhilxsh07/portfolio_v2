@@ -2,7 +2,7 @@ import { projects, getProject } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 import ProjectLinks from "./ProjectLinks";
 import ScreenGallery from "./ScreenGallery";
-import ProjectIndex from "./ProjectIndex";
+import Contribution from "./Contribution";
 import ProjectWalkthrough, { CursusOverview } from "./ProjectWalkthrough";
 import { sableTour, cursusTour } from "../data/walkthroughs";
 import ultronImage from "../assets/myUltron.webp";
@@ -73,7 +73,7 @@ function Decisions({ items }) {
     );
 }
 
-function Feature({ project, label, large, gallery, summary, note = project.note, children }) {
+function Feature({ project, label, large, gallery, summary, children }) {
     return (
         <article
             id={project.id}
@@ -83,20 +83,18 @@ function Feature({ project, label, large, gallery, summary, note = project.note,
                 className={`p-6 md:p-9 grid gap-8 items-center ${large ? "lg:grid-cols-[1fr_1.15fr]" : "lg:grid-cols-[1.15fr_1fr]"}`}
             >
                 <div>
-                    <p className={`text-xs font-mono mb-4 ${large ? "text-green-400" : "text-amber-300"}`}>{label}</p>
+                    <p className="text-xs font-mono mb-4 text-neutral-400">{label}</p>
                     <h2
                         className={`text-white font-light tracking-tight ${large ? "text-4xl md:text-5xl" : "text-3xl md:text-4xl"}`}
                     >
                         {project.title}
                     </h2>
                     <p className="text-lg text-neutral-200 mt-3">{project.subtitle}</p>
-                    <p className="text-sm text-neutral-400 leading-relaxed mt-5">{project.description}</p>
-                    {note && (
-                        <p className="text-sm text-neutral-300 leading-relaxed mt-4">
-                            {note}
-                        </p>
-                    )}
-                    <div className="mt-5"><ProjectLinks project={project} /></div>
+                    <p className="text-sm text-neutral-400 leading-relaxed mt-4">{project.description}</p>
+                    <Contribution project={project} className="mt-5" />
+                    {project.note && <p className="text-sm text-neutral-400 leading-relaxed mt-4">{project.note}</p>}
+                    <p className="text-xs text-neutral-400 font-mono mt-5">{project.tech.slice(0, 4).join(" · ")}</p>
+                    <div className="mt-4"><ProjectLinks project={project} /></div>
                 </div>
                 {gallery}
             </div>
@@ -118,7 +116,7 @@ function SableFeature() {
     return (
         <Feature
             project={project}
-            label={`FEATURED / ${project.status.toUpperCase()}`}
+            label={`featured · ${project.status.toLowerCase()}`}
             large
             summary="Inside sable: how it works"
             gallery={
@@ -166,7 +164,7 @@ function CursusCaseStudy() {
     return (
         <Feature
             project={project}
-            label={`CASE STUDY / ${project.status.toUpperCase()}`}
+            label={`case study · ${project.status.toLowerCase()}`}
             summary="Inside Cursus: how it works"
             gallery={<CursusOverview />}
         >
@@ -193,15 +191,30 @@ function CursusCaseStudy() {
     );
 }
 
+const jumpLinks = [
+    ["sable", "#sable"],
+    ["Cursus", "#cursus"],
+    ["More work", "#more-work"],
+    ["Experiments", "#building"],
+    ["Earlier work", "#earlier-work"],
+    ["Everything", "#all-projects"]
+];
+
 export default function Projects() {
     return (
         <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-7xl mx-auto">
                 <SectionHeading as="h1" title="Work" note="Selected projects" />
-                <ProjectIndex />
+                <nav aria-label="On this page" className="-mt-6 mb-8 flex flex-wrap gap-x-5 font-mono text-xs">
+                    {jumpLinks.map(([label, href]) => (
+                        <a key={href} href={`/work${href}`} className="min-h-11 inline-flex items-center text-neutral-400 hover:text-green-400 transition-colors">
+                            {label}
+                        </a>
+                    ))}
+                </nav>
                 <SableFeature />
                 <CursusCaseStudy />
-                <h2 className="text-lg text-white mt-12 mb-5">More work</h2>
+                <h2 id="more-work" className="text-lg text-white mt-12 mb-5 scroll-mt-24">More work</h2>
                 <div className="divide-y divide-neutral-800 border-y border-neutral-800">
                     {projects
                         .filter((project) => project.group === "selected")
@@ -226,7 +239,8 @@ export default function Projects() {
                                         <h3 className="text-lg text-white font-mono">{project.title}</h3>
                                         <span className="text-xs text-neutral-400">{project.status}</span>
                                     </div>
-                                    <p className="text-sm text-neutral-300 mt-2 leading-relaxed">{project.description}</p>
+                                    <p className="text-sm text-neutral-300 mt-2 leading-relaxed max-w-3xl">{project.description}</p>
+                                    <Contribution project={project} className="mt-3 max-w-3xl" />
                                     <div className="flex flex-wrap justify-between items-center gap-4 mt-4">
                                         <p className="text-xs text-neutral-400 leading-relaxed">{project.tech.join(" · ")}</p>
                                         <ProjectLinks project={project} />

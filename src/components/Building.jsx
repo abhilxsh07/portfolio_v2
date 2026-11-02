@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 export default function Building() {
     return (
-        <section id="building" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
+        <section id="building" className="relative z-10 px-6 md:px-16 lg:px-24 pt-8 pb-14">
             <div className="max-w-5xl mx-auto">
                 <SectionHeading title="Building" note="Experiments and paused work" />
                 <div className="divide-y divide-neutral-800 border-y border-neutral-800">

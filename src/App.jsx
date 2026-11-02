@@ -6,6 +6,7 @@ import HomeLinks from "./components/HomeLinks";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import EarlierWork from "./components/EarlierWork";
+import ProjectIndex from "./components/ProjectIndex";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
 import Uses from "./components/Uses";
@@ -39,6 +40,7 @@ function Page({ path, onOpenTerminal }) {
                     <Projects />
                     <Building />
                     <EarlierWork />
+                    <ProjectIndex />
                 </div>
             );
         case "/stack":

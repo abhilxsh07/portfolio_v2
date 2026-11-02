@@ -40,7 +40,12 @@ export function isPage(url) {
 
 export function scrollToHash(hash, behavior = "auto") {
     const target = document.getElementById(decodeURIComponent(hash.slice(1)));
-    if (target) target.scrollIntoView({ block: "start", behavior });
+    if (!target) return;
+    // A target inside a closed <details> has no layout box, so open its containers first.
+    for (let box = target.parentElement?.closest("details"); box; box = box.parentElement?.closest("details")) {
+        box.open = true;
+    }
+    target.scrollIntoView({ block: "start", behavior });
 }
 
 export function navigate(to) {
