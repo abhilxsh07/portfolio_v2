@@ -19,7 +19,7 @@ The site has six pages: `/`, `/work`, `/stack`, `/experience`, `/uses` and `/con
 
 Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. On project cards, `role` is the "my part" line, `proof` is the "outcome" line, and `note` holds status or credit text. Leave missing URLs as `null`; the card just drops that link.
 
-sable screenshots live in `src/assets/sable/` (alpha build, sample document). Cursus is shown with an illustration, `src/components/CursusOverview.jsx`, not a screenshot; the old captures in `src/assets/cursus/` aren't used. Metadata is in `index.html`; the social image is `public/og-preview.png`.
+sable screenshots live in `src/assets/sable/` (development build, November 2026, sample document; the highlight, underline and note were made in sable itself). Cursus is shown with an illustration, `src/components/CursusOverview.jsx`, not a screenshot; the old captures in `src/assets/cursus/` aren't used. Metadata is in `index.html`; the social image is `public/og-preview.png`.
 
 ## Work page
 

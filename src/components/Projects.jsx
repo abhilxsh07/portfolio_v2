@@ -8,26 +8,30 @@ import ArchitectureExplorer from "./ArchitectureExplorer";
 import CursusOverview from "./CursusOverview";
 import ultronImage from "../assets/myUltron.webp";
 import sableReader from "../assets/sable/reader.png";
-import sableSepia from "../assets/sable/sepia.png";
+import sableNotes from "../assets/sable/notes.png";
 import sableFind from "../assets/sable/find.png";
-import sableOutline from "../assets/sable/outline.png";
+import sableSpread from "../assets/sable/spread.png";
 
 const sableScreens = [
     {
         title: "Night",
         image: sableReader,
-        alt: "sable showing a document with the Default night filter and page thumbnails in the right rail"
+        alt: "sable showing a sample document with the Default night preset and page thumbnails in the right rail"
     },
-    { title: "Sepia", image: sableSepia, alt: "The same document with the Sepia preset applied" },
+    {
+        title: "Notes",
+        image: sableNotes,
+        alt: "A highlighted sentence and an underlined one in the Sepia preset, with both marks and a typed note listed in the comments panel"
+    },
     {
         title: "Find",
         image: sableFind,
         alt: "Find with six matches for the word contrast, the current match highlighted in orange"
     },
     {
-        title: "Outline",
-        image: sableOutline,
-        alt: "The document outline sidebar showing nested chapters and sections"
+        title: "Spreads",
+        image: sableSpread,
+        alt: "Pages one and two side by side as an odd-page spread, in the Redeye preset"
     }
 ];
 const sableFlow = [
@@ -161,7 +165,7 @@ function SableFeature() {
                     screens={sableScreens}
                     width={1440}
                     height={774}
-                    caption="Alpha build · a sample document written for these screenshots."
+                    caption="Development build, November 2026 · a sample document written for these screenshots."
                 />
             }
         >
