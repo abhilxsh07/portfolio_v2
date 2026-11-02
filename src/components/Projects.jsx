@@ -3,15 +3,13 @@ import SectionHeading from "./SectionHeading";
 import ProjectLinks from "./ProjectLinks";
 import ScreenGallery from "./ScreenGallery";
 import ProjectIndex from "./ProjectIndex";
+import ProjectWalkthrough, { CursusOverview } from "./ProjectWalkthrough";
+import { sableTour, cursusTour } from "../data/walkthroughs";
 import ultronImage from "../assets/myUltron.webp";
 import sableReader from "../assets/sable/reader.png";
 import sableSepia from "../assets/sable/sepia.png";
 import sableFind from "../assets/sable/find.png";
 import sableOutline from "../assets/sable/outline.png";
-import cursusBoard from "../assets/cursus/board.png";
-import cursusTable from "../assets/cursus/table.png";
-import cursusChat from "../assets/cursus/chat.png";
-import cursusQuiz from "../assets/cursus/quiz.png";
 
 const sableScreens = [
     {
@@ -31,20 +29,14 @@ const sableScreens = [
         alt: "The document outline sidebar showing nested chapters and sections"
     }
 ];
-const sablePipeline = [
-    ["01 / Open", "Parse the PDF", "PDFium on its own thread"],
-    ["02 / Render", "Draw each page", "PDFium page bitmaps"],
-    ["03 / Filter", "Apply the preset", "Direct2D on the GPU"],
-    ["04 / Read", "Tabs, Find, outline", "WinUI 3 shell"]
-];
 const sableDecisions = [
     [
         "The filter only touches the page",
         "Presets change how pages are drawn, not the UI, thumbnails or printouts, so documents still print in their real colours."
     ],
     [
-        "Parity before features",
-        "Same presets, filter math, shortcuts, settings keys and command line as NightPDF first. Comments, Fill & Sign and page tools come after."
+        "Keep the familiar filter behavior",
+        "Presets, filter order, shortcuts and settings follow NightPDF. The native shell and Direct2D rendering are part of the rewrite."
     ],
     ["Keep PDFium off the UI thread", "Opening and rendering run on the engine's own thread, away from the window."],
     [
@@ -53,40 +45,12 @@ const sableDecisions = [
     ]
 ];
 
-const cursusScreens = [
-    {
-        title: "Board",
-        image: cursusBoard,
-        alt: "Cursus collection board with study tasks arranged into To study, In progress, and Reviewed columns"
-    },
-    {
-        title: "Table",
-        image: cursusTable,
-        alt: "The same Cursus study tasks in a table with status, priority, and due-date properties"
-    },
-    {
-        title: "Grounded chat",
-        image: cursusChat,
-        alt: "Cursus material chat showing an example discussion about database indexes with a source reference"
-    },
-    {
-        title: "Quiz",
-        image: cursusQuiz,
-        alt: "Cursus quiz with a selected answer, progress, and an explanation about database indexes"
-    }
-];
-const cursusPipeline = [
-    ["01 / Upload", "PDFs and images", "Private Supabase Storage"],
-    ["02 / Process", "Convert and index", "Inngest background jobs"],
-    ["03 / Retrieve", "Find relevant chunks", "Postgres + pgvector"],
-    ["04 / Study", "Chat, summaries, quizzes", "Next.js + OpenAI"]
-];
 const cursusDecisions = [
     [
         "Keep user data separate",
         "Supabase row-level security and private storage scope access to each user's material."
     ],
-    ["Bound AI spending", "Per-user daily request and token budgets reserve capacity before model work begins."],
+    ["Bound AI spending", "Chat and study generation reserve daily capacity; indexing checks the budget. Conversion records usage without daily-budget gating."],
     [
         "Fail closed in production",
         "Protected requests are refused when the production rate limiter is absent or unavailable."
@@ -96,24 +60,6 @@ const cursusDecisions = [
         "File-size, MIME, extension, and magic-byte checks verify uploads before processing."
     ]
 ];
-function Pipeline({ label, steps, footnote }) {
-    return (
-        <div>
-            <h3 className="text-sm text-white font-mono mb-4">{label}</h3>
-            <ol aria-label={label} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {steps.map(([step, title, detail]) => (
-                    <li key={step} className="rounded-lg border border-neutral-700 bg-neutral-950/60 p-4">
-                        <p className="text-xs text-green-400 font-mono">{step}</p>
-                        <p className="text-sm text-white mt-3">{title}</p>
-                        <p className="text-xs text-neutral-400 mt-2 leading-relaxed">{detail}</p>
-                    </li>
-                ))}
-            </ol>
-            <p className="text-xs text-neutral-400 mt-4 leading-relaxed">{footnote}</p>
-        </div>
-    );
-}
-
 function Decisions({ items }) {
     return (
         <div className="grid md:grid-cols-2 gap-6">
@@ -127,7 +73,7 @@ function Decisions({ items }) {
     );
 }
 
-function Feature({ project, label, large, gallery, summary, children }) {
+function Feature({ project, label, large, gallery, summary, note = project.note, children }) {
     return (
         <article
             id={project.id}
@@ -145,9 +91,9 @@ function Feature({ project, label, large, gallery, summary, children }) {
                     </h2>
                     <p className="text-lg text-neutral-200 mt-3">{project.subtitle}</p>
                     <p className="text-sm text-neutral-400 leading-relaxed mt-5">{project.description}</p>
-                    {project.note && (
+                    {note && (
                         <p className="text-sm text-neutral-300 leading-relaxed mt-4">
-                            {project.note}
+                            {note}
                         </p>
                     )}
                     <div className="mt-5"><ProjectLinks project={project} /></div>
@@ -158,7 +104,7 @@ function Feature({ project, label, large, gallery, summary, children }) {
                 <summary className="cursor-pointer px-6 md:px-9 py-5 text-sm font-mono text-neutral-200 hover:text-green-400">
                     {summary}
                 </summary>
-                <div className="px-6 md:px-9 pb-9 space-y-9">
+                <div className="px-4 sm:px-6 md:px-9 pb-9 space-y-9">
                     {children}
                     <p className="text-xs text-neutral-400 font-mono leading-relaxed">{project.tech.join(" · ")}</p>
                 </div>
@@ -203,11 +149,7 @@ function SableFeature() {
                     </p>
                 </div>
             </div>
-            <Pipeline
-                label="From file to page"
-                steps={sablePipeline}
-                footnote="The filter is applied when a page is drawn. The file itself never changes."
-            />
+            <ProjectWalkthrough tour={sableTour} />
             <Decisions items={sableDecisions} />
             <div className="border-l-2 border-neutral-600 pl-4">
                 <h3 className="text-sm text-white mb-2">Current limits</h3>
@@ -226,9 +168,8 @@ function CursusCaseStudy() {
             project={project}
             label={`CASE STUDY / ${project.status.toUpperCase()}`}
             summary="Inside Cursus: how it works"
-            gallery={
-                <ScreenGallery name="Cursus" screens={cursusScreens} caption="Product screens · sample study data." />
-            }
+            note="Fully built, then shelved when Notion shipped most of the same features. Sign-ups are closed; explore the engineering walkthrough below."
+            gallery={<CursusOverview />}
         >
             <div className="grid md:grid-cols-2 gap-8">
                 <div>
@@ -247,11 +188,7 @@ function CursusCaseStudy() {
                     </p>
                 </div>
             </div>
-            <Pipeline
-                label="From upload to answer"
-                steps={cursusPipeline}
-                footnote="The Next.js app coordinates authenticated requests. Calendar sync is a separate, one-way integration for dated workspace items."
-            />
+            <ProjectWalkthrough tour={cursusTour} />
             <Decisions items={cursusDecisions} />
         </Feature>
     );
@@ -260,7 +197,7 @@ function CursusCaseStudy() {
 export default function Projects() {
     return (
         <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
-            <div className="max-w-5xl mx-auto">
+            <div className="max-w-7xl mx-auto">
                 <SectionHeading as="h1" title="Work" note="Selected projects" />
                 <ProjectIndex />
                 <SableFeature />
