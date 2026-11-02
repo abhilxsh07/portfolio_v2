@@ -168,7 +168,6 @@ function CursusCaseStudy() {
             project={project}
             label={`CASE STUDY / ${project.status.toUpperCase()}`}
             summary="Inside Cursus: how it works"
-            note="Fully built, then shelved when Notion shipped most of the same features. Sign-ups are closed; explore the engineering walkthrough below."
             gallery={<CursusOverview />}
         >
             <div className="grid md:grid-cols-2 gap-8">
