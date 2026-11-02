@@ -59,7 +59,7 @@ export default function Contact() {
                     transition={{ duration: 0.4, delay: 0.1 }}
                     className="bg-neutral-900/60 border border-neutral-800 rounded-xl px-8 py-6 w-full max-w-2xl"
                 >
-                    <div className="space-y-3 mb-4">
+                    <div className="mb-4">
                         {links.map(({ icon: Icon, label, href, ariaLabel }, i) => (
                             <motion.a
                                 key={label}
@@ -71,7 +71,7 @@ export default function Contact() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
-                                className="flex items-center gap-3 text-sm text-neutral-300 hover:text-white transition-colors font-mono"
+                                className="flex items-center gap-3 min-h-11 text-sm text-neutral-300 hover:text-white transition-colors font-mono"
                             >
                                 <Icon className="w-4 h-4 text-neutral-400" />
                                 {label}
@@ -82,7 +82,7 @@ export default function Contact() {
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="View résumé (opens in new tab)"
-                            className="flex items-center gap-3 text-sm text-neutral-300 hover:text-white transition-colors font-mono"
+                            className="flex items-center gap-3 min-h-11 text-sm text-neutral-300 hover:text-white transition-colors font-mono"
                         >
                             <IconFileText className="w-4 h-4 text-neutral-400" aria-hidden="true" />
                             Résumé

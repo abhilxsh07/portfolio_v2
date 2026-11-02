@@ -36,7 +36,7 @@ export default function Navbar({ path }) {
     }, [menuOpen]);
 
     const linkClass = (href) =>
-        `font-mono text-sm transition-colors ${path === href ? "text-white" : "text-neutral-400 hover:text-white"}`;
+        `font-mono text-sm py-2 transition-colors ${path === href ? "text-white" : "text-neutral-400 hover:text-white"}`;
 
     return (
         <motion.nav

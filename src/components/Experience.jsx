@@ -16,7 +16,7 @@ export default function Experience() {
                                 <span className="text-xs text-neutral-400 font-mono">{entry.date || entry.status}</span>
                             </div>
                             {entry.description && <p className="text-sm text-neutral-300 leading-relaxed max-w-3xl mt-3">{entry.description}</p>}
-                            {entry.projectId && <a href={`/work#${entry.projectId}`} className="inline-block text-xs text-green-400 font-mono mt-3 hover:underline">View {getProject(entry.projectId).title} <span aria-hidden="true">↗</span></a>}
+                            {entry.projectId && <a href={`/work#${entry.projectId}`} className="min-h-11 inline-flex items-center text-xs text-green-400 font-mono mt-1 hover:underline">View {getProject(entry.projectId).title} <span aria-hidden="true">↗</span></a>}
                         </article>
                     ))}
                 </div>
