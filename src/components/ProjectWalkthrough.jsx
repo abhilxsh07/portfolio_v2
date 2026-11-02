@@ -1,9 +1,9 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { IconArrowRight, IconExternalLink } from "@tabler/icons-react";
+import { IconExternalLink } from "@tabler/icons-react";
 import ArchitectureGraph from "./ArchitectureGraph";
 import useReducedMotion from "../hooks/useReducedMotion";
-import { presets, presetFilter } from "../data/walkthroughs";
+import { presets, presetFilter, sableTour, cursusTour } from "../data/walkthroughs";
 import "./ProjectWalkthrough.css";
 
 function tourReducer(state, action) {
@@ -117,20 +117,10 @@ function CursusPreview({ flow, stage }) {
     );
 }
 
-export function CursusOverview() {
-    return (
-        <figure className="cursus-overview">
-            <figcaption className="tour-eyebrow">Cursus / engineering map</figcaption>
-            <div className="cursus-overview-document"><span className="tour-file-type">PDF</span><div>Your course material<small>Private upload · owned by one user</small></div></div>
-            <div className="cursus-overview-route" aria-hidden="true"><span /><IconArrowRight size={18} /><span /></div>
-            <div className="cursus-overview-engine"><span className="tour-eyebrow">Convert → chunk → embed</span><p>Notes become searchable.</p><div className="cursus-vector-bars" aria-hidden="true">{[36, 68, 48, 86, 58, 74, 40, 92, 52, 66, 44, 80].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div></div>
-            <div className="cursus-overview-outputs"><span>Grounded chat</span><span>Summaries</span><span>Quizzes</span></div>
-            <p className="tour-small-note">Explore the paths in “Inside Cursus” below.</p>
-        </figure>
-    );
-}
+const tours = { sable: sableTour, cursus: cursusTour };
 
-export default function ProjectWalkthrough({ tour }) {
+export default function ProjectWalkthrough({ tourId }) {
+    const tour = tours[tourId];
     const [state, dispatch] = useReducer(tourReducer, { flow: tour.flows[0].id, index: 0, playing: false });
     const [presetId, setPresetId] = useState("default");
     const reducedMotion = useReducedMotion();

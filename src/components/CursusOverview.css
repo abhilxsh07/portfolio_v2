@@ -1,0 +1,15 @@
+.cursus-overview { border: 1px solid #61583b; border-radius: 10px; background: #171911; padding: 22px; }
+.cursus-overview-eyebrow { display: block; color: #e6c66f; font: 11px/1.6 var(--font-mono); text-transform: uppercase; letter-spacing: .1em; }
+.cursus-overview-engine .cursus-overview-eyebrow { color: #c9c3a0; }
+.cursus-overview-document { display: flex; gap: 12px; align-items: center; margin-top: 23px; font-size: 15px; color: #eee9d7; }
+.cursus-overview-document small { display: block; font-size: 12px; color: #b9bda6; margin-top: 4px; }
+.cursus-overview-type { padding: 8px 7px; border: 1px solid #8a8466; border-radius: 4px; color: #e6c66f; font: 11px var(--font-mono); }
+.cursus-overview-route { display: flex; align-items: center; gap: 10px; margin: 19px 0; color: #c6bb79; }
+.cursus-overview-route > span { flex: 1; height: 1px; background: #5e6248; }
+.cursus-overview-engine { border: 1px solid #5c6245; padding: 14px; border-radius: 6px; }
+.cursus-overview-engine > p { font-size: 17px; color: #e9e8d6; margin-top: 4px; }
+.cursus-vector-bars { display: flex; gap: 5px; align-items: center; height: 41px; margin-top: 15px; }
+.cursus-vector-bars i { display: block; flex: 1; background: #c1ca8f; border-radius: 1px; }
+.cursus-overview-outputs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 17px; }
+.cursus-overview-outputs span { font: 11px/1.5 var(--font-mono); color: #ddd5ac; border: 1px solid #656146; border-radius: 4px; padding: 7px; }
+.cursus-overview-note { margin-top: 14px; font-size: 12px; line-height: 1.7; color: #b6b9a3; }

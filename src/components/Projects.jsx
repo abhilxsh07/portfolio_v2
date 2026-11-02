@@ -3,8 +3,9 @@ import SectionHeading from "./SectionHeading";
 import ProjectLinks from "./ProjectLinks";
 import ScreenGallery from "./ScreenGallery";
 import Contribution from "./Contribution";
-import ProjectWalkthrough, { CursusOverview } from "./ProjectWalkthrough";
-import { sableTour, cursusTour } from "../data/walkthroughs";
+import FlowSteps from "./FlowSteps";
+import ArchitectureExplorer from "./ArchitectureExplorer";
+import CursusOverview from "./CursusOverview";
 import ultronImage from "../assets/myUltron.webp";
 import sableReader from "../assets/sable/reader.png";
 import sableSepia from "../assets/sable/sepia.png";
@@ -29,46 +30,80 @@ const sableScreens = [
         alt: "The document outline sidebar showing nested chapters and sections"
     }
 ];
+const sableFlow = [
+    { title: "PDF", text: "Read into memory and parsed by PDFium. The file on disk isn't locked or changed." },
+    { title: "Background render", text: "PDFium rasterises the visible pages, plus one either side, on its own thread." },
+    { title: "Original pixels, cached", text: "The unfiltered bitmap is cached and uploaded to the GPU as is." },
+    { title: "Display filter", text: "Direct2D runs it through six colour matrices, one per filter step." },
+    { title: "Reading view", text: "The filtered page lands on screen. Find highlights are drawn after the filter." }
+];
+const sableBranches = [
+    { title: "Switching presets", text: "New matrix values and a redraw of the bitmap already on the GPU. PDFium isn't asked again." },
+    { title: "Thumbnails", text: "Same render queue at a smaller size, shown without the filter." },
+    { title: "Printing", text: "Its own unfiltered render at printer resolution, in tiles. Never touches the night filter." }
+];
 const sableDecisions = [
     [
-        "The filter only touches the page",
-        "Presets change how pages are drawn, not the UI, thumbnails or printouts, so documents still print in their real colours."
+        "Filter at draw time, not in the file",
+        "The cached bitmap is always the original, so a preset change is just new matrix values and a redraw. Nothing about the night colours leaks into thumbnails or print."
     ],
     [
-        "Keep the familiar filter behavior",
-        "Presets, filter order, shortcuts and settings follow NightPDF. The native shell and Direct2D rendering are part of the rewrite."
+        "PDFium never runs on the UI thread",
+        "Opening, rendering and text search happen on one engine thread. Results come back through the window's DispatcherQueue and stale ones are thrown away, so a heavy page can take its time without freezing the window."
     ],
-    ["Keep PDFium off the UI thread", "Opening and rendering run on the engine's own thread, away from the window."],
     [
-        "Everything stays local",
-        "No accounts and no cloud. Features that need a server, or don't fit a GPLv2 licence, are left out."
+        "NightPDF's behaviour, not its code",
+        "Preset values, filter order, shortcuts and settings keys match NightPDF, so it feels the same if you're switching over. The native shell and the Direct2D rendering are new."
     ]
 ];
 
+const cursusFlow = [
+    { title: "Private upload", text: "Checked for size, extension, MIME type and magic bytes, then stored in a private bucket." },
+    { title: "Conversion", text: "A background job pulls the text out (or transcribes scans and images) and cleans it into Markdown." },
+    { title: "Indexing", text: "The Markdown is split into overlapping chunks and embedded into pgvector." },
+    { title: "Ready to study", text: "Chat and the study tools unlock only once conversion and indexing are both marked ready." }
+];
+const cursusBranches = [
+    { title: "Chat", text: "Embeds the question and pulls up to six of the closest chunks from that one file." },
+    { title: "Summaries and quizzes", text: "Pack the file's chunks in order within a token budget, then validate the model's JSON before showing it." },
+    { title: "Calendar sync", text: "A separate one-way job. Dated workspace items become all-day Google Calendar events." }
+];
 const cursusDecisions = [
     [
-        "Keep user data separate",
-        "Supabase row-level security and private storage scope access to each user's material."
-    ],
-    ["Bound AI spending", "Chat and study generation reserve daily capacity; indexing checks the budget. Conversion records usage without daily-budget gating."],
-    [
-        "Fail closed in production",
-        "Protected requests are refused when the production rate limiter is absent or unavailable."
+        "Each person's files stay theirs",
+        "Row-level security and a private bucket scope every file to its owner. Uploads are checked down to the magic bytes before anything is stored, so a renamed file can't pass as a PDF."
     ],
     [
-        "Validate the upload itself",
-        "File-size, MIME, extension, and magic-byte checks verify uploads before processing."
+        "Readiness is explicit",
+        "Conversion and indexing are separate background jobs with their own ready flags. The study tools stay off until both are set, so nobody chats with half a document."
+    ],
+    [
+        "Model calls are budgeted and checked",
+        "Chat and study generation reserve against a daily per-user budget, and indexing checks it too; conversion logs usage without being blocked. In production, protected routes refuse requests when the rate limiter is down, and study output has to pass schema validation before it's shown."
     ]
 ];
+
 function Decisions({ items }) {
     return (
-        <div className="grid md:grid-cols-2 gap-6">
-            {items.map(([title, description]) => (
-                <div key={title}>
-                    <h3 className="text-sm text-white mb-2">{title}</h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">{description}</p>
-                </div>
-            ))}
+        <div>
+            <h3 className="text-sm text-white font-mono mb-4">Decisions that mattered</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+                {items.map(([title, description]) => (
+                    <div key={title}>
+                        <h4 className="text-[15px] md:text-sm text-white mb-2">{title}</h4>
+                        <p className="text-[15px] md:text-sm text-neutral-400 leading-relaxed">{description}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function Prose({ title, children }) {
+    return (
+        <div className="max-w-3xl">
+            <h3 className="text-sm text-white font-mono mb-3">{title}</h3>
+            <div className="space-y-3 text-[15px] md:text-sm text-neutral-400 leading-relaxed">{children}</div>
         </div>
     );
 }
@@ -129,36 +164,37 @@ function SableFeature() {
                 />
             }
         >
-            <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 className="text-sm text-white font-mono mb-3">The problem</h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
-                        NightPDF was a dark-mode PDF reader built on Electron and PDF.js, and it has since been
-                        archived. sable keeps what made it useful, the night filter and its presets, and rebuilds the
-                        rest as a native Windows app.
-                    </p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-white font-mono mb-3">What I built</h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
-                        A native rewrite in C++/WinRT: the WinUI 3 shell, the PDFium engine layer, the Direct2D filter,
-                        and the reading tools so far. That means tabs, Find, text selection across pages, thumbnails,
-                        the outline and printing.
-                    </p>
-                </div>
-            </div>
-            <ProjectWalkthrough tour={sableTour} />
-            <Decisions items={sableDecisions} />
-            <div className="border-l-2 border-neutral-600 pl-4">
-                <h3 className="text-sm text-white mb-2">Current limits</h3>
-                <p className="text-sm text-neutral-400 leading-relaxed">
-                    Going native means sable is Windows-only, and it inherits PDFium's limits. OCR, redaction and adding
-                    passwords are out for now.
+            <Prose title="The idea">
+                <p>
+                    sable is built around one rule: change how a page looks on screen, never what's in the document.
+                    Each page is rendered once in its original colours, and the night preset only applies when that
+                    page is drawn. The reading view goes dark, while thumbnails and printouts keep the colours the
+                    document actually has.
                 </p>
-            </div>
+                <p>
+                    NightPDF did this as an Electron app on PDF.js, and it's archived now. I kept what was worth
+                    keeping (the filter, its presets, the shortcuts) and rebuilt everything around it as a native
+                    Windows app.
+                </p>
+            </Prose>
+            <FlowSteps
+                label="From file to filtered page"
+                steps={sableFlow}
+                branchesLabel="Other paths"
+                branches={sableBranches}
+            />
+            <Decisions items={sableDecisions} />
+            <Prose title="Limits and what's next">
+                <p>
+                    It's Windows-only, which is the point of going native. OCR, redaction and adding passwords are out
+                    for now. The next milestone is feature parity with NightPDF; new features come after that.
+                </p>
+            </Prose>
+            <ArchitectureExplorer tourId="sable" name="sable" />
         </Feature>
     );
 }
+
 function CursusCaseStudy() {
     const project = getProject("cursus");
     return (
@@ -168,25 +204,34 @@ function CursusCaseStudy() {
             summary="Inside Cursus: how it works"
             gallery={<CursusOverview />}
         >
-            <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 className="text-sm text-white font-mono mb-3">The problem</h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
-                        Course material is spread across files and deadlines. I built a workspace where the material
-                        itself becomes the starting point for study: organize it, ask questions, and practice from the
-                        same source.
-                    </p>
-                </div>
-                <div>
-                    <h3 className="text-sm text-white font-mono mb-3">What I built</h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
-                        The full-stack study workspace: collections and views, private uploads, background indexing,
-                        grounded AI tools, and one-way Google Calendar sync.
-                    </p>
-                </div>
-            </div>
-            <ProjectWalkthrough tour={cursusTour} />
+            <Prose title="The idea">
+                <p>
+                    Your own course material becomes the context. You upload notes, and chat, summaries and quizzes
+                    work from those files. Most of the engineering went into what surrounds that: who can see a file,
+                    when it's ready to use, and how much each person can spend on model calls.
+                </p>
+            </Prose>
+            <FlowSteps
+                label="From upload to study material"
+                steps={cursusFlow}
+                branchesLabel="Then three separate paths"
+                branches={cursusBranches}
+                accent="text-amber-300"
+            />
             <Decisions items={cursusDecisions} />
+            <Prose title="Limits, and why it's paused">
+                <p>
+                    If I picked it back up, I'd fix three things first. Summaries and quiz results only live in the
+                    browser, so they're gone on reload. If the first background event fails to send after an upload,
+                    the file can sit unconverted with nothing to retry it; it needs an outbox. And answers reference
+                    chunks of the text as [0], [1] and so on, not page numbers, which is less useful than it looks
+                    and doesn't prove a claim is right.
+                </p>
+                <p>
+                    I stopped development after Notion shipped similar features, and closed sign-ups.
+                </p>
+            </Prose>
+            <ArchitectureExplorer tourId="cursus" name="Cursus" />
         </Feature>
     );
 }

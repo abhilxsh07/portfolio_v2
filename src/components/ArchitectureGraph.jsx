@@ -168,7 +168,6 @@ export default function ArchitectureGraph({ tour, flow, index, stage, playing, c
             </header>
             <div className="architecture-flow-strip">
                 <span><i />{flow.label}</span>
-                <span>{routeNodes.size} components <b>·</b> {route.edges.length} connections</span>
                 <button type="button" aria-pressed={following} onClick={() => setFollowing((value) => !value)}>Follow active step</button>
                 <span className="architecture-live-label">{playing ? "TRACING PATH" : "INTERACTIVE SYSTEM MAP"}</span>
             </div>

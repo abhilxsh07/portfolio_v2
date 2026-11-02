@@ -83,20 +83,12 @@
 .tour-date-card { display: flex; flex-direction: column; align-items: center; max-width: 104px; margin: 20px auto; border: 1px solid #858464; border-radius: 8px; overflow: hidden; font: 10px/2 var(--font-mono); }
 .tour-date-card > span:first-child { width: 100%; text-align: center; background: #fcd34d; color: #191a15; }
 .tour-date-card strong { font: 36px/1.6 var(--font-sans); color: #f3f0dd; }
-.cursus-overview { border: 1px solid #61583b; border-radius: 10px; background: #171911; padding: 22px; }
-.cursus-overview > .tour-eyebrow { color: #e6c66f; }
-.cursus-overview-document { display: flex; gap: 12px; align-items: center; margin-top: 23px; font-size: 14px; color: #eee9d7; }
-.cursus-overview-document small { display: block; font-size: 10px; color: #b9bda6; margin-top: 4px; }
-.cursus-overview-route { display: flex; align-items: center; gap: 10px; margin: 19px 0; color: #c6bb79; }
-.cursus-overview-route > span { flex: 1; height: 1px; background: #5e6248; }
-.cursus-overview-engine { border: 1px solid #5c6245; padding: 14px; border-radius: 6px; }
-.cursus-overview-engine > p { font-size: 17px; color: #e9e8d6; margin-top: 4px; }
-.cursus-vector-bars { display: flex; gap: 5px; align-items: center; height: 41px; margin-top: 15px; }
-.cursus-vector-bars i { display: block; flex: 1; background: #c1ca8f; border-radius: 1px; }
-.cursus-overview-outputs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 17px; }
-.cursus-overview-outputs span { font: 10px/1.5 var(--font-mono); color: #ddd5ac; border: 1px solid #656146; border-radius: 4px; padding: 7px; }
 @media (max-width: 700px) {
     .tour-stage-layout { grid-template-columns: minmax(0, 1fr); padding: 22px 16px; gap: 25px; }
+    .tour-description, .tour-heading > p:last-child { font-size: 15px; line-height: 1.7; }
+    .tour-io dd, .tour-takeaway { font-size: 14px; }
+    .tour-failure, .tour-small-note, .tour-preview-caption { font-size: 12px; }
+    .tour-source a, .tour-source code { font-size: 12px; }
     .tour-reader { padding: 12px; }
     .tour-flow-switch button { padding: 8px 10px; font-size: 10px; }
 }
