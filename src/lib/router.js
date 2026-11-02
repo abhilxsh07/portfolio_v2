@@ -46,6 +46,8 @@ export function scrollToHash(hash, behavior = "auto") {
         box.open = true;
     }
     target.scrollIntoView({ block: "start", behavior });
+    // Only things that opted in with tabindex (like <main> for the skip link) take focus.
+    if (target.hasAttribute("tabindex")) target.focus({ preventScroll: true });
 }
 
 export function navigate(to) {

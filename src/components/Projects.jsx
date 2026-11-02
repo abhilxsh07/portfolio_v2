@@ -258,7 +258,7 @@ export default function Projects() {
                 </nav>
                 <SableFeature />
                 <CursusCaseStudy />
-                <h2 id="more-work" className="text-lg text-white mt-12 mb-5 scroll-mt-24">More work</h2>
+                <h2 id="more-work" className="text-lg text-white mt-12 mb-5">More work</h2>
                 <div className="divide-y divide-neutral-800 border-y border-neutral-800">
                     {projects
                         .filter((project) => project.group === "selected")

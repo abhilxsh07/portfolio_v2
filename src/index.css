@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* index.html holds the skip link, and Tailwind doesn't look there on its own */
+@source "../index.html";
 
 @theme {
     --font-mono: 'JetBrains Mono', monospace;
@@ -7,9 +9,9 @@
 
 html {
     scroll-behavior: smooth;
+    /* Clears the fixed navbar for #anchors and for keyboard focus, which scroll-margin on the targets didn't cover */
+    scroll-padding-top: 6rem;
 }
-
-section[id], article[id] { scroll-margin-top: 6rem; }
 
 .screen-gallery-dialog::backdrop {
     background: rgb(0 0 0 / 85%);
