@@ -1,6 +1,6 @@
 import { getProject } from "../data/portfolio";
 import CursusOverview from "./CursusOverview";
-import sableReader from "../assets/sable/reader.png";
+import sableNotes from "../assets/sable/notes.png";
 
 const previews = [
     {
@@ -8,11 +8,11 @@ const previews = [
         status: "In development",
         visual: (
             <img
-                src={sableReader}
+                src={sableNotes}
                 width={1440}
                 height={774}
                 loading="lazy"
-                alt="sable showing a sample document with the Default night preset and page thumbnails"
+                alt="sable with a highlight, an underline and a note on a sample page, listed in the comments panel"
                 className="w-full aspect-[1440/774] object-cover object-top border-b border-neutral-800"
             />
         )
