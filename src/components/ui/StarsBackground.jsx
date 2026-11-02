@@ -1,67 +1,39 @@
 import { useEffect, useRef } from "react";
 
-// Twinkles when `animated`, otherwise it's drawn once and left alone. The stars are kept
-// in a ref so flipping between the two doesn't reshuffle the sky.
-export default function StarsBackground({ starCount = 120, animated = true }) {
+// A still field of stars, drawn once and redrawn on resize. It used to twinkle,
+// but nothing moving behind the text reads better.
+export default function StarsBackground({ starCount = 120 }) {
     const canvasRef = useRef(null);
-    const starsRef = useRef([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext("2d");
-        let animationId;
 
-        function createStars() {
-            starsRef.current = Array.from({ length: starCount }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 1.5 + 0.3,
-                opacity: Math.random() * 0.6 + 0.2,
-                twinkleSpeed: Math.random() * 0.02 + 0.005,
-                twinkleOffset: Math.random() * Math.PI * 2
-            }));
-        }
-
-        function resize() {
-            const changed = canvas.width !== window.innerWidth || canvas.height !== window.innerHeight;
+        function draw() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            if (changed || starsRef.current.length !== starCount) createStars();
-        }
-
-        function paint(time) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            starsRef.current.forEach((star) => {
-                const twinkle = animated ? Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.3 + 0.7 : 0.85;
+            for (let i = 0; i < starCount; i++) {
                 ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * twinkle})`;
+                ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 1.5 + 0.3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${(Math.random() * 0.6 + 0.2) * 0.85})`;
                 ctx.fill();
-            });
+            }
         }
 
-        function loop(time) {
-            paint(time);
-            animationId = requestAnimationFrame(loop);
-        }
-
-        resize();
-        if (animated) animationId = requestAnimationFrame(loop);
-        else paint(0);
-
+        // Phones fire resize while the address bar slides in and out; only redraw on width changes.
+        let lastWidth = window.innerWidth;
         const onResize = () => {
-            resize();
-            if (!animated) paint(0);
+            if (window.innerWidth === lastWidth) return;
+            lastWidth = window.innerWidth;
+            draw();
         };
-        window.addEventListener("resize", onResize);
 
-        return () => {
-            cancelAnimationFrame(animationId);
-            window.removeEventListener("resize", onResize);
-        };
-    }, [starCount, animated]);
+        draw();
+        window.addEventListener("resize", onResize);
+        return () => window.removeEventListener("resize", onResize);
+    }, [starCount]);
 
     return (
         <canvas

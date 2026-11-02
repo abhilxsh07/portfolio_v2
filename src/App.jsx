@@ -15,25 +15,15 @@ import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
-import ShootingStars from "./components/ui/ShootingStars";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { MotionConfig } from "motion/react";
-import useReducedMotion from "./hooks/useReducedMotion";
 import { pages, useLocation, navigate, isPage, scrollToHash } from "./lib/router";
 
 // Neither of these is needed until someone opens them. Once loaded they stay mounted,
 // so the terminal keeps its history and Doom keeps its window between opens.
 const Terminal = lazy(() => import("./components/Terminal"));
 const DoomPopup = lazy(() => import("./components/DoomPopup"));
-
-function readMotionSetting() {
-    try {
-        return localStorage.getItem("background-motion") !== "off";
-    } catch {
-        return true;
-    }
-}
 
 function Page({ path, onOpenTerminal }) {
     switch (path) {
@@ -88,10 +78,8 @@ export default function App() {
     const [doomOpen, setDoomOpen] = useState(false);
     const [terminalLoaded, setTerminalLoaded] = useState(false);
     const [doomLoaded, setDoomLoaded] = useState(false);
-    const [motionOn, setMotionOn] = useState(readMotionSetting);
     if (terminalOpen && !terminalLoaded) setTerminalLoaded(true);
     if (doomOpen && !doomLoaded) setDoomLoaded(true);
-    const reducedMotion = useReducedMotion();
     const { path, hash } = useLocation();
     const mainRef = useRef(null);
     const lastPath = useRef(path);
@@ -100,20 +88,6 @@ export default function App() {
     const closeTerminal = useCallback(() => setTerminalOpen(false), []);
     const openDoom = useCallback(() => setDoomOpen(true), []);
     const closeDoom = useCallback(() => setDoomOpen(false), []);
-    const toggleMotion = useCallback(() => {
-        setMotionOn((on) => {
-            try {
-                localStorage.setItem("background-motion", on ? "off" : "on");
-            } catch {
-                // private mode etc. the switch still works for this visit
-            }
-            return !on;
-        });
-    }, []);
-
-    // The stars only twinkle (and shoot) on the home page. Everywhere else is mostly
-    // reading, so they stay still behind the text.
-    const animateSky = !reducedMotion && motionOn && path === "/";
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -162,17 +136,14 @@ export default function App() {
     return (
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen bg-neutral-950 text-white">
-                {!reducedMotion && <StarsBackground starCount={120} animated={animateSky} />}
-                {animateSky && <ShootingStars interval={5000} />}
+                <StarsBackground starCount={120} />
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
                     <Page path={path} onOpenTerminal={openTerminal} />
                 </main>
 
-                <Footer
-                    motion={path === "/" && !reducedMotion ? { on: motionOn, toggle: toggleMotion } : null}
-                />
+                <Footer />
 
                 <BackToTop />
 
