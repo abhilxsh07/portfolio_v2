@@ -241,8 +241,7 @@ const jumpLinks = [
     ["Cursus", "#cursus"],
     ["More work", "#more-work"],
     ["Experiments", "#building"],
-    ["Earlier work", "#earlier-work"],
-    ["Everything", "#all-projects"]
+    ["Earlier work", "#earlier-work"]
 ];
 
 export default function Projects() {
