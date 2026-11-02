@@ -188,7 +188,8 @@ function SableFeature() {
             <Prose title="Limits and what's next">
                 <p>
                     It's Windows-only, which is the point of going native. OCR, redaction and adding passwords are out
-                    for now. The next milestone is feature parity with NightPDF; new features come after that.
+                    for now. Notes and markup are in, form filling is what I'm building at the moment, and page
+                    organizing comes after that.
                 </p>
             </Prose>
             <ArchitectureExplorer tourId="sable" name="sable" />

@@ -19,7 +19,7 @@ export const profile = {
 export const now = {
     updated: "2026-11-02",
     text:
-        "Mostly sable. I'm rebuilding NightPDF's reading features in a native Windows app, with feature parity as the current milestone. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+        "Mostly sable. Notes and markup are in, and this week I'm working on filling in PDF forms. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
 };
 
 export const navigation = [
@@ -67,8 +67,8 @@ export const projects = [
         description:
             "A native rewrite of NightPDF in C++/WinRT and WinUI 3. Night presets change how pages are drawn, so thumbnails and printouts keep their original colours.",
         role: "Built the native shell, the PDFium integration, the Direct2D filter, and the reading tools so far.",
-        proof: "Tabs, four night presets, Find with highlights, text selection across pages, an outline sidebar, and printing in original colours.",
-        note: "Based on NightPDF by Joe Loya and Lunarequest. An independent rewrite, not an official successor.",
+        proof: "Tabs, four night presets, Find, text selection, outlines, presentation mode, notes and markup, Save a Copy, and printing in original colours.",
+        note: "Based on NightPDF, first released by Joe Loya and later maintained at Lunarequest/NightPDF. An independent rewrite, not an official successor.",
         tech: ["C++/WinRT", "WinUI 3", "Windows App SDK", "PDFium", "Direct2D"],
         liveUrl: null,
         repoUrl: null,
