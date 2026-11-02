@@ -131,7 +131,8 @@ function Feature({ project, label, large, gallery, summary, children }) {
                     <p className="text-xs text-neutral-400 font-mono mt-5">{project.tech.slice(0, 4).join(" · ")}</p>
                     <div className="mt-4"><ProjectLinks project={project} /></div>
                 </div>
-                {gallery}
+                {/* On phones the screenshot goes first, otherwise it's a full screen of text before any proof */}
+                <div className={large ? "order-first lg:order-none" : ""}>{gallery}</div>
             </div>
             <details className="group border-t border-neutral-800">
                 <summary className="cursor-pointer px-6 md:px-9 py-5 text-sm font-mono text-neutral-200 hover:text-green-400">
