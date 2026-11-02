@@ -20,8 +20,8 @@ export default function Hero({ onOpenTerminal }) {
     }, []);
 
     return (
-        <section className="relative z-10 min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-28 pb-16">
-            <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-between gap-12">
+        <section className="relative z-10 lg:min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-24 md:pt-28 pb-12 lg:pb-16">
+            <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12">
                 <div className="flex-1 max-w-xl">
                     <div
                         className="transition-all duration-500 ease-out"
@@ -54,7 +54,7 @@ export default function Hero({ onOpenTerminal }) {
                             <p className="text-sm text-neutral-400 leading-relaxed">{profile.context}</p>
                             <p className="text-sm text-neutral-300 leading-relaxed">{profile.proof}</p>
                         </div>
-                        <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                        <div className="flex flex-wrap items-center gap-3">
                             <a href="/work#sable" className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-400 text-neutral-950 hover:bg-green-300 transition-colors text-sm font-medium">
                                 View sable <IconArrowRight className="w-4 h-4" aria-hidden="true" />
                             </a>
@@ -78,33 +78,33 @@ export default function Hero({ onOpenTerminal }) {
                                 <IconExternalLink className="w-4 h-4" />
                                 Résumé
                             </a>
+                            {/* Kept low-key on purpose: it's a toy, the buttons before it are what matter */}
                             <button
+                                type="button"
                                 onClick={onOpenTerminal}
-                                className="w-fit flex items-center gap-2 px-5 py-2.5 rounded-lg text-neutral-300 hover:text-white transition-colors text-sm font-medium cursor-pointer"
-                                style={{ border: '1px solid #404040', background: 'rgba(23,23,23,0.6)' }}
-                                aria-label="Open interactive terminal"
+                                className="w-fit min-h-11 flex items-center gap-2 px-2 text-neutral-400 hover:text-white transition-colors text-sm font-mono cursor-pointer"
+                                aria-keyshortcuts="Control+K Meta+K"
                             >
-                                <IconTerminal2 className="w-4 h-4" />
-                                Terminal
-                                <span className="hidden md:inline text-neutral-400 text-xs ml-1">{terminalShortcut()}</span>
+                                <IconTerminal2 className="w-4 h-4" aria-hidden="true" />
+                                terminal
+                                <span className="hidden md:inline text-neutral-500 text-xs">{terminalShortcut()}</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 {showContent && (
                     <motion.div
-                        className="flex-shrink-0 lg:hidden flex justify-center"
+                        className="flex-shrink-0 lg:hidden order-first"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
                     >
                         <div className="relative">
-                            <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full overflow-hidden border-2 border-neutral-800 shadow-2xl shadow-black/50">
+                            <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-neutral-800 shadow-2xl shadow-black/50">
                                 <img
                                     src={avatarImg}
                                     alt="Abhilash Kar"
                                     className="w-full h-full object-cover"
-                                    loading="lazy"
                                 />
                             </div>
                             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-green-500/10 to-transparent -z-10 blur-xl scale-125" />

@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import WorkPreviews from "./components/WorkPreviews";
 import Now from "./components/Now";
 import HomeLinks from "./components/HomeLinks";
 import Skills from "./components/Skills";
@@ -30,6 +31,7 @@ function Page({ path, onOpenTerminal }) {
             return (
                 <>
                     <Hero onOpenTerminal={onOpenTerminal} />
+                    <WorkPreviews />
                     <Now />
                     <HomeLinks />
                 </>
