@@ -16,7 +16,7 @@ export default function FlowSteps({ label, steps, branchesLabel, branches = [], 
                         {index < steps.length - 1 && (
                             <span
                                 aria-hidden="true"
-                                className="absolute left-6 -bottom-[22px] rotate-90 min-[700px]:rotate-0 min-[700px]:left-auto min-[700px]:bottom-auto min-[700px]:-right-[17px] min-[700px]:top-1/2 min-[700px]:-translate-y-1/2 text-neutral-500"
+                                className="absolute left-6 -bottom-[22px] rotate-90 min-[700px]:rotate-0 min-[700px]:left-auto min-[700px]:bottom-auto min-[700px]:-right-[17px] min-[700px]:top-1/2 min-[700px]:-translate-y-1/2 text-neutral-400"
                             >
                                 →
                             </span>

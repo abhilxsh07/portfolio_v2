@@ -253,7 +253,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMinimize(); }}
                                 aria-label="Minimize"
-                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
+                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
                                 <IconMinus className="w-3.5 h-3.5" />
@@ -261,7 +261,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMaximize(); }}
                                 aria-label="Maximize"
-                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
+                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
                                 <IconSquare className="w-3 h-3" />
@@ -269,7 +269,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleClose(); }}
                                 aria-label="Close DOOM"
-                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-500 hover:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
+                                className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-red-400 hover:bg-red-500/20 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
                                 <IconX className="w-3.5 h-3.5" />
@@ -285,11 +285,11 @@ export default function DoomPopup({ isOpen, onClose }) {
                             {loadError ? (
                                 /* Error state */
                                 <div className="flex flex-col items-center justify-center h-full gap-4 p-6">
-                                    <IconAlertTriangle className="w-10 h-10 text-neutral-500" />
+                                    <IconAlertTriangle className="w-10 h-10 text-neutral-400" />
                                     <p className="text-sm text-neutral-300 font-mono text-center">
                                         Failed to load DOOM
                                     </p>
-                                    <p className="text-xs text-neutral-500 font-mono text-center">
+                                    <p className="text-xs text-neutral-400 font-mono text-center">
                                         Check your connection and try again.
                                     </p>
                                     <button
@@ -305,7 +305,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                                 <>
                                     {!iframeLoaded && (
                                         <div className="absolute inset-0 flex items-center justify-center z-10">
-                                            <span className="text-sm text-neutral-500 font-mono">Loading DOOM...</span>
+                                            <span className="text-sm text-neutral-400 font-mono">Loading DOOM...</span>
                                         </div>
                                     )}
                                     <iframe

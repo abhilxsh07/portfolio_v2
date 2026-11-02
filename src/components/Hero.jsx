@@ -87,7 +87,7 @@ export default function Hero({ onOpenTerminal }) {
                             >
                                 <IconTerminal2 className="w-4 h-4" aria-hidden="true" />
                                 terminal
-                                <span className="hidden md:inline text-neutral-500 text-xs">{terminalShortcut()}</span>
+                                <span className="hidden md:inline text-neutral-400 text-xs">{terminalShortcut()}</span>
                             </button>
                         </div>
                     </div>

@@ -123,7 +123,7 @@ function CoffeeAnimation({ onDone }) {
     return (
         <div className="space-y-1">
             <div>
-                <span className="text-neutral-500">&gt; </span>
+                <span className="text-neutral-400">&gt; </span>
                 <span className="text-white">Brewing coffee...</span>
             </div>
             {COFFEE_STEPS.map((step, i) => {
@@ -136,7 +136,7 @@ function CoffeeAnimation({ onDone }) {
                 return (
                     <div key={i} className="mt-2">
                         <div>
-                            <span className={isDone ? "text-green-400" : "text-neutral-500"}>
+                            <span className={isDone ? "text-green-400" : "text-neutral-400"}>
                                 {"  "}[{i + 1}/{COFFEE_STEPS.length}]{" "}
                             </span>
                             <span className={isDone ? "text-green-400" : "text-neutral-300"}>
@@ -157,7 +157,7 @@ function CoffeeAnimation({ onDone }) {
                 <div className="mt-2 space-y-0.5">
                     {summaryLines >= 1 && (
                         <div>
-                            <span className="text-neutral-500">&gt; </span>
+                            <span className="text-neutral-400">&gt; </span>
                             <span className="text-white">Initializing coffee.service...</span>
                         </div>
                     )}
@@ -184,7 +184,7 @@ function CoffeeAnimation({ onDone }) {
 export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     const [input, setInput] = useState("");
     const [history, setHistory] = useState([
-        { type: "system", lines: [{ text: 'Terminal ready. Type "/" to see commands or "help" for list.', color: "text-neutral-500" }] }
+        { type: "system", lines: [{ text: 'Terminal ready. Type "/" to see commands or "help" for list.', color: "text-neutral-400" }] }
     ]);
     const [cmdHistory, setCmdHistory] = useState([]);
     const [cmdIndex, setCmdIndex] = useState(-1);
@@ -299,9 +299,9 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             const isMobile = window.innerWidth < 768;
             if (isMobile) {
                 const mobileOutput = [
-                    { text: "> Loading doom.wad...", color: "text-neutral-500" },
+                    { text: "> Loading doom.wad...", color: "text-neutral-400" },
                     { text: "  [ERR] DOOM is not available on mobile devices yet.", color: "text-red-400" },
-                    { text: "  [--] Try again on a desktop or laptop.", color: "text-neutral-500" }
+                    { text: "  [--] Try again on a desktop or laptop.", color: "text-neutral-400" }
                 ];
                 setHistory((prev) => [
                     ...prev,
@@ -310,7 +310,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 ]);
             } else {
                 const doomOutput = [
-                    { text: "> Loading doom.wad...", color: "text-neutral-500" },
+                    { text: "> Loading doom.wad...", color: "text-neutral-400" },
                     { text: "  [OK] Renderer initialized", color: "text-green-500" },
                     { text: "  [OK] Audio subsystem ready", color: "text-green-500" },
                     { text: "  [OK] DOOM is running", color: "text-green-500" }
@@ -334,7 +334,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 setHistory((prev) => [
                     ...prev,
                     { type: "command", cmd: trimmed },
-                    { type: "output", lines: [{ text: "> Coffee is already brewing...", color: "text-neutral-500" }] }
+                    { type: "output", lines: [{ text: "> Coffee is already brewing...", color: "text-neutral-400" }] }
                 ]);
             } else {
                 setIsBrewing(true);
@@ -437,14 +437,14 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-sm text-white font-medium">
-                                <span className="text-neutral-500">&gt;_</span> terminal
+                                <span className="text-neutral-400">&gt;_</span> terminal
                             </span>
-                            <span className="text-xs text-neutral-500">Press Esc to close</span>
+                            <span className="text-xs text-neutral-400">Press Esc to close</span>
                         </div>
                         <button
                             onClick={onClose}
                             aria-label="Close terminal"
-                            className="text-neutral-500 hover:text-white transition-colors cursor-pointer"
+                            className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
                         >
                             <IconX className="w-4 h-4" />
                         </button>
@@ -509,7 +509,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                             }`}
                                         >
                                             <span className="font-medium font-mono">{cmd.name}</span>
-                                            <span className="text-neutral-500 font-mono">{cmd.desc}</span>
+                                            <span className="text-neutral-400 font-mono">{cmd.desc}</span>
                                         </button>
                                     ))}
                                 </motion.div>

@@ -22,7 +22,7 @@ export default function HomeLinks() {
                             <span className="text-lg text-white font-mono">{card.title}</span>
                             <span
                                 aria-hidden="true"
-                                className="text-neutral-500 group-hover:text-green-400 transition-colors"
+                                className="text-neutral-400 group-hover:text-green-400 transition-colors"
                             >
                                 →
                             </span>
