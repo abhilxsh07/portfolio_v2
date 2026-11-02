@@ -18,17 +18,17 @@ and fictional result previews.
 
 ## Source basis
 
-Reviewed on 1 November 2026 against:
+Checked on 1 November 2026 against:
 
 - `D:/NightPdf/rework/sable-walkthrough-brief.md`, describing `91f77a8`.
 - `C:/Users/Abhilash Kar/Downloads/codingStuff/Cursus/cursus-public/cursus-walkthrough-brief.md`,
   describing `ccfe3d6` on `fix/security-audit`.
 
-sable's GitHub `main` was independently checked through the GitHub API and
-resolved to `8e4aca7274da75d423e8183f094dcb18d7a5f6ab`. Links open whole files
-at that published snapshot. Do not use the newer brief's line numbers there.
-The tour labels the snapshot difference. Recheck public availability before
-updating the pinned SHA, then review the descriptions and source files together.
+Both repositories are private. On 2 November 2026 an anonymous request for
+`github.com/abhilxsh07/sable` returned 404, so sable's stages name their modules
+without linking to them, and the project card has no Source action. If the repo
+goes public later, link files at a commit that matches these descriptions and
+review the two together. Don't reuse line numbers from a different commit.
 
 Cursus has no repository links. Its private module names explain ownership.
 The existing Cursus product gallery was replaced with an original engineering

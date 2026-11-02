@@ -72,7 +72,7 @@ export const projects = [
         note: "Based on NightPDF by Joe Loya and Lunarequest. An independent rewrite, not an official successor.",
         tech: ["C++/WinRT", "WinUI 3", "Windows App SDK", "PDFium", "Direct2D"],
         liveUrl: null,
-        repoUrl: "https://github.com/abhilxsh07/sable",
+        repoUrl: null,
         group: "featured",
         status: "In development",
         buildingNote: null
