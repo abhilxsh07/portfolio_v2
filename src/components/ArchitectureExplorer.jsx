@@ -42,7 +42,7 @@ export default function ArchitectureExplorer({ tourId, name }) {
                             ref={backButton}
                             type="button"
                             onClick={() => show(false)}
-                            className="min-h-11 px-4 rounded-lg border border-neutral-700 text-sm font-mono text-neutral-300 hover:text-white hover:border-neutral-500"
+                            className="min-h-11 max-w-full px-4 py-2 rounded-lg border border-neutral-700 text-sm font-mono text-neutral-300 hover:text-white hover:border-neutral-500 [overflow-wrap:anywhere]"
                         >
                             Back to the short version
                         </button>
@@ -58,7 +58,7 @@ export default function ArchitectureExplorer({ tourId, name }) {
                     </Suspense>
                 </>
             ) : (
-                <div className="rounded-xl border border-dashed border-neutral-700 p-5 flex flex-wrap items-center justify-between gap-4">
+                <div className="rounded-xl border border-dashed border-neutral-700 p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
                     <p className="text-[15px] md:text-sm text-neutral-400 leading-relaxed max-w-xl">
                         The full map traces every path through {name} stage by stage, with the module behind each
                         one and what happens when something fails.
@@ -67,7 +67,7 @@ export default function ArchitectureExplorer({ tourId, name }) {
                         ref={openButton}
                         type="button"
                         onClick={() => show(true)}
-                        className="min-h-11 px-4 rounded-lg border border-neutral-600 bg-neutral-900 text-sm font-mono text-neutral-200 hover:text-white hover:border-neutral-400"
+                        className="min-h-11 max-w-full px-4 py-2 rounded-lg border border-neutral-600 bg-neutral-900 text-sm font-mono text-neutral-200 hover:text-white hover:border-neutral-400 [overflow-wrap:anywhere]"
                     >
                         Explore the full architecture
                     </button>
