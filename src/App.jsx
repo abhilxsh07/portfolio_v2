@@ -100,6 +100,25 @@ export default function App() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, []);
 
+    // On a fresh load with a #hash, the first scroll happens before the web fonts swap in,
+    // and the swap pushes the target down. Aim again once they're loaded, unless the
+    // visitor has already scrolled somewhere else.
+    useEffect(() => {
+        const { hash: initialHash } = window.location;
+        if (!initialHash || !document.fonts) return;
+        let moved = false;
+        const onWheel = () => (moved = true);
+        window.addEventListener("wheel", onWheel, { passive: true, once: true });
+        window.addEventListener("touchmove", onWheel, { passive: true, once: true });
+        document.fonts.ready.then(() => {
+            if (!moved && window.location.hash === initialHash) scrollToHash(initialHash, "instant");
+        });
+        return () => {
+            window.removeEventListener("wheel", onWheel);
+            window.removeEventListener("touchmove", onWheel);
+        };
+    }, []);
+
     // Keep page-to-page links inside the app instead of reloading everything.
     useEffect(() => {
         const handleClick = (event) => {
