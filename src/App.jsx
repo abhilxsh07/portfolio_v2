@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import WorkPreviews from "./components/WorkPreviews";
@@ -14,8 +14,6 @@ import Uses from "./components/Uses";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
-import Terminal from "./components/Terminal";
-import DoomPopup from "./components/DoomPopup";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
 import ShootingStars from "./components/ui/ShootingStars";
@@ -24,6 +22,19 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { MotionConfig } from "motion/react";
 import useReducedMotion from "./hooks/useReducedMotion";
 import { pages, useLocation, navigate, isPage, scrollToHash } from "./lib/router";
+
+// Neither of these is needed until someone opens them. Once loaded they stay mounted,
+// so the terminal keeps its history and Doom keeps its window between opens.
+const Terminal = lazy(() => import("./components/Terminal"));
+const DoomPopup = lazy(() => import("./components/DoomPopup"));
+
+function readMotionSetting() {
+    try {
+        return localStorage.getItem("background-motion") !== "off";
+    } catch {
+        return true;
+    }
+}
 
 function Page({ path, onOpenTerminal }) {
     switch (path) {
@@ -77,6 +88,11 @@ function Page({ path, onOpenTerminal }) {
 export default function App() {
     const [terminalOpen, setTerminalOpen] = useState(false);
     const [doomOpen, setDoomOpen] = useState(false);
+    const [terminalLoaded, setTerminalLoaded] = useState(false);
+    const [doomLoaded, setDoomLoaded] = useState(false);
+    const [motionOn, setMotionOn] = useState(readMotionSetting);
+    if (terminalOpen && !terminalLoaded) setTerminalLoaded(true);
+    if (doomOpen && !doomLoaded) setDoomLoaded(true);
     const reducedMotion = useReducedMotion();
     const { path, hash } = useLocation();
     const mainRef = useRef(null);
@@ -86,6 +102,20 @@ export default function App() {
     const closeTerminal = useCallback(() => setTerminalOpen(false), []);
     const openDoom = useCallback(() => setDoomOpen(true), []);
     const closeDoom = useCallback(() => setDoomOpen(false), []);
+    const toggleMotion = useCallback(() => {
+        setMotionOn((on) => {
+            try {
+                localStorage.setItem("background-motion", on ? "off" : "on");
+            } catch {
+                // private mode etc. the switch still works for this visit
+            }
+            return !on;
+        });
+    }, []);
+
+    // The stars only twinkle (and shoot) on the home page. Everywhere else is mostly
+    // reading, so they stay still behind the text.
+    const animateSky = !reducedMotion && motionOn && path === "/";
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -134,21 +164,31 @@ export default function App() {
     return (
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen bg-neutral-950 text-white">
-                {!reducedMotion && <StarsBackground starCount={120} />}
-                {!reducedMotion && <ShootingStars interval={5000} />}
+                {!reducedMotion && <StarsBackground starCount={120} animated={animateSky} />}
+                {animateSky && <ShootingStars interval={5000} />}
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
                     <Page path={path} onOpenTerminal={openTerminal} />
                 </main>
 
-                <Footer />
+                <Footer
+                    motion={path === "/" && !reducedMotion ? { on: motionOn, toggle: toggleMotion } : null}
+                />
 
                 <BackToTop />
 
-                <Terminal isOpen={terminalOpen} onClose={closeTerminal} onOpenDoom={openDoom} isDoomOpen={doomOpen} />
+                {terminalLoaded && (
+                    <Suspense fallback={null}>
+                        <Terminal isOpen={terminalOpen} onClose={closeTerminal} onOpenDoom={openDoom} isDoomOpen={doomOpen} />
+                    </Suspense>
+                )}
 
-                <DoomPopup isOpen={doomOpen} onClose={closeDoom} />
+                {doomLoaded && (
+                    <Suspense fallback={null}>
+                        <DoomPopup isOpen={doomOpen} onClose={closeDoom} />
+                    </Suspense>
+                )}
 
                 <Analytics />
                 <SpeedInsights />

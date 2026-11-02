@@ -1,7 +1,10 @@
 import { useEffect, useRef } from "react";
 
-export default function StarsBackground({ starCount = 120 }) {
+// Twinkles when `animated`, otherwise it's drawn once and left alone. The stars are kept
+// in a ref so flipping between the two doesn't reshuffle the sky.
+export default function StarsBackground({ starCount = 120, animated = true }) {
     const canvasRef = useRef(null);
+    const starsRef = useRef([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -9,15 +12,9 @@ export default function StarsBackground({ starCount = 120 }) {
 
         const ctx = canvas.getContext("2d");
         let animationId;
-        let stars = [];
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
 
         function createStars() {
-            stars = Array.from({ length: starCount }, () => ({
+            starsRef.current = Array.from({ length: starCount }, () => ({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
                 size: Math.random() * 1.5 + 0.3,
@@ -27,29 +24,36 @@ export default function StarsBackground({ starCount = 120 }) {
             }));
         }
 
-        function draw(time) {
+        function resize() {
+            const changed = canvas.width !== window.innerWidth || canvas.height !== window.innerHeight;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (changed || starsRef.current.length !== starCount) createStars();
+        }
+
+        function paint(time) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            stars.forEach((star) => {
-                const twinkle = Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.3 + 0.7;
-                const alpha = star.opacity * twinkle;
-
+            starsRef.current.forEach((star) => {
+                const twinkle = animated ? Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.3 + 0.7 : 0.85;
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity * twinkle})`;
                 ctx.fill();
             });
+        }
 
-            animationId = requestAnimationFrame(draw);
+        function loop(time) {
+            paint(time);
+            animationId = requestAnimationFrame(loop);
         }
 
         resize();
-        createStars();
-        animationId = requestAnimationFrame(draw);
+        if (animated) animationId = requestAnimationFrame(loop);
+        else paint(0);
 
         const onResize = () => {
             resize();
-            createStars();
+            if (!animated) paint(0);
         };
         window.addEventListener("resize", onResize);
 
@@ -57,11 +61,12 @@ export default function StarsBackground({ starCount = 120 }) {
             cancelAnimationFrame(animationId);
             window.removeEventListener("resize", onResize);
         };
-    }, [starCount]);
+    }, [starCount, animated]);
 
     return (
         <canvas
             ref={canvasRef}
+            aria-hidden="true"
             className="fixed inset-0 z-0 pointer-events-none"
             style={{ width: "100vw", height: "100vh" }}
         />
