@@ -2,12 +2,8 @@ import { experience, builtWith } from "../data/portfolio";
 
 const stack = [...new Set(builtWith.flatMap(({ skills }) => skills))].slice(0, 6);
 
+// Work has its own previews above, so these are just the other two pages.
 const cards = [
-    {
-        href: "/work",
-        title: "Work",
-        text: "sable, Cursus, and a few smaller projects."
-    },
     { href: "/stack", title: "Stack", text: `${stack.join(", ")}, and where I've used them.` },
     { href: "/experience", title: "Experience", text: experience.map((entry) => entry.company).join(" · ") }
 ];
@@ -15,7 +11,7 @@ const cards = [
 export default function HomeLinks() {
     return (
         <section aria-label="Around the site" className="relative z-10 px-6 md:px-16 lg:px-24 pb-24">
-            <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-4">
+            <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-4">
                 {cards.map((card) => (
                     <a
                         key={card.href}
@@ -26,7 +22,7 @@ export default function HomeLinks() {
                             <span className="text-lg text-white font-mono">{card.title}</span>
                             <span
                                 aria-hidden="true"
-                                className="text-neutral-500 group-hover:text-green-400 transition-colors"
+                                className="text-neutral-400 group-hover:text-green-400 transition-colors"
                             >
                                 →
                             </span>

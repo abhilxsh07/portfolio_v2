@@ -5,6 +5,8 @@ import {
     alsoUse,
     learning,
     experience,
+    now,
+    uses,
     getProject,
     contactLinks
 } from "../data/portfolio.js";
@@ -40,6 +42,7 @@ export function getPortfolioOutput(command) {
                 ...projects.flatMap((project) => [
                     line(`${project.title} / ${project.status}`, "text-green-400", `/work#${project.id}`),
                     line(`  ${project.role}`),
+                    ...(project.note ? [line(`  ${project.note}`, "text-neutral-400")] : []),
                     line(`  ${project.tech.join(" · ")}`, "text-neutral-400"),
                     ...(project.liveUrl ? [line("  Live app ↗", "text-green-400", project.liveUrl)] : []),
                     ...(project.repoUrl ? [line("  Source ↗", "text-neutral-300", project.repoUrl)] : [])
@@ -54,6 +57,13 @@ export function getPortfolioOutput(command) {
                 line(`${entry.title} / ${entry.company}`, "text-green-400"),
                 line(entry.date || entry.status),
                 ...(entry.description ? [line(entry.description, "text-neutral-400")] : [])
+            ]);
+        case "now":
+            return [line(`now (updated ${now.updated})`, "text-green-400"), line(now.text)];
+        case "uses":
+            return uses.flatMap(({ heading, items }) => [
+                line(heading, "text-green-400"),
+                ...items.map((item) => line(`  ${item}`))
             ]);
         case "contact":
             return contactLinks.map((link) => line(link.label, "text-neutral-300", link.href));

@@ -15,6 +15,13 @@ export const profile = {
         "Open to internships and full-stack roles. I also take on client projects through Forma Labs."
 };
 
+// Shows up on the home page and in the terminal. Bump the date whenever this changes.
+export const now = {
+    updated: "2026-11-02",
+    text:
+        "Mostly sable. Notes and markup are in, and this week I'm working on filling in PDF forms. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+};
+
 export const navigation = [
     { label: "Work", href: "/work" },
     { label: "Stack", href: "/stack" },
@@ -28,10 +35,10 @@ export const projects = [
         title: "Cursus",
         subtitle: "A study workspace for your own notes.",
         description:
-            "Upload course material, ask questions with source citations, and generate summaries and quizzes. Dated tasks can sync to Google Calendar.",
-        role: "Creator · full-stack development",
-        proof: "Private uploads, cited answers, and one-way Google Calendar sync in one workspace.",
-        note: "Fully built, then shelved when Notion shipped most of the same features. Sign-ups are closed, so the screens here use sample data.",
+            "A study workspace with private uploads, document-grounded chat, summaries, quizzes and one-way Google Calendar sync.",
+        role: "Built the full-stack app: upload checks, background indexing, the study tools and the Calendar integration.",
+        proof: "Each user's files are isolated with row-level security, and chat and study tools draw on a daily AI budget per user.",
+        note: "Development is paused and sign-ups are closed.",
         tech: ["Next.js", "TypeScript", "Supabase", "pgvector", "OpenAI", "Inngest", "Redis"],
         liveUrl: null,
         repoUrl: null,
@@ -43,9 +50,9 @@ export const projects = [
         id: "ultron",
         title: "Ultron 9.0",
         subtitle: "A hackathon, from registration to submission.",
-        description: "A Futurix hackathon platform for team registration and project submissions.",
-        role: "Technical Staff · Futurix",
-        proof: "Registration and submission flows backed by PHP and MySQL.",
+        description: "Futurix's hackathon platform for Ultron 9.0, from team registration to project submission.",
+        role: "Worked on the team-registration and project-submission flows. This was a team build.",
+        proof: null,
         tech: ["React", "TypeScript", "Tailwind CSS", "PHP", "MySQL"],
         liveUrl: null,
         repoUrl: "https://github.com/abhilxsh07/futurixUltron9.0",
@@ -58,13 +65,13 @@ export const projects = [
         title: "sable",
         subtitle: "A dark-mode PDF reader for Windows.",
         description:
-            "A Windows reader built with C++/WinRT and WinUI 3. PDFium renders the pages; Direct2D applies night filters while thumbnails and printouts keep their original colours.",
-        role: "Native Windows development",
-        proof: "Tabs, four night presets, Find with highlights, text selection across pages, an outline sidebar and printing in original colours.",
-        note: "Based on NightPDF by Joe Loya and Lunarequest. An independent rewrite, not an official successor.",
+            "A native rewrite of NightPDF in C++/WinRT and WinUI 3. Night presets change how pages are drawn, so thumbnails and printouts keep their original colours.",
+        role: "Built the native shell, the PDFium integration, the Direct2D filter, and the reading tools so far.",
+        proof: "Tabs, four night presets, Find, text selection, outlines, presentation mode, notes and markup, Save a Copy, and printing in original colours.",
+        note: "Based on NightPDF, first released by Joe Loya and later maintained at Lunarequest/NightPDF. An independent rewrite, not an official successor.",
         tech: ["C++/WinRT", "WinUI 3", "Windows App SDK", "PDFium", "Direct2D"],
         liveUrl: null,
-        repoUrl: "https://github.com/abhilxsh07/sable",
+        repoUrl: null,
         group: "featured",
         status: "In development",
         buildingNote: null
@@ -73,9 +80,10 @@ export const projects = [
         id: "clipstash",
         title: "clipstash",
         subtitle: "Useful snippets, one command away.",
-        description: "A Python CLI for saving, tagging, searching, and copying code snippets from the terminal.",
-        role: "Creator · Python development",
-        proof: "Clipboard workflows and JSON import/export; installable from source.",
+        description:
+            "A Python CLI for keeping code snippets: save, tag, search, copy to the clipboard, and move them in and out as JSON.",
+        role: "Built it myself.",
+        proof: "Installable from source, with a test suite.",
         tech: ["Python", "CLI", "Clipboard", "JSON"],
         liveUrl: null,
         repoUrl: "https://github.com/abhilxsh07/clipstash",
@@ -101,9 +109,9 @@ export const projects = [
         id: "ideaspark",
         title: "IdeaSpark 3.0 playbook",
         subtitle: "Event guides and resources.",
-        description: "Playbook pages for Founders Club's IdeaSpark 3.0.",
-        role: "Technical Staff · Founders Club",
-        proof: "Event playbook pages built with Next.js.",
+        description: "The event playbook for Founders Club's IdeaSpark 3.0.",
+        role: "Built the playbook pages: schedule, tracks, judging criteria and participant guidance.",
+        proof: "Live on the event site.",
         tech: ["Next.js", "Front-end development"],
         liveUrl: "https://ideaspark.thefoundersclub.tech/playbook",
         repoUrl: "https://github.com/founder-srm/IdeaSpark",
@@ -116,9 +124,9 @@ export const projects = [
         title: "abhilashkar.dev",
         subtitle: "The site you're exploring.",
         description:
-            "A personal portfolio with an interactive terminal, illustrated profile card, and custom animation.",
-        role: "Design and development",
-        proof: "Shared project data powers the page and its terminal commands.",
+            "This site: an interactive terminal, an illustrated profile card, and walkthroughs of sable and Cursus.",
+        role: "Designed and built it. One data file feeds the pages and the terminal commands.",
+        proof: "A dependency audit on 19 Oct 2026 found three advisories; compatible updates cleared them.",
         tech: ["React", "Vite", "Tailwind CSS", "Motion"],
         liveUrl: null,
         repoUrl: "https://github.com/abhilxsh07/portfolio_v2",
@@ -208,6 +216,9 @@ export const builtWith = [
 export const alsoUse = ["Git", "Docker", "PostgreSQL", "NumPy"];
 export const learning = ["GPT architecture", "LoRA fine-tuning"];
 
+export const experienceIntro =
+    "I'm a second-year CSE student at SRMIST. I build for clients through Forma Labs and contribute to student-run events.";
+
 export const experience = [
     {
         id: "forma",
@@ -217,7 +228,7 @@ export const experience = [
         status: "Current",
         projectId: null,
         description:
-            "Co-running a two-person full-stack product studio that builds landing pages, product UIs and the backends behind them. Currently building a website for a financial-services client."
+            "Co-running a two-person full-stack product studio. I handle the technical side: landing pages, product UIs and the backends behind them. Right now we're building a website for a financial-services client."
     },
     {
         id: "founders",
@@ -248,6 +259,30 @@ export const experience = [
         description: null
     }
 ];
+// The /uses page. Only things I actually open most days.
+export const uses = [
+    {
+        heading: "Machine",
+        items: [
+            "An Acer Nitro V 15: i5-13420H, 32 GB of DDR5 and an RTX 4050 with 6 GB. It runs Windows 11, which helps when you're building a Windows app, and the 4050 is what my GPT experiments train on.",
+            "A Nothing Phone (3)."
+        ]
+    },
+    {
+        heading: "Code",
+        items: [
+            "Visual Studio for sable. WinUI 3 more or less expects it.",
+            "JetBrains for everything else: WebStorm for the web stuff, PyCharm for Python, CLion when C++ doesn't need the Windows tooling.",
+            "uv for every Python project. I don't use pip or venv directly anymore.",
+            "Git, and Docker when something needs to run the same way on another machine."
+        ]
+    },
+    {
+        heading: "Off-screen",
+        items: ["Autodesk SketchBook for drawing.", "DaVinci Resolve for cutting video."]
+    }
+];
+
 export function getProject(id) {
     return projects.find((project) => project.id === id);
 }

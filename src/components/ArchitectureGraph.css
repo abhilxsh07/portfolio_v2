@@ -1,0 +1,138 @@
+.architecture {
+    --atlas-bg: #081211;
+    --atlas-ink: #d8e7df;
+    --atlas-muted: #8ba89b;
+    --atlas-green: #8ce6b3;
+    position: relative;
+    color: var(--atlas-ink);
+    background: var(--atlas-bg);
+    border-bottom: 1px solid #293e33;
+}
+.architecture [data-kind="local"] { --node-color: #aec1c5; --node-wash: #152023; }
+.architecture [data-kind="ui"] { --node-color: #74dbb0; --node-wash: #0c2520; }
+.architecture [data-kind="engine"] { --node-color: #8cb9f0; --node-wash: #132131; }
+.architecture [data-kind="data"] { --node-color: #c8b5e8; --node-wash: #211a2f; }
+.architecture [data-kind="render"] { --node-color: #bfa1f3; --node-wash: #21192e; }
+.architecture [data-kind="jobs"] { --node-color: #e7bc75; --node-wash: #292218; }
+.architecture [data-kind="output"] { --node-color: #ebcb85; --node-wash: #292417; }
+.architecture-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; padding: 17px 20px; background: #0c1714; border-bottom: 1px solid #2b4136; }
+.architecture-identity { display: flex; align-items: center; gap: 11px; margin-right: auto; }
+.architecture-logo { display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid #5d9477; border-radius: 8px; color: #91dfb5; background: #132c20; box-shadow: inset 0 0 16px #8ce6b309; }
+.architecture-kicker { display: block; color: #91b19f; text-transform: uppercase; font: 9px/1.6 var(--font-mono); letter-spacing: .13em; }
+.architecture-fullscreen-flows { display: none; }
+.architecture-fullscreen-flows button { min-height: 36px; border: 1px solid #345142; border-radius: 5px; padding: 6px 10px; color: #aac7b4; font: 10px var(--font-mono); cursor: pointer; }
+.architecture-fullscreen-flows button[aria-pressed="true"] { background: #254831; border-color: #8ac99e; color: #d6f9df; }
+.architecture-identity strong { display: block; font-size: 13px; font-weight: 500; letter-spacing: -.02em; }
+.architecture-view-switch { display: flex; border: 1px solid #345142; border-radius: 6px; padding: 3px; }
+.architecture-view-switch button { min-height: 34px; padding: 5px 10px; border-radius: 3px; font: 10px var(--font-mono); color: #b1c9ba; cursor: pointer; }
+.architecture-view-switch [aria-pressed="true"] { color: #baf5d3; background: #1b3a29; box-shadow: 0 0 0 1px #427458; }
+.architecture-tools { display: flex; align-items: center; gap: 3px; }
+.architecture-tools button, .architecture-playback-buttons button { display: inline-flex; align-items: center; justify-content: center; width: 36px; min-height: 36px; border: 1px solid #345142; border-radius: 5px; color: #b8d1c2; cursor: pointer; background: #12221b; }
+.architecture button:hover:enabled { filter: brightness(1.2); }
+.architecture button:disabled { opacity: .35; cursor: default; }
+.architecture-zoom { color: #b2c9ba; min-width: 39px; text-align: center; font: 9px var(--font-mono); }
+.architecture-flow-strip { display: flex; gap: 20px; align-items: center; padding: 10px 20px; border-bottom: 1px solid #20372b; color: #89a794; font: 9px/1.6 var(--font-mono); background: #0a1712; }
+.architecture-flow-strip > span:first-child { color: #b8efcf; display: flex; align-items: center; gap: 8px; }
+.architecture-flow-strip i { width: 5px; height: 5px; border-radius: 50%; background: #91dfb5; box-shadow: 0 0 8px #91dfb560; }
+.architecture-flow-strip b { margin: 0 3px; font-weight: 400; }
+.architecture-flow-strip > button { padding: 4px 8px; border: 1px solid #345142; border-radius: 4px; color: #a6cdb2; font: 8px var(--font-mono); cursor: pointer; }
+.architecture-flow-strip > button[aria-pressed="true"] { background: #254831; border-color: #8ac99e; color: #d6f9df; }
+.architecture-live-label { margin-left: auto; letter-spacing: .1em; font-size: 8px; }
+.architecture-viewport { position: relative; height: clamp(370px, 48vw, 650px); overflow: hidden; cursor: grab; touch-action: pan-y; background-image: radial-gradient(circle at 50% 30%, #1d40321f, transparent 70%), radial-gradient(#6fba901d .8px, transparent .8px); background-size: auto, 19px 19px; isolation: isolate; }
+.architecture-viewport[data-dragging="true"] { cursor: grabbing; user-select: none; touch-action: none; }
+.architecture-scene { position: absolute; top: 0; left: 0; transform-origin: 0 0; }
+.architecture-map-heading { position: absolute; left: 26px; right: 26px; top: 22px; display: flex; align-items: baseline; gap: 18px; }
+.architecture-map-heading > span { font: 10px var(--font-mono); color: #7c9b89; letter-spacing: .1em; }
+.architecture-map-heading strong { color: #d5efdf; font-size: 21px; font-weight: 500; letter-spacing: -.03em; }
+.architecture-map-heading p { margin-top: 5px; color: #91ac9a; font: 10px var(--font-mono); }
+.architecture-zone { position: absolute; border: 1px dashed color-mix(in srgb, var(--node-color) 34%, transparent); border-radius: 10px; background: color-mix(in srgb, var(--node-wash) 32%, transparent); }
+.architecture-zone > button { display: flex; align-items: center; justify-content: space-between; width: calc(100% - 28px); margin: 16px 14px 0; color: var(--node-color); font: 10px/1.5 var(--font-mono); letter-spacing: .1em; text-align: left; cursor: zoom-in; }
+.architecture-zone > button svg { opacity: .7; }
+.architecture-zone > p { margin: 4px 14px; font: 9px var(--font-mono); color: #93aa9b; }
+.architecture-wires { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.architecture-edge { color: #345346; transition: opacity .25s; }
+.architecture-wire { fill: none; stroke: currentColor; stroke-width: 1.4; }
+.architecture-edge[data-type="control"] .architecture-wire, .architecture-edge[data-type="bypass"] .architecture-wire { stroke-dasharray: 5 4; }
+.architecture-edge[data-relevant="true"] { color: #568f6d; }
+.architecture-edge[data-active="true"] { color: #9aefbb; }
+.architecture-edge[data-active="true"][data-type="control"], .architecture-edge[data-active="true"][data-type="bypass"] { color: #edca80; }
+.architecture-edge[data-visited="true"]:not([data-active="true"]) { color: #6da583; }
+.architecture-wire-glow { fill: none; stroke: currentColor; stroke-width: 5; opacity: .2; }
+.architecture-edge[data-active="true"] .architecture-wire { stroke-width: 2; }
+.architecture-edge-label { fill: #9db8a6; stroke: #081411; stroke-width: 5px; stroke-linejoin: round; paint-order: stroke fill; font: 8px var(--font-mono); letter-spacing: .03em; }
+.architecture-edge:not([data-relevant="true"]) .architecture-edge-label { opacity: 0; }
+.architecture-edge[data-active="true"] .architecture-edge-label { fill: #d7f8df; }
+.architecture-signal { fill: #e3ffdf; filter: drop-shadow(0 0 5px #9aefbb); }
+.architecture-node { position: absolute; display: flex; align-items: center; gap: 11px; border: 1px solid color-mix(in srgb, var(--node-color) 42%, transparent); border-radius: 7px; padding: 12px; color: var(--node-color); background: linear-gradient(135deg, color-mix(in srgb, var(--node-wash) 90%, #081211), #0c1715); text-align: left; cursor: pointer; transition: opacity .25s, border-color .2s, box-shadow .2s; box-shadow: 0 3px 8px #0003; }
+.architecture-node::before { content: ""; position: absolute; left: -1px; width: 2px; top: 15px; bottom: 15px; border-radius: 2px; background: var(--node-color); opacity: .6; }
+.architecture-node-icon { display: grid; place-items: center; width: 29px; height: 29px; flex-shrink: 0; border: 1px solid color-mix(in srgb, var(--node-color) 25%, transparent); border-radius: 6px; background: color-mix(in srgb, var(--node-color) 5%, transparent); }
+.architecture-node-copy { min-width: 0; }
+.architecture-node-copy strong { display: block; font-size: 12px; font-weight: 500; line-height: 1.4; color: #d9e7df; letter-spacing: -.02em; }
+.architecture-node-copy small { display: block; margin-top: 5px; color: #a0b2a8; font: 8px/1.6 var(--font-mono); }
+.architecture-node[data-active="true"] { border-color: var(--node-color); box-shadow: 0 0 0 1px color-mix(in srgb, var(--node-color) 25%, transparent), 0 0 24px color-mix(in srgb, var(--node-color) 13%, transparent), inset 0 0 20px color-mix(in srgb, var(--node-color) 4%, transparent); }
+.architecture-node[data-active="true"] .architecture-node-copy strong { color: #f1fff7; }
+.architecture-node-port { position: absolute; top: calc(50% - 3px); width: 5px; height: 5px; border: 1px solid var(--node-color); background: #081211; border-radius: 50%; opacity: .6; }
+.architecture-node-port-in { left: -3px; }
+.architecture-node-port-out { right: -3px; }
+.architecture-node-beacon { position: absolute; top: -3px; right: -3px; width: 7px; height: 7px; border-radius: 50%; background: var(--node-color); box-shadow: 0 0 9px var(--node-color); }
+.architecture[data-path-focus="true"] .architecture-node[data-relevant="false"] { opacity: .17; }
+.architecture[data-path-focus="true"] .architecture-edge[data-relevant="false"] { opacity: .16; }
+.architecture-callout { position: absolute; transform: translateX(-50%); color: var(--node-color); border-top: 1px solid color-mix(in srgb, var(--node-color) 35%, transparent); padding-top: 8px; font: 8px/1.6 var(--font-mono); letter-spacing: .08em; white-space: nowrap; }
+.architecture-map-footnote { position: absolute; left: 27px; right: 27px; bottom: 19px; display: flex; justify-content: space-between; font: 8px var(--font-mono); color: #749580; letter-spacing: .08em; }
+.architecture-legend { position: absolute; bottom: 13px; left: 17px; display: flex; gap: 14px; padding: 7px 9px; border: 1px solid #294334; border-radius: 5px; background: #0a1512ed; color: #9fbeab; font: 8px var(--font-mono); pointer-events: none; }
+.architecture-legend > span { display: flex; align-items: center; gap: 5px; }
+.architecture-legend i { display: block; width: 14px; height: 1px; background: #6d9a7d; }
+.architecture-legend .is-control { background: none; border-top: 1px dashed #ebcb85; }
+.architecture-legend .is-active { height: 2px; background: #b3f4c8; box-shadow: 0 0 5px #8ce6b330; }
+.architecture-minimap { position: absolute; right: 13px; bottom: 12px; width: 114px; border: 1px solid #31573e; background: #0b1712ed; border-radius: 5px; padding: 5px; cursor: pointer; overflow: hidden; }
+.architecture-minimap svg { width: 100%; display: block; }
+.architecture-minimap rect { fill: #415b4a; }
+.architecture-minimap .architecture-minimap-zone { fill: #16291c; stroke: #37543e; stroke-width: 3; }
+.architecture-minimap .is-relevant { fill: #83b591; }
+.architecture-minimap .architecture-minimap-window { stroke: #b9f2c7; stroke-width: 8; fill: #98ffc80a; }
+.architecture-pan-hint { position: absolute; right: 18px; top: 13px; font: 7px var(--font-mono); color: #729880; letter-spacing: .08em; pointer-events: none; }
+.architecture-pan-hint b { margin: 0 5px; font-weight: 400; }
+.architecture-step-rail { display: flex; gap: 0; overflow-x: auto; border-top: 1px solid #2c4736; border-bottom: 1px solid #2c4736; scrollbar-width: thin; scrollbar-color: #446c52 #0a1712; background: #0c1913; }
+.architecture-step-rail button { min-height: 49px; flex: 1 0 auto; display: flex; align-items: center; gap: 7px; padding: 9px 13px; border-right: 1px solid #203b2a; color: #91ad9a; text-align: left; font: 9px/1.6 var(--font-mono); cursor: pointer; }
+.architecture-step-rail button > span { font-size: 8px; color: #749580; }
+.architecture-step-rail [aria-current="step"] { background: #1a3523; color: #d6f9df; box-shadow: inset 0 2px #9ce8b7; }
+.architecture-step-rail [aria-current="step"] > span { color: #aceec1; }
+.architecture-playback { display: flex; align-items: center; gap: 21px; padding: 15px 18px; background: #0d1c15; }
+.architecture-playback-buttons { display: flex; gap: 5px; }
+.architecture-playback-buttons .architecture-play-button { gap: 6px; width: auto; padding: 0 12px; min-width: 99px; color: #c7f3d5; font: 10px var(--font-mono); background: #1b3827; }
+.architecture-now { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; min-width: 0; }
+.architecture-now > span { grid-row: span 2; align-self: center; font: 8px var(--font-mono); color: #8ab097; border-right: 1px solid #385940; padding-right: 12px; }
+.architecture-now > strong { font-size: 12px; font-weight: 500; }
+.architecture-now > small { font: 9px var(--font-mono); color: #91ad9a; }
+.architecture-live-source { display: flex; flex-direction: column; gap: 6px; align-items: end; margin-left: auto; }
+.architecture-live-source a { display: flex; align-items: center; gap: 5px; color: #bde5c7; font: 10px var(--font-mono); text-decoration: underline; text-underline-offset: 3px; }
+.architecture-live-source > span { color: #95b49f; font: 9px var(--font-mono); }
+.architecture-live-source small { font: 8px var(--font-mono); color: #7fa28a; white-space: nowrap; }
+.architecture-error { padding: 10px 18px; color: #ebcb85; font-size: 11px; }
+.architecture:fullscreen { width: 100vw; height: 100dvh; display: flex; flex-direction: column; overflow: auto; }
+.architecture:fullscreen .architecture-viewport { flex: 1; height: auto; min-height: 250px; }
+.architecture:fullscreen .architecture-fullscreen-flows { display: flex; gap: 5px; flex-wrap: wrap; }
+.architecture:fullscreen .architecture-step-rail, .architecture:fullscreen .architecture-toolbar, .architecture:fullscreen .architecture-playback { flex-shrink: 0; }
+@media (max-width: 700px) {
+    .architecture-toolbar { padding: 13px 12px; gap: 12px; }
+    .architecture-identity { width: 100%; }
+    .architecture-view-switch { margin-right: auto; }
+    .architecture-view-switch button { font-size: 9px; padding: 5px 7px; }
+    .architecture-tools button { width: 31px; min-height: 34px; }
+    .architecture-zoom { display: none; }
+    .architecture-flow-strip { padding: 9px 12px; gap: 12px; font-size: 8px; flex-wrap: wrap; }
+    .architecture-live-label { display: none; }
+    .architecture-viewport { height: 390px; }
+    .architecture-pan-hint { display: none; }
+    .architecture-minimap { width: 72px; bottom: 12px; right: 9px; }
+    .architecture-legend { flex-direction: column; gap: 6px; bottom: 12px; left: 9px; font-size: 7px; }
+    .architecture-playback { padding: 13px 12px; gap: 12px; flex-wrap: wrap; }
+    .architecture-playback-buttons button { width: 38px; min-height: 44px; }
+    .architecture-now { flex: 1 0 100%; order: -1; }
+    .architecture-live-source { align-items: start; margin-left: 0; }
+    .architecture-live-source small { display: none; }
+    .architecture-step-rail button { min-height: 47px; font-size: 9px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .architecture * { transition: none; }
+}
