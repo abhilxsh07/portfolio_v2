@@ -23,7 +23,7 @@ sable screenshots live in `src/assets/sable/` (alpha build, sample document). Cu
 
 ## Work page
 
-Each case study has three layers: the card, a short write-up inside "Inside …: how it works", and the full architecture map behind "Explore the full architecture". The map is lazy-loaded, so it isn't in the main bundle. [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
+Each case study has a card and a short write-up inside "Inside …: how it works". sable also has the full architecture map behind "Explore the full architecture", which is lazy-loaded so it isn't in the main bundle. [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
 
 ## Terminal
 

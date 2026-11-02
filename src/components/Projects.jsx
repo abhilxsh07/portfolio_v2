@@ -232,7 +232,6 @@ function CursusCaseStudy() {
                     I stopped development after Notion shipped similar features, and closed sign-ups.
                 </p>
             </Prose>
-            <ArchitectureExplorer tourId="cursus" name="Cursus" />
         </Feature>
     );
 }

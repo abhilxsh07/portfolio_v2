@@ -1,5 +1,4 @@
 .project-tour { --tour-accent: #86efac; --tour-dim: rgb(134 239 172 / 9%); color: #e5e5e5; }
-.project-tour[data-tour="cursus"] { --tour-accent: #fcd34d; --tour-dim: rgb(252 211 77 / 8%); }
 .tour-eyebrow { display: block; color: #a3a3a3; font: 10px/1.6 var(--font-mono); text-transform: uppercase; letter-spacing: .1em; }
 .tour-heading > .tour-eyebrow { color: var(--tour-accent); }
 .tour-heading h3 { margin: 7px 0 10px; color: #fafafa; font-size: clamp(22px, 3vw, 30px); font-weight: 400; letter-spacing: -.035em; }
@@ -59,30 +58,6 @@
 .tour-small-note { font-size: 10px; line-height: 1.8; color: #a3ada6; margin-top: 9px; }
 .tour-takeaway { margin-top: 17px; padding-left: 13px; border-left: 2px solid var(--tour-accent); color: #d4d4d4; font-size: 12px; line-height: 1.85; }
 .tour-provenance { margin-top: 12px; }
-.tour-study-sample { border: 1px solid #454137; border-radius: 7px; padding: 16px; background: #191a15; min-height: 290px; font-size: 12px; line-height: 1.8; color: #d5d5c8; }
-.tour-sample-header { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid #3b3d30; font-size: 11px; }
-.tour-sample-header small { display: block; color: #aeb19c; font-size: 9px; }
-.tour-file-type { display: inline-grid; place-items: center; width: 32px; height: 39px; border: 1px solid #8b8863; border-radius: 3px 9px 3px 3px; font: 9px var(--font-mono); color: #fcd34d; flex-shrink: 0; }
-.tour-sample-label { color: #c8bc84; font: 9px/1.7 var(--font-mono); margin: 17px 0 10px; }
-.tour-sample-title { font-size: 16px; line-height: 1.6; font-weight: 500; color: #f3f0dd; margin-bottom: 13px; }
-.tour-notes-sample > p:not([class]) { margin-top: 10px; font-size: 11px; }
-.tour-chunk { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; border-top: 1px solid #3b3d30; }
-.tour-chunk > span { font: 10px var(--font-mono); color: #fcd34d; }
-.tour-chunk p { font-size: 11px; }
-.tour-citation-note { color: #b9bea4; margin-top: 20px; border-top: 1px solid #3b3d30; padding-top: 12px; font-size: 10px; }
-.tour-summary-sample ul { list-style: disc; padding-left: 16px; }
-.tour-summary-sample li { margin-top: 8px; font-size: 11px; }
-.tour-quiz-option { display: flex; width: 100%; gap: 10px; align-items: baseline; text-align: left; margin-top: 7px; border: 1px solid #66634d; border-radius: 5px; padding: 9px; min-height: 44px; font-size: 11px; cursor: pointer; }
-.tour-quiz-option > span { font: 10px var(--font-mono); color: #c7bc8f; }
-.tour-quiz-option:hover:enabled { border-color: #fcd34d; }
-.tour-quiz-option:disabled { cursor: default; }
-.tour-quiz-option.is-correct { border-color: #86efac; background: #86efac0d; }
-.tour-quiz-option.is-wrong { border-color: #fca5a5; }
-.tour-answer-feedback { color: #d9dfc8; font-size: 11px; margin-top: 13px; }
-.tour-answer-feedback button { display: block; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; color: #fcd34d; }
-.tour-date-card { display: flex; flex-direction: column; align-items: center; max-width: 104px; margin: 20px auto; border: 1px solid #858464; border-radius: 8px; overflow: hidden; font: 10px/2 var(--font-mono); }
-.tour-date-card > span:first-child { width: 100%; text-align: center; background: #fcd34d; color: #191a15; }
-.tour-date-card strong { font: 36px/1.6 var(--font-sans); color: #f3f0dd; }
 @media (max-width: 700px) {
     .tour-stage-layout { grid-template-columns: minmax(0, 1fr); padding: 22px 16px; gap: 25px; }
     .tour-description, .tour-heading > p:last-child { font-size: 15px; line-height: 1.7; }

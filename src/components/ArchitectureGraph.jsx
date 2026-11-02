@@ -2,8 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import {
     IconFileText, IconSettings, IconFolder, IconLayersIntersect, IconScan,
     IconAdjustmentsHorizontal, IconCpu, IconPhoto, IconSearch, IconPrinter,
-    IconDatabase, IconLayoutGrid, IconBook2, IconUpload, IconMessage,
-    IconCalendar, IconShieldCheck, IconBraces, IconKey, IconSparkles, IconBolt,
+    IconDatabase, IconLayoutGrid, IconBook2,
     IconZoomIn, IconZoomOut, IconFocusCentered, IconMaximize, IconMinimize,
     IconArrowLeft, IconArrowRight, IconPlayerPlay, IconPlayerPause, IconExternalLink
 } from "@tabler/icons-react";
@@ -14,10 +13,7 @@ const glyphs = {
     file: IconFileText, settings: IconSettings, folder: IconFolder,
     layers: IconLayersIntersect, scan: IconScan, sliders: IconAdjustmentsHorizontal,
     cpu: IconCpu, image: IconPhoto, search: IconSearch, printer: IconPrinter,
-    database: IconDatabase, grid: IconLayoutGrid, book: IconBook2,
-    upload: IconUpload, message: IconMessage, calendar: IconCalendar,
-    shield: IconShieldCheck, braces: IconBraces, key: IconKey,
-    spark: IconSparkles, bolt: IconBolt
+    database: IconDatabase, grid: IconLayoutGrid, book: IconBook2
 };
 
 function port(node, side) {
@@ -197,7 +193,7 @@ export default function ArchitectureGraph({ tour, flow, index, stage, playing, c
                 onPointerUp={(event) => { drag.current = null; event.currentTarget.dataset.dragging = "false"; }}
                 onPointerCancel={(event) => { drag.current = null; event.currentTarget.dataset.dragging = "false"; }}>
                 <div className="architecture-scene" style={{ width: graph.width, height: graph.height, transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})` }}>
-                    <div className="architecture-map-heading"><span>FIG. {tour.id === "sable" ? "01" : "02"}</span><div><strong>{graph.title}</strong><p>{graph.subtitle}</p></div></div>
+                    <div className="architecture-map-heading"><span>FIG. {graph.figure}</span><div><strong>{graph.title}</strong><p>{graph.subtitle}</p></div></div>
                     {graph.zones.map((zone) => (
                         <div key={zone.title} className="architecture-zone" data-kind={zone.kind} style={{ left: zone.x, top: zone.y, width: zone.width, height: zone.height }}>
                             <button type="button" onClick={() => focusZone(zone)} aria-label={`Focus ${tour.id} subsystem: ${zone.title}`}><span>{zone.title}</span><IconFocusCentered size={12} /></button>
@@ -240,9 +236,9 @@ export default function ArchitectureGraph({ tour, flow, index, stage, playing, c
                         );
                     })}
                     {graph.callouts.map((callout) => <div key={callout.text} className="architecture-callout" data-kind={callout.kind} style={{ left: callout.x, top: callout.y }}>{callout.text}</div>)}
-                    <div className="architecture-map-footnote"><span>CLICK A COMPONENT TO TRACE ITS ROLE</span><span>{tour.id === "sable" ? "LOCAL FILE → NATIVE THREADS → PIXELS" : "PRIVATE MATERIAL → INDEXED CONTEXT → STUDY"}</span></div>
+                    <div className="architecture-map-footnote"><span>CLICK A COMPONENT TO TRACE ITS ROLE</span><span>{graph.footnote}</span></div>
                 </div>
-                <div className="architecture-legend" aria-label="Connection legend"><span><i />Data flow</span><span><i className="is-control" />{tour.id === "sable" ? "Control / bypass" : "Control / event"}</span><span><i className="is-active" />Selected path</span></div>
+                <div className="architecture-legend" aria-label="Connection legend"><span><i />Data flow</span><span><i className="is-control" />{graph.controlLabel}</span><span><i className="is-active" />Selected path</span></div>
                 <button type="button" className="architecture-minimap" onClick={reset} aria-label={`Reset ${tour.id} minimap to fit`}>
                     <svg viewBox={`0 0 ${graph.width} ${graph.height}`} aria-hidden="true">
                         {graph.zones.map((zone) => <rect key={zone.title} x={zone.x} y={zone.y} width={zone.width} height={zone.height} className="architecture-minimap-zone" />)}

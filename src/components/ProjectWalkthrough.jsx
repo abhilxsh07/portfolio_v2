@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { IconExternalLink } from "@tabler/icons-react";
 import ArchitectureGraph from "./ArchitectureGraph";
 import useReducedMotion from "../hooks/useReducedMotion";
-import { presets, presetFilter, sableTour, cursusTour } from "../data/walkthroughs";
+import { presets, presetFilter, sableTour } from "../data/walkthroughs";
 import "./ProjectWalkthrough.css";
 
 function tourReducer(state, action) {
@@ -62,62 +62,7 @@ function SablePreview({ flow, stage, preset }) {
     );
 }
 
-const sampleChunks = [
-    ["[0]", "An index helps a database locate rows without scanning the whole table."],
-    ["[1]", "Indexes use storage and add work when rows are inserted or updated."],
-    ["[2]", "Choose indexes around the queries the application actually runs."]
-];
-
-function CursusPreview({ flow, stage }) {
-    const [answer, setAnswer] = useState(null);
-    const scene = stage.scene;
-    return (
-        <figure className="tour-preview tour-cursus-preview">
-            <figcaption className="tour-eyebrow">Fictional study example · local simulation</figcaption>
-            <div className="tour-study-sample">
-                <div className="tour-sample-header"><span className="tour-file-type">TXT</span><span>Database field notes<small>Sample content written for this tour</small></span></div>
-                {flow.id === "calendar" ? (
-                    <div className="tour-calendar-sample">
-                        <p className="tour-sample-label">Separate workspace item</p>
-                        <p className="tour-sample-title">Review database indexes</p>
-                        <div className="tour-date-card"><span>NOV</span><strong>12</strong><span>All day</span></div>
-                        <p className="tour-small-note">{scene === "calendar" ? "One-way sync → Google Calendar event" : "Dated item → queued job → event"}</p>
-                    </div>
-                ) : scene === "quiz" ? (
-                    <div className="tour-quiz-sample">
-                        <p className="tour-sample-label">Try a sample question</p>
-                        <p className="tour-sample-title">What is a trade-off of adding an index?</p>
-                        {["It removes all storage costs.", "It adds work on writes.", "It replaces every table scan.", "It guarantees faster queries."].map((option, index) => (
-                            <button type="button" key={option} disabled={answer !== null} aria-pressed={answer === index} onClick={() => setAnswer(index)} className={`tour-quiz-option ${answer !== null && index === 1 ? "is-correct" : ""} ${answer === index && index !== 1 ? "is-wrong" : ""}`}>
-                                <span>{String.fromCharCode(65 + index)}</span>{option}
-                            </button>
-                        ))}
-                        {answer !== null && <p className="tour-answer-feedback" role="status">{answer === 1 ? "Correct. " : "The answer is B. "}Indexes use storage and need maintenance when rows change. [1] <button type="button" onClick={() => setAnswer(null)}>Restart sample</button></p>}
-                    </div>
-                ) : scene === "answer" ? (
-                    <div className="tour-answer-sample">
-                        <p className="tour-sample-label">Question</p><p className="tour-sample-title">Why not index every column?</p>
-                        <p>Indexes help locate rows, but each one costs storage and adds work on writes. [0] [1]</p>
-                        <div className="tour-citation-note">[0] and [1] refer to chunks, not PDF pages. This example is not generated live.</div>
-                    </div>
-                ) : scene === "summary" ? (
-                    <div className="tour-summary-sample"><p className="tour-sample-label">Revision summary</p><p className="tour-sample-title">Indexes: speed with a cost</p><ul><li>Locate rows without a full scan. [0]</li><li>Account for storage and write overhead. [1]</li><li>Choose around real query patterns. [2]</li></ul><p className="tour-small-note">Illustrative output · kept in browser state</p></div>
-                ) : ["chunks", "ready", "retrieve", "generate", "validate"].includes(scene) ? (
-                    <div className="tour-chunks">
-                        <p className="tour-sample-label">{scene === "retrieve" ? "Illustrative retrieved excerpts" : "Illustrative document chunks"}</p>
-                        {sampleChunks.map(([label, text]) => <div key={label} className="tour-chunk"><span>{label}</span><p>{text}</p></div>)}
-                        <p className="tour-small-note">{scene === "ready" ? "Conversion ready + index ready → study tools enabled" : scene === "retrieve" ? "At most six chunks from one owned material" : "Chunk indices travel with the reference text"}</p>
-                    </div>
-                ) : (
-                    <div className="tour-notes-sample"><p className="tour-sample-label">{scene === "question" ? "Question saved before generation" : scene === "stored" ? "Stored privately, waiting for conversion" : "Original study material"}</p><p className="tour-sample-title">Database indexes</p><p>{sampleChunks[0][1]}</p><p>{sampleChunks[1][1]}</p><p>{sampleChunks[2][1]}</p></div>
-                )}
-            </div>
-            <div className="tour-preview-caption"><span className="tour-status-dot" aria-hidden="true" />{stage.output}</div>
-        </figure>
-    );
-}
-
-const tours = { sable: sableTour, cursus: cursusTour };
+const tours = { sable: sableTour };
 
 export default function ProjectWalkthrough({ tourId }) {
     const tour = tours[tourId];
@@ -160,7 +105,7 @@ export default function ProjectWalkthrough({ tourId }) {
 
     return (
         <section ref={container} className="project-tour" data-tour={tour.id} aria-label={`${tour.id} interactive walkthrough`}>
-            <div className="tour-heading"><p className="tour-eyebrow">Interactive architecture / {tour.id === "sable" ? "01" : "02"}</p><h3>{tour.title}</h3><p>{tour.intro}</p></div>
+            <div className="tour-heading"><p className="tour-eyebrow">Interactive architecture</p><h3>{tour.title}</h3><p>{tour.intro}</p></div>
             <div className="tour-flow-switch" role="group" aria-label={`${tour.id} walkthrough flows`}>
                 {tour.flows.map((item) => <button type="button" key={item.id} aria-pressed={flow.id === item.id} onClick={() => dispatch({ type: "flow", id: item.id })}>{item.label}</button>)}
             </div>
@@ -192,8 +137,8 @@ export default function ProjectWalkthrough({ tourId }) {
                         </AnimatePresence>
                     </div>
                     <div>
-                        {tour.id === "sable" && <div className="tour-presets" role="group" aria-label="Illustration preset">{presets.map((item) => <button type="button" key={item.id} aria-pressed={presetId === item.id} onClick={() => setPresetId(item.id)}>{item.label}</button>)}</div>}
-                        {tour.id === "sable" ? <SablePreview flow={flow} stage={stage} preset={preset} /> : <CursusPreview key={`${flow.id}-${stage.id}`} flow={flow} stage={stage} />}
+                        <div className="tour-presets" role="group" aria-label="Illustration preset">{presets.map((item) => <button type="button" key={item.id} aria-pressed={presetId === item.id} onClick={() => setPresetId(item.id)}>{item.label}</button>)}</div>
+                        <SablePreview flow={flow} stage={stage} preset={preset} />
                     </div>
                 </div>
             </div>
