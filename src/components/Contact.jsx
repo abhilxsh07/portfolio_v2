@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { IconMail, IconBrandGithub, IconBrandLinkedin, IconSend } from "@tabler/icons-react";
+import { IconMail, IconBrandGithub, IconBrandLinkedin, IconSend, IconFileText } from "@tabler/icons-react";
 import { profile, contactLinks } from "../data/portfolio";
 
 const icons = { email: IconMail, github: IconBrandGithub, linkedin: IconBrandLinkedin };
@@ -77,6 +77,16 @@ export default function Contact() {
                                 {label}
                             </motion.a>
                         ))}
+                        <a
+                            href={profile.resume}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="View résumé (opens in new tab)"
+                            className="flex items-center gap-3 text-sm text-neutral-300 hover:text-white transition-colors font-mono"
+                        >
+                            <IconFileText className="w-4 h-4 text-neutral-400" aria-hidden="true" />
+                            Résumé
+                        </a>
                     </div>
 
                     <div className="border-t border-neutral-800 my-4" />

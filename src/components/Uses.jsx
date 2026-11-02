@@ -7,7 +7,7 @@ export default function Uses() {
             <div className="max-w-5xl mx-auto">
                 <SectionHeading as="h1" title="Uses" />
                 <p className="text-sm text-neutral-300 leading-relaxed max-w-2xl -mt-4 mb-12">
-                    What I work on day to day. If something here looks out of date, I probably just haven't edited this page yet.
+                    The hardware and tools I actually use day to day.
                 </p>
                 <div className="space-y-12">
                     {uses.map(({ heading, items }) => (

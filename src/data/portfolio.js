@@ -17,9 +17,9 @@ export const profile = {
 
 // Shows up on the home page and in the terminal. Bump the date whenever this changes.
 export const now = {
-    updated: "2026-11-01",
+    updated: "2026-11-02",
     text:
-        "Mostly sable. I'm getting it to parity with NightPDF before I add anything of my own. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+        "Mostly sable. I'm rebuilding NightPDF's reading features in a native Windows app, with feature parity as the current milestone. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
 };
 
 export const navigation = [
@@ -217,7 +217,7 @@ export const alsoUse = ["Git", "Docker", "PostgreSQL", "NumPy"];
 export const learning = ["GPT architecture", "LoRA fine-tuning"];
 
 export const experienceIntro =
-    "I'm in my second year at SRMIST, so all of this fits around classes. The clubs gave me my first real users. Forma Labs is where I build for clients.";
+    "I'm a second-year CSE student at SRMIST. I build for clients through Forma Labs and contribute to student-run events.";
 
 export const experience = [
     {
@@ -228,7 +228,7 @@ export const experience = [
         status: "Current",
         projectId: null,
         description:
-            "Co-running a two-person full-stack product studio that builds landing pages, product UIs and the backends behind them. Currently building a website for a financial-services client."
+            "Co-running a two-person full-stack product studio. I handle the technical side: landing pages, product UIs and the backends behind them. Right now we're building a website for a financial-services client."
     },
     {
         id: "founders",
