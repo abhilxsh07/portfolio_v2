@@ -19,7 +19,7 @@ export const profile = {
 export const now = {
     updated: "2026-11-19",
     text:
-        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers. Forma Labs is building a site for a financial-services client."
+        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers."
 };
 
 export const navigation = [
@@ -190,7 +190,7 @@ export const alsoUse = ["Git", "Docker", "PostgreSQL", "NumPy"];
 export const learning = [];
 
 export const experienceIntro =
-    "I'm a second-year CSE student at SRMIST. I build for clients through Forma Labs and contribute to student-run events.";
+    "I'm a second-year CSE student at SRMIST. I co-run Forma Labs and contribute to student-run events.";
 
 export const experience = [
     {
@@ -201,7 +201,7 @@ export const experience = [
         status: "Current",
         projectId: null,
         description:
-            "Co-running a two-person full-stack product studio. I handle the technical side: landing pages, product UIs and the backends behind them. Right now we're building a website for a financial-services client."
+            "Co-running a two-person full-stack product studio. I handle the technical side: landing pages, product UIs and the backends behind them."
     },
     {
         id: "founders",
