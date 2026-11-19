@@ -113,7 +113,7 @@ export const projects = [
         description:
             "This site: an interactive terminal, an illustrated profile card, and walkthroughs of sable and Cursus.",
         role: "Designed and built it. One data file feeds the pages and the terminal commands.",
-        proof: "A dependency audit on 19 Oct 2026 found three advisories; compatible updates cleared them.",
+        proof: null,
         tech: ["React", "Vite", "Tailwind CSS", "Motion"],
         liveUrl: null,
         repoUrl: "https://github.com/abhilxsh07/portfolio_v2",

@@ -41,12 +41,4 @@ Before publishing, check mobile layout, section links, keyboard focus, reduced m
 
 ## Dependency cleanup
 
-Removed ten unused packages and switched animation imports to `motion/react`. On 19 October 2026, a production dependency audit found three affected packages. Compatible updates cleared those advisories:
-
-| Package | Before | After |
-| --- | --- | --- |
-| nanoid | 3.3.15 | 3.3.20 |
-| postcss | 8.5.16 | 8.5.31 |
-| source-map-js | 1.2.1 | 1.2.2 |
-
-The [dated audit record](public/engineering/dependency-audit-2026-10-19.json) includes lockfile hashes and advisory links. This covers dependency advisories, not the whole application's security.
+Removed ten unused packages and switched animation imports to `motion/react`.
