@@ -26,10 +26,12 @@ export default function Skills() {
                         <h2 className="text-sm font-mono text-white mb-3">Also use</h2>
                         <p className="text-sm text-neutral-400 leading-relaxed">{alsoUse.join(" · ")}</p>
                     </div>
-                    <div>
-                        <h2 className="text-sm font-mono text-white mb-3">Learning</h2>
-                        <p className="text-sm text-neutral-400 leading-relaxed">{learning.join(" · ")}</p>
-                    </div>
+                    {learning.length > 0 && (
+                        <div>
+                            <h2 className="text-sm font-mono text-white mb-3">Learning</h2>
+                            <p className="text-sm text-neutral-400 leading-relaxed">{learning.join(" · ")}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

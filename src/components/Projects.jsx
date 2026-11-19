@@ -251,7 +251,6 @@ const jumpLinks = [
     ["sable", "#sable"],
     ["Cursus", "#cursus"],
     ["More work", "#more-work"],
-    ["Experiments", "#building"],
     ["Earlier work", "#earlier-work"]
 ];
 

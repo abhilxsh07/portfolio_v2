@@ -34,8 +34,7 @@ export function getPortfolioOutput(command) {
                 ),
                 line("Also use", "text-green-400"),
                 line(alsoUse.join(" · ")),
-                line("Learning", "text-green-400"),
-                line(learning.join(" · "))
+                ...(learning.length ? [line("Learning", "text-green-400"), line(learning.join(" · "))] : [])
             ];
         case "projects":
             return [

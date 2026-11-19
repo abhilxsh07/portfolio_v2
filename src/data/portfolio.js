@@ -19,7 +19,7 @@ export const profile = {
 export const now = {
     updated: "2026-11-19",
     text:
-        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers. Forma Labs is building a site for a financial-services client."
 };
 
 export const navigation = [
@@ -91,20 +91,6 @@ export const projects = [
         group: "selected",
         status: "Usable",
         buildingNote: null
-    },
-    {
-        id: "llm-lab",
-        title: "LLM lab",
-        subtitle: "Learning by building the model.",
-        description: "Experiments with a GPT built from scratch and a LoRA fine-tune of Llama 3.1 8B.",
-        role: "Personal experiments",
-        proof: "Exploring model internals alongside parameter-efficient fine-tuning.",
-        tech: ["Python", "GPT", "LoRA", "Fine-tuning"],
-        liveUrl: null,
-        repoUrl: null,
-        group: "building",
-        status: "In progress",
-        buildingNote: "Building a GPT from scratch and experimenting with a LoRA fine-tune of Llama 3.1 8B."
     },
     {
         id: "ideaspark",
@@ -201,7 +187,7 @@ export const builtWith = [
     { projectId: "portfolio", skills: ["React", "Vite", "Tailwind CSS", "Motion"] }
 ];
 export const alsoUse = ["Git", "Docker", "PostgreSQL", "NumPy"];
-export const learning = ["GPT architecture", "LoRA fine-tuning"];
+export const learning = [];
 
 export const experienceIntro =
     "I'm a second-year CSE student at SRMIST. I build for clients through Forma Labs and contribute to student-run events.";
@@ -251,7 +237,7 @@ export const uses = [
     {
         heading: "Machine",
         items: [
-            "An Acer Nitro V 15: i5-13420H, 32 GB of DDR5 and an RTX 4050 with 6 GB. It runs Windows 11, which helps when you're building a Windows app, and the 4050 is what my GPT experiments train on.",
+            "An Acer Nitro V 15: i5-13420H, 32 GB of DDR5 and an RTX 4050 with 6 GB. It runs Windows 11, which helps when you're building a Windows app.",
             "A Nothing Phone (3)."
         ]
     },
