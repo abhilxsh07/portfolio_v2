@@ -3,7 +3,7 @@
   "redirects": [
     {
       "source": "/resume",
-      "destination": "https://drive.google.com/file/d/1wCrlUqyzggFcj6Q8LYjDm7WYoTb78NEP/view?usp=sharing",
+      "destination": "/resume.pdf",
       "permanent": false
     }
   ],
