@@ -80,7 +80,7 @@ export const projects = [
     {
         id: "clipstash",
         title: "clipstash",
-        subtitle: "Useful snippets, one command away.",
+        subtitle: "Code snippets, saved from the terminal.",
         description:
             "A Python CLI for keeping code snippets: save, tag, search, copy to the clipboard, and move them in and out as JSON.",
         role: "Built it myself.",
@@ -109,7 +109,7 @@ export const projects = [
     {
         id: "portfolio",
         title: "abhilashkar.dev",
-        subtitle: "The site you're exploring.",
+        subtitle: "This site.",
         description:
             "This site: an interactive terminal, an illustrated profile card, and walkthroughs of sable and Cursus.",
         role: "Designed and built it. One data file feeds the pages and the terminal commands.",

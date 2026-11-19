@@ -24,9 +24,9 @@ function Paper({ small = false }) {
         <div className={`tour-paper ${small ? "tour-paper-small" : ""}`}>
             <span className="tour-paper-kicker">FIELD NOTES / 01</span>
             <p className="tour-paper-title">A little more<br />contrast.</p>
-            <p className="tour-paper-body">Good tools get out of the way. Keep the words clear, the page quiet, and the original file intact.</p>
+            <p className="tour-paper-body">The filter only changes what you see. The file on disk stays exactly as it was.</p>
             <div className="tour-paper-chart" aria-hidden="true"><i /><i /><i /><i /><i /></div>
-            <p className="tour-paper-body">The same page. A different way to read.</p>
+            <p className="tour-paper-body">The same page, before and after the filter.</p>
             <span className="tour-paper-number">01</span>
         </div>
     );

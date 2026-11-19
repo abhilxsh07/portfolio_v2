@@ -20,7 +20,7 @@ export function presetFilter(values) {
 export const sableTour = {
     id: "sable",
     title: "How a file becomes a filtered page",
-    intro: "Explore the threads, caches and drawing paths inside sable. Choose a route to trace it through the system, or select any component to inspect its role.",
+    intro: "Pick a route to follow a file through sable's threads, caches and draw calls, or click any part to see what it does.",
     sourceNote: "Describes a November 2026 development build, before v1.0.0-alpha.1. Modules are named, not linked; the source is at github.com/abhilxsh07/sable.",
     flows: [
         {
