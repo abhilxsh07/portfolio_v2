@@ -33,6 +33,8 @@ Click terminal or press Ctrl+K (Cmd+K on macOS). Type `help` for commands or `/`
 
 Vercel builds with `npm run build`. `vercel.json` sets response headers and the résumé redirect. Local Vite preview does not apply those settings.
 
+The résumé is served from `public/resume.pdf`. `/resume` redirects to `/resume.pdf` on Vercel.
+
 The contact form uses Web3Forms. Mock submissions when testing. Discord verification is at `/.well-known/discord`.
 
 Before publishing, check mobile layout, section links, keyboard focus, reduced motion, and terminal commands. Run `npm audit --omit=dev` for dependency advisories.

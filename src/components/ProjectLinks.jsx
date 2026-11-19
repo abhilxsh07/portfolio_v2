@@ -1,4 +1,4 @@
-import { IconArrowUpRight, IconBrandGithub } from "@tabler/icons-react";
+import { IconArrowUpRight, IconBrandGithub, IconDownload } from "@tabler/icons-react";
 
 export default function ProjectLinks({ project }) {
     return (
@@ -12,6 +12,17 @@ export default function ProjectLinks({ project }) {
                     className="min-h-11 inline-flex items-center gap-1.5 text-green-400 hover:underline"
                 >
                     Live app <IconArrowUpRight size={15} aria-hidden="true" />
+                </a>
+            )}
+            {project.downloadUrl && (
+                <a
+                    href={project.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Download ${project.title}`}
+                    className="min-h-11 inline-flex items-center gap-1.5 text-green-400 hover:underline"
+                >
+                    Download <IconDownload size={15} aria-hidden="true" />
                 </a>
             )}
             {project.repoUrl && (

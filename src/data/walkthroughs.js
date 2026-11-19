@@ -1,5 +1,5 @@
 // Stage text is condensed from the sable codebase brief (91f77a8).
-// The repo is private, so stages name their module instead of linking to it.
+// The repo went public with v1.0.0-alpha.1; stages still name modules without linking until they are checked against a release commit.
 const step = (id, title, owner, description, input, output, file, extra = {}) => ({
     id, title, owner, description, input, output, file, ...extra
 });
@@ -21,7 +21,7 @@ export const sableTour = {
     id: "sable",
     title: "How a file becomes a filtered page",
     intro: "Explore the threads, caches and drawing paths inside sable. Choose a route to trace it through the system, or select any component to inspect its role.",
-    sourceNote: "Describes the development build at 91f77a8. The repo is private, so modules are named but not linked.",
+    sourceNote: "Describes a November 2026 development build, before v1.0.0-alpha.1. Modules are named, not linked; the source is at github.com/abhilxsh07/sable.",
     flows: [
         {
             id: "read", label: "Read", result: "A filtered page", takeaway: "The file and cached pixels keep their original colours. The filter runs when the page is drawn.",

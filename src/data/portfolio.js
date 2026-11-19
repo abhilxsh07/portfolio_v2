@@ -5,11 +5,11 @@ export const profile = {
     location: "Chennai, India",
     intro: "I build web apps and Windows software.",
     context: "CSE student at SRMIST and co-founder of Forma Labs.",
-    proof: "Currently building sable, a dark-mode PDF reader in C++ and WinUI 3.",
+    proof: "I made sable, a dark-mode PDF reader for Windows in C++ and WinUI 3. It's out in public alpha.",
     email: "abh6l9sh@protonmail.com",
     github: "https://github.com/abhilxsh07",
     linkedin: "https://www.linkedin.com/in/abhilxsh/",
-    resume: "/resume",
+    resume: "/resume.pdf",
     studioUrl: null,
     contact:
         "Open to internships and full-stack roles. I also take on client projects through Forma Labs."
@@ -17,9 +17,9 @@ export const profile = {
 
 // Shows up on the home page and in the terminal. Bump the date whenever this changes.
 export const now = {
-    updated: "2026-11-02",
+    updated: "2026-11-19",
     text:
-        "Mostly sable. Notes and markup are in, and this week I'm working on filling in PDF forms. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
+        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers. Forma Labs is building a site for a financial-services client, and on free evenings I go back to the GPT I'm writing from scratch."
 };
 
 export const navigation = [
@@ -65,15 +65,16 @@ export const projects = [
         title: "sable",
         subtitle: "A dark-mode PDF reader for Windows.",
         description:
-            "A native rewrite of NightPDF in C++/WinRT and WinUI 3. Night presets change how pages are drawn, so thumbnails and printouts keep their original colours.",
-        role: "Built the native shell, the PDFium integration, the Direct2D filter, and the reading tools so far.",
-        proof: "Tabs, four night presets, Find, text selection, outlines, presentation mode, notes and markup, Save a Copy, and printing in original colours.",
+            "A native port of NightPDF in C++/WinRT and WinUI 3, with PDFium and night filters in Direct2D that recolour only the page. Tabs, Find, comments, form filling, Fill & Sign, page organizing, export, Read Aloud and printing in original colours.",
+        role: "Built it on my own: the WinUI 3 shell, the PDFium engine thread, the Direct2D filter, the reading and editing tools, the installer and the release pipeline.",
+        proof: "v1.0.0-alpha.1 shipped on 17 Nov 2026 with x64 and ARM64 installers; 903 tests pass at the release commit.",
         note: "Based on NightPDF, first released by Joe Loya and later maintained at Lunarequest/NightPDF. An independent rewrite, not an official successor.",
         tech: ["C++/WinRT", "WinUI 3", "Windows App SDK", "PDFium", "Direct2D"],
         liveUrl: null,
-        repoUrl: null,
+        downloadUrl: "https://github.com/abhilxsh07/sable/releases/tag/v1.0.0-alpha.1",
+        repoUrl: "https://github.com/abhilxsh07/sable",
         group: "featured",
-        status: "In development",
+        status: "Public alpha",
         buildingNote: null
     },
     {
@@ -189,20 +190,6 @@ export const projects = [
         group: "earlier",
         status: "Built",
         buildingNote: null
-    },
-    {
-        id: "memscope",
-        title: "memscope",
-        subtitle: "Python memory profiling",
-        description: "An exploration of object-level memory usage and reference graphs.",
-        role: "Personal project",
-        proof: null,
-        tech: ["Python", "Memory profiling"],
-        liveUrl: null,
-        repoUrl: null,
-        group: "building",
-        status: "On hold",
-        buildingNote: "Paused while I focus on other projects."
     }
 ];
 

@@ -192,8 +192,8 @@ function SableFeature() {
             <Prose title="Limits and what's next">
                 <p>
                     It's Windows-only, which is the point of going native. OCR, redaction and adding passwords are out
-                    for now. Notes and markup are in, form filling is what I'm building at the moment, and page
-                    organizing comes after that.
+                    for now. v1.0.0-alpha.1 has notes and markup, form filling, Fill & Sign and page organizing. Before a
+                    stable release it still needs a run on a clean PC and on real ARM hardware, and signed installers.
                 </p>
             </Prose>
             <ArchitectureExplorer tourId="sable" name="sable" />

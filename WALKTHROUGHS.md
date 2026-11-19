@@ -35,11 +35,10 @@ Checked on 1 November 2026 against
 `D:/NightPdf/rework/sable-walkthrough-brief.md`, describing `91f77a8`. The
 Cursus short write-up is based on its brief for `ccfe3d6` on `fix/security-audit`.
 
-Both repositories are private. On 2 November 2026 an anonymous request for
-`github.com/abhilxsh07/sable` returned 404, so sable's stages name their modules
-without linking to them, and the project card has no Source action. If the repo
-goes public later, link files at a commit that matches these descriptions and
-review the two together. Don't reuse line numbers from a different commit.
+sable's repo went public with v1.0.0-alpha.1 on 17 November 2026, and the
+project card now links to the source and the release. The stages still name
+their modules without linking to them. To link them, pick a commit that matches
+these descriptions and review the two together. Don't reuse line numbers from a different commit.
 
 Cursus's UI came from a design system that isn't mine, so the old product
 screenshots aren't shown anywhere. The card uses an original illustration

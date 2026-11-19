@@ -5,7 +5,7 @@ import sableNotes from "../assets/sable/notes.png";
 const previews = [
     {
         project: getProject("sable"),
-        status: "In development",
+        status: "Public alpha · v1.0.0-alpha.1",
         visual: (
             <img
                 src={sableNotes}
