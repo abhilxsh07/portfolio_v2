@@ -1,6 +1,6 @@
 import { getProject } from "../data/portfolio";
 import CursusOverview from "./CursusOverview";
-import sableNotes from "../assets/sable/notes.png";
+import sableReader from "../assets/sable/reader-night-default.webp";
 
 const previews = [
     {
@@ -8,12 +8,12 @@ const previews = [
         status: "Public alpha · v1.0.0-alpha.1",
         visual: (
             <img
-                src={sableNotes}
-                width={1440}
-                height={774}
+                src={sableReader}
+                width={1600}
+                height={860}
                 loading="lazy"
-                alt="sable with a highlight, an underline and a note on a sample page, listed in the comments panel"
-                className="w-full aspect-[1440/774] object-cover object-top border-b border-neutral-800"
+                alt="sable showing a document with the default dark night filter"
+                className="w-full aspect-[1600/860] object-cover object-top border-b border-neutral-800"
             />
         )
     },

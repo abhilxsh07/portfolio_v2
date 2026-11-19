@@ -7,31 +7,37 @@ import FlowSteps from "./FlowSteps";
 import ArchitectureExplorer from "./ArchitectureExplorer";
 import CursusOverview from "./CursusOverview";
 import ultronImage from "../assets/myUltron.webp";
-import sableReader from "../assets/sable/reader.png";
-import sableNotes from "../assets/sable/notes.png";
-import sableFind from "../assets/sable/find.png";
-import sableSpread from "../assets/sable/spread.png";
+import sableReader from "../assets/sable/reader-night-default.webp";
+import sableComments from "../assets/sable/comment-tools.webp";
+import sableFind from "../assets/sable/find-in-document.webp";
+import sableOrganize from "../assets/sable/organize-pages.webp";
+import sableFillSign from "../assets/sable/fill-and-sign.webp";
 
 const sableScreens = [
     {
         title: "Night",
         image: sableReader,
-        alt: "sable showing a sample document with the Default night preset and page thumbnails in the right rail"
+        alt: "sable showing a document with the default dark night filter"
     },
     {
-        title: "Notes",
-        image: sableNotes,
-        alt: "A highlighted sentence and an underlined one in the Sepia preset, with both marks and a typed note listed in the comments panel"
+        title: "Comments",
+        image: sableComments,
+        alt: "The Comment toolbar: note, highlight, underline, strike, text box, draw, shape, stamp"
     },
     {
         title: "Find",
         image: sableFind,
-        alt: "Find with six matches for the word contrast, the current match highlighted in orange"
+        alt: "Find highlighting every match of \"night\" in the page"
     },
     {
-        title: "Spreads",
-        image: sableSpread,
-        alt: "Pages one and two side by side as an odd-page spread, in the Redeye preset"
+        title: "Organize",
+        image: sableOrganize,
+        alt: "Organize pages showing seven page thumbnails"
+    },
+    {
+        title: "Fill & Sign",
+        image: sableFillSign,
+        alt: "The Fill & Sign toolbar: text, check, cross, typed and drawn signature"
     }
 ];
 const sableFlow = [
@@ -163,9 +169,9 @@ function SableFeature() {
                 <ScreenGallery
                     name="sable"
                     screens={sableScreens}
-                    width={1440}
-                    height={774}
-                    caption="Development build, November 2026 · a sample document written for these screenshots."
+                    width={1600}
+                    height={860}
+                    caption="v1.0.0-alpha.1, November 2026 · a sample document written for these screenshots."
                 />
             }
         >

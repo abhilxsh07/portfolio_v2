@@ -50,9 +50,9 @@ export const projects = [
         id: "ultron",
         title: "Ultron 9.0",
         subtitle: "A hackathon, from registration to submission.",
-        description: "Futurix's hackathon platform for Ultron 9.0, from team registration to project submission.",
-        role: "Worked on the team-registration and project-submission flows. This was a team build.",
-        proof: null,
+        description: "A hackathon submission platform for Futurix's Ultron 9.0: invite-only sign-in, deadline-locked submissions and admin moderation.",
+        role: "Built it on my own: the React front end, the PHP API and the MySQL schema.",
+        proof: "Participant and admin roles, deadline-locked edits, moderation, CSV export and likes de-duplicated per user.",
         tech: ["React", "TypeScript", "Tailwind CSS", "PHP", "MySQL"],
         liveUrl: null,
         repoUrl: "https://github.com/abhilxsh07/futurixUltron9.0",
@@ -234,7 +234,7 @@ export const experience = [
         status: "Current",
         projectId: "ultron",
         description:
-            "Worked on the Ultron 9.0 hackathon platform, including team registration and project submission flows."
+            "Built my own Ultron 9.0 hackathon submission platform for Futurix: invite-only sign-in, deadline-locked submissions and admin moderation."
     },
     {
         id: "srmist",
