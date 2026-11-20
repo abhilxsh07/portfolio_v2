@@ -36,7 +36,9 @@
     {
         "@context": "https://schema.org",
         "@type": "Person",
+        "@id": "https://abhilashkar.dev/#person",
         "name": "Abhilash Kar",
+        "alternateName": ["abhilxsh07", "abhilxsh"],
         "url": "https://abhilashkar.dev",
         "jobTitle": "Full-stack developer",
         "description": "Full-stack developer and co-founder of Forma Labs, a two-person product studio. Made sable, a native dark-mode PDF reader for Windows. B.Tech CSE student at SRMIST, expected 2029.",
@@ -50,6 +52,28 @@
             "@type": "CollegeOrUniversity",
             "name": "SRM Institute of Science and Technology"
         }
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://abhilashkar.dev/#website",
+                "url": "https://abhilashkar.dev/",
+                "name": "Abhilash Kar",
+                "publisher": { "@id": "https://abhilashkar.dev/#person" }
+            },
+            {
+                "@type": "ProfilePage",
+                "@id": "https://abhilashkar.dev/#profile",
+                "url": "https://abhilashkar.dev/",
+                "isPartOf": { "@id": "https://abhilashkar.dev/#website" },
+                "mainEntity": { "@id": "https://abhilashkar.dev/#person" }
+            }
+        ]
     }
     </script>
 
