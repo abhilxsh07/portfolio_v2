@@ -4,6 +4,7 @@ import { ready } from "./ready.js";
 
 export const SITE_URL = "https://abhilashkar.dev";
 export const BRAIN_PATH = "/brain";
+const BLOG_PATH = "/blog";
 
 const fixedPages = [
     {
@@ -22,7 +23,7 @@ const brainName = BRAIN_PATH[1].toUpperCase() + BRAIN_PATH.slice(2);
 const newPages = [
     { id: "uses-v2", path: "/uses", heading: "Uses", intro: "uses.intro", description: copy.uses.intro },
     { id: "brain", path: BRAIN_PATH, heading: brainName, intro: "brain.intro", description: copy.brain.intro },
-    { id: "blog", path: "/blog", heading: "Blog", intro: "blog.intro", description: copy.blog.intro },
+    { id: "blog", path: BLOG_PATH, heading: "Blog", intro: "blog.intro", description: copy.blog.intro },
     { id: "log", path: "/log", heading: "Log", intro: "log.intro", description: copy.log.intro },
     { id: "colophon", path: "/colophon", heading: "Colophon", description: copy.colophon.body }
 ].map((page) => ({
@@ -39,7 +40,7 @@ export function livePages() {
 export const navigation = [
     { label: "Work", href: "/work" },
     { label: brainName, href: BRAIN_PATH },
-    { label: "Blog", href: "/blog" },
+    { label: "Blog", href: BLOG_PATH },
     { label: "Uses", href: "/uses" },
     { label: "Contact", href: "/contact" }
 ].filter(({ href }) => livePages().some(({ path }) => path === href));
@@ -47,6 +48,23 @@ export const navigation = [
 export function previewPage(path) {
     if (path === "/uses-v2") return newPages[0];
     return newPages.find((page) => page.path === path) ?? null;
+}
+
+export function contentPages({ notes, posts }, preview = false) {
+    return [
+        { entries: notes, base: BRAIN_PATH, flag: "brain", id: "brain-note", summary: "hint" },
+        { entries: posts, base: BLOG_PATH, flag: "blog", id: "blog-post", summary: "summary" }
+    ].flatMap(({ entries, base, flag, id, summary }) => {
+        if (!preview && !ready[flag]) return [];
+        return entries.filter((entry) => preview || !entry.draft).map((entry) => ({
+            id,
+            path: `${base}/${entry.slug}`,
+            title: `${entry.title} · ${profile.name}`,
+            heading: entry.title,
+            description: entry[summary] ?? "",
+            entry
+        }));
+    });
 }
 
 export const notFoundPage = {

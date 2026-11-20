@@ -1,6 +1,9 @@
 import { useSyncExternalStore } from "react";
 
-import { livePages, previewPage } from "../data/pages";
+import { contentPages, livePages, previewPage } from "../data/pages";
+import content from "../generated/index.json";
+
+const pages = [...livePages(), ...contentPages(content, import.meta.env.DEV)];
 
 const movedPages = {
     "/stack": "/uses#stack",
@@ -37,7 +40,7 @@ export function useLocation() {
 
 export function resolve(path) {
     const normalized = normalize(path);
-    const page = livePages().find(({ path }) => path === normalized);
+    const page = pages.find(({ path }) => path === normalized);
     return page ?? (import.meta.env.DEV ? previewPage(normalized) : null);
 }
 

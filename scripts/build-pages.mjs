@@ -1,8 +1,9 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { livePages, notFoundPage, SITE_URL } from "../src/data/pages.js";
+import { contentPages, livePages, notFoundPage, SITE_URL } from "../src/data/pages.js";
 
 const index = readFileSync("dist/index.html", "utf8");
+const content = JSON.parse(readFileSync("src/generated/index.json", "utf8"));
 
 function escapeHtml(text) {
     return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
@@ -23,7 +24,7 @@ function pageHtml({ title, description, socialDescription = description, path })
         .replace(/<meta property="og:url" content="[^"]*"\s*\/?>/, () => url ? `<meta property="og:url" content="${url}" />` : "");
 }
 
-for (const page of livePages()) {
+for (const page of [...livePages(), ...contentPages(content)]) {
     const file = page.path === "/" ? "dist/index.html" : `dist${page.path}.html`;
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, pageHtml(page));
