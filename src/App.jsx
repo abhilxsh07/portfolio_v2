@@ -16,6 +16,8 @@ import NotFound from "./components/NotFound";
 import PageShell from "./components/PageShell";
 import Brain from "./components/Brain";
 import BrainNote from "./components/BrainNote";
+import Blog from "./components/Blog";
+import BlogPost from "./components/BlogPost";
 import Copy from "./components/Copy";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
@@ -62,6 +64,10 @@ function Page({ page, search, onOpenTerminal }) {
             return <UsesV2 />;
         case "brain":
             return <Brain title={page.heading} search={search} />;
+        case "blog":
+            return <Blog />;
+        case "blog-post":
+            return <BlogPost post={page.entry} />;
         case "brain-note":
             return <BrainNote key={page.entry.slug} note={page.entry} />;
         case "/contact":
@@ -75,7 +81,6 @@ function Page({ page, search, onOpenTerminal }) {
             return (
                 <PageShell title={page.heading} intro={page.intro}>
                     {page.id === "colophon" && <Copy k="colophon.body" />}
-                    {page.id === "blog" && <Copy k="blog.empty" />}
                 </PageShell>
             );
     }
