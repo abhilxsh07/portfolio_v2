@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
 import { BRAIN_PATH } from "../data/pages";
 import { resolve } from "../lib/router";
@@ -10,12 +11,7 @@ const bodies = Object.fromEntries(Object.entries(files).map(([file, load]) => [
         const { html } = await load();
         return {
             default: function PostBody() {
-                return (
-                    <article
-                        className="space-y-4 break-words leading-relaxed [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-green-400 [&_h2]:font-mono [&_ol]:list-decimal [&_ol]:pl-6 [&_pre]:overflow-x-auto [&_ul]:list-disc [&_ul]:pl-6"
-                        dangerouslySetInnerHTML={{ __html: html }}
-                    />
-                );
+                return <MarkdownBody as="article" html={html} />;
             }
         };
     })

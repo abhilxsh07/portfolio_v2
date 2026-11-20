@@ -4,6 +4,7 @@ import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
 import { BRAIN_PATH } from "../src/data/pages.js";
 import { ready } from "../src/data/ready.js";
+import { copy } from "../src/data/copy.js";
 import { layoutBrain } from "./layout-brain.mjs";
 
 const development = process.argv.includes("--dev");
@@ -71,7 +72,7 @@ function renderEntry({ markdown }) {
                 const note = notesBySlug.get(slug);
                 const text = label.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
                 const linkText = !note || note.draft ? `<s title="not written yet">${text}</s>` : text;
-                return note && (development || !note.draft) ? `<a href="${BRAIN_PATH}/${slug}">${linkText}</a>` : linkText;
+                return note && (development || (ready.brain && !note.draft)) ? `<a href="${BRAIN_PATH}/${slug}">${linkText}</a>` : linkText;
             }
         }],
         walkTokens(token) {
@@ -119,4 +120,6 @@ const map = development || ready.brain
         ...note, links: indexedNotes.get(note.slug)?.links ?? renderEntry(note).links
     })), development || ready.blog ? postIndex : [], development)
     : undefined;
+const colophon = (development || ready.colophon) && copy.colophon.body !== null ? renderEntry({ markdown: copy.colophon.body }).html : null;
+writeFileSync(new URL("colophon.json", output), JSON.stringify({ html: colophon }) + "\n");
 writeFileSync(new URL("index.json", output), JSON.stringify({ notes: noteIndex, posts: postIndex, map }) + "\n");

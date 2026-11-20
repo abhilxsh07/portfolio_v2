@@ -13,13 +13,12 @@ import Uses from "./components/Uses";
 import UsesV2 from "./components/UsesV2";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
-import PageShell from "./components/PageShell";
 import Brain from "./components/Brain";
 import BrainNote from "./components/BrainNote";
 import Blog from "./components/Blog";
 import BlogPost from "./components/BlogPost";
 import SiteLog from "./components/SiteLog";
-import Copy from "./components/Copy";
+import Colophon from "./components/Colophon";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
@@ -67,6 +66,8 @@ function Page({ page, search, onOpenTerminal }) {
             return <Brain title={page.heading} search={search} />;
         case "blog":
             return <Blog />;
+        case "colophon":
+            return <Colophon />;
         case "log":
             return <SiteLog />;
         case "blog-post":
@@ -80,12 +81,7 @@ function Page({ page, search, onOpenTerminal }) {
                 </div>
             );
         default:
-            if (!page) return <NotFound />;
-            return (
-                <PageShell title={page.heading} intro={page.intro}>
-                    {page.id === "colophon" && <Copy k="colophon.body" />}
-                </PageShell>
-            );
+            return <NotFound />;
     }
 }
 

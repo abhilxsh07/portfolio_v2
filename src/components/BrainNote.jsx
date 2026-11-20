@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import Copy from "./Copy";
+import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
 import { brainRegions } from "../data/brain";
 import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
@@ -16,12 +17,7 @@ const bodies = Object.fromEntries(Object.entries(files).map(([file, load]) => [
         const { html } = await load();
         return {
             default: function NoteBody() {
-                return (
-                    <div
-                        className="space-y-4 break-words leading-relaxed [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-green-400 [&_h2]:font-mono [&_ol]:list-decimal [&_ol]:pl-6 [&_pre]:overflow-x-auto [&_ul]:list-disc [&_ul]:pl-6"
-                        dangerouslySetInnerHTML={{ __html: html }}
-                    />
-                );
+                return <MarkdownBody html={html} />;
             }
         };
     })
