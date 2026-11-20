@@ -2,10 +2,9 @@ import { experience, builtWith } from "../data/portfolio";
 
 const stack = [...new Set(builtWith.flatMap(({ skills }) => skills))].slice(0, 6);
 
-// Work has its own previews above, so these are just the other two pages.
 const cards = [
-    { href: "/stack", title: "Stack", text: `${stack.join(", ")}, and where I've used them.` },
-    { href: "/experience", title: "Experience", text: experience.map((entry) => entry.company).join(" · ") }
+    { href: "/uses#stack", title: "Stack", text: `${stack.join(", ")}, and where I've used them.` },
+    { href: "/work#experience", title: "Experience", text: experience.map((entry) => entry.company).join(" · ") }
 ];
 
 export default function HomeLinks() {

@@ -3,10 +3,13 @@ import { useSyncExternalStore } from "react";
 export const pages = {
     "/": "Abhilash Kar — Full-stack developer · Forma Labs",
     "/work": "Work · Abhilash Kar",
-    "/stack": "Stack · Abhilash Kar",
-    "/experience": "Experience · Abhilash Kar",
     "/uses": "Uses · Abhilash Kar",
     "/contact": "Contact · Abhilash Kar"
+};
+
+const movedPages = {
+    "/stack": "/uses#stack",
+    "/experience": "/work#experience"
 };
 
 const listeners = new Set();
@@ -26,7 +29,10 @@ export function normalize(path) {
 }
 
 export function useLocation() {
-    const href = useSyncExternalStore(subscribe, () => window.location.pathname + window.location.hash);
+    const href = useSyncExternalStore(subscribe, () => {
+        const path = window.location.pathname;
+        return movedPages[normalize(path)] ?? path + window.location.hash;
+    });
     const hashAt = href.indexOf("#");
     return {
         path: normalize(hashAt === -1 ? href : href.slice(0, hashAt)),
@@ -35,7 +41,8 @@ export function useLocation() {
 }
 
 export function isPage(url) {
-    return url.origin === window.location.origin && normalize(url.pathname) in pages;
+    const path = normalize(url.pathname);
+    return url.origin === window.location.origin && (Object.hasOwn(pages, path) || Object.hasOwn(movedPages, path));
 }
 
 export function scrollToHash(hash, behavior = "auto") {
@@ -52,6 +59,12 @@ export function scrollToHash(hash, behavior = "auto") {
 
 export function navigate(to) {
     const url = new URL(to, window.location.href);
+    const moved = movedPages[normalize(url.pathname)];
+    if (moved) {
+        const [path, hash] = moved.split("#");
+        url.pathname = path;
+        url.hash = hash;
+    }
     if (url.href === window.location.href) {
         // Clicking the link for the page you're already on just takes you back to the spot.
         if (url.hash) scrollToHash(url.hash);

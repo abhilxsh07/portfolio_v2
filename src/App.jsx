@@ -42,17 +42,6 @@ function Page({ path, onOpenTerminal }) {
                     <Projects />
                     <Building />
                     <EarlierWork />
-                </div>
-            );
-        case "/stack":
-            return (
-                <div className="pt-10">
-                    <Skills />
-                </div>
-            );
-        case "/experience":
-            return (
-                <div className="pt-10">
                     <Experience />
                 </div>
             );
@@ -60,6 +49,7 @@ function Page({ path, onOpenTerminal }) {
             return (
                 <div className="pt-10">
                     <Uses />
+                    <Skills />
                 </div>
             );
         case "/contact":

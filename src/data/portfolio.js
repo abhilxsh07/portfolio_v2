@@ -24,8 +24,7 @@ export const now = {
 
 export const navigation = [
     { label: "Work", href: "/work" },
-    { label: "Stack", href: "/stack" },
-    { label: "Experience", href: "/experience" },
+    { label: "Uses", href: "/uses" },
     { label: "Contact", href: "/contact" }
 ];
 
