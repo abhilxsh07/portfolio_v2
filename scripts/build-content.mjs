@@ -3,6 +3,8 @@ import matter from "gray-matter";
 import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
 import { BRAIN_PATH } from "../src/data/pages.js";
+import { ready } from "../src/data/ready.js";
+import { layoutBrain } from "./layout-brain.mjs";
 
 const development = process.argv.includes("--dev");
 const content = new URL("../src/content/", import.meta.url);
@@ -112,4 +114,9 @@ for (const [kind, entries] of [["note", noteIndex], ["post", postIndex]]) {
     }
 }
 
-writeFileSync(new URL("index.json", output), JSON.stringify({ notes: noteIndex, posts: postIndex }) + "\n");
+const map = development || ready.brain
+    ? layoutBrain(notes.map((note) => ({
+        ...note, links: indexedNotes.get(note.slug)?.links ?? renderEntry(note).links
+    })), development || ready.blog ? postIndex : [], development)
+    : undefined;
+writeFileSync(new URL("index.json", output), JSON.stringify({ notes: noteIndex, posts: postIndex, map }) + "\n");

@@ -82,7 +82,7 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                         return <line key={from + " " + to} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={lit ? "#4ade80" : "#404040"} opacity={active && !lit ? .25 : .65} />;
                     })}
                 </g>
-                {nodes.map(({ id, kind, slug, title, x, y, size, degree, draft }) => {
+                {nodes.map(({ id, kind, slug, title, x, y, size, degree, draft, label }) => {
                     const post = kind === "post";
                     const lit = nearby?.has(id);
                     const colour = lit ? "#4ade80" : "#d4d4d4";
@@ -116,7 +116,7 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                                     fill="#f87171" mask={`url(#${ids}-mark)`} transform={`rotate(${rotation})`} pointerEvents="none" />
                             )}
                             {title && (
-                                <text x={size + 5} y="4" fill={colour} fontSize="12" className={`font-mono ${degree >= 3 || id === active ? "" : "hidden md:block"}`} pointerEvents="none">
+                                <text x={label?.x ?? size + 5} y={label?.y ?? 4} fill={colour} fontSize="12" className={`font-mono ${degree >= 3 || id === active ? "" : "hidden md:block"}`} pointerEvents="none">
                                     {title}
                                 </text>
                             )}
