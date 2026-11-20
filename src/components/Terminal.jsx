@@ -3,7 +3,15 @@ import { motion, AnimatePresence } from "motion/react";
 import { IconX } from "@tabler/icons-react";
 import { profile } from "../data/portfolio";
 import { getPortfolioOutput } from "../lib/terminalContent";
-import { isPage } from "../lib/router";
+import { isPage, navigate, resolve } from "../lib/router";
+import { BRAIN_PATH } from "../data/pages";
+import content from "../generated/index.json";
+
+const brainWord = BRAIN_PATH.slice(1);
+const listNotes = `ls ${brainWord}`;
+const catNote = `cat ${brainWord}/`;
+const openMap = `open ${brainWord} --map`;
+const hasBrain = resolve(BRAIN_PATH) !== null;
 
 // Site pages open in place and close the terminal; everything else opens in a new tab.
 const isSitePage = (href) => href.startsWith("#") || isPage(new URL(href, window.location.href));
@@ -23,12 +31,34 @@ const COMMANDS = [
     { name: "projects", desc: "- See my work" },
     { name: "skills", desc: "- View my tech stack" },
     { name: "uses", desc: "- My machine and the tools I use" },
+    ...(hasBrain ? [
+        { name: listNotes, desc: "- List notes" },
+        { name: catNote + "<slug>", desc: "- Read a note" },
+        { name: openMap, desc: "- Open the map" }
+    ] : []),
     { name: "whoami", desc: "- Who are you?" },
     { name: "cls", desc: "- Clear terminal" },
     { name: "exit", desc: "- Close terminal" }
 ];
 
 function getOutput(cmd) {
+    if (hasBrain && cmd === listNotes) {
+        return content.notes.map(({ slug }) => ({
+            text: slug,
+            color: "text-neutral-300",
+            href: `${BRAIN_PATH}/${slug}`
+        }));
+    }
+    if (hasBrain && cmd.startsWith(catNote)) {
+        const slug = cmd.slice(catNote.length);
+        const note = resolve(`${BRAIN_PATH}/${slug}`)?.entry;
+        if (!note) return [{ text: "Note not found", color: "text-neutral-400" }];
+        return [
+            { text: note.title, color: "text-green-400" },
+            { text: note.state, color: "text-neutral-300" },
+            ...(note.hint ? [{ text: note.hint, color: "text-neutral-300" }] : [])
+        ];
+    }
     const portfolioOutput = getPortfolioOutput(cmd);
     if (portfolioOutput) return portfolioOutput;
     switch (cmd) {
@@ -295,6 +325,12 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             return;
         }
 
+        if (hasBrain && trimmed === catNote + "<slug>") {
+            setInput(catNote);
+            setShowPalette(false);
+            return;
+        }
+
         if (trimmed === "doom") {
             const isMobile = window.innerWidth < 768;
             if (isMobile) {
@@ -351,16 +387,21 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             return;
         }
 
-        const output = getOutput(trimmed);
+        const openingMap = hasBrain && trimmed === openMap;
+        const output = openingMap ? [] : getOutput(trimmed);
         setHistory((prev) => [
             ...prev,
             { type: "command", cmd: trimmed },
-            { type: "output", lines: output }
+            ...(output.length ? [{ type: "output", lines: output }] : [])
         ]);
         setCmdHistory((prev) => [trimmed, ...prev]);
         setCmdIndex(-1);
         setInput("");
         setShowPalette(false);
+        if (openingMap) {
+            onClose();
+            navigate(`${BRAIN_PATH}?view=map`);
+        }
     }, [onClose, onOpenDoom, isDoomOpen, isBrewing]);
 
     const handleCoffeeDone = useCallback(() => {
