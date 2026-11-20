@@ -128,8 +128,8 @@ export default function App() {
             if (event.defaultPrevented || event.button !== 0) return;
             if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
             const link = event.target.closest?.("a[href]");
-            if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
-            const url = new URL(link.href);
+            if (!link || link.getAttribute("target") === "_blank" || link.hasAttribute("download")) return;
+            const url = new URL(link.getAttribute("href"), window.location.href);
             if (!isPage(url)) return;
             event.preventDefault();
             navigate(url.href);
