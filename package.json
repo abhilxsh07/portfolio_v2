@@ -9,6 +9,7 @@
     "prebuild": "node scripts/build-content.mjs && node scripts/check-ready.mjs",
     "build": "vite build && node scripts/build-pages.mjs",
     "lint": "eslint .",
+    "log": "node scripts/build-log.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

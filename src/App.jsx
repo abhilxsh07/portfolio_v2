@@ -18,6 +18,7 @@ import Brain from "./components/Brain";
 import BrainNote from "./components/BrainNote";
 import Blog from "./components/Blog";
 import BlogPost from "./components/BlogPost";
+import SiteLog from "./components/SiteLog";
 import Copy from "./components/Copy";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
@@ -66,6 +67,8 @@ function Page({ page, search, onOpenTerminal }) {
             return <Brain title={page.heading} search={search} />;
         case "blog":
             return <Blog />;
+        case "log":
+            return <SiteLog />;
         case "blog-post":
             return <BlogPost post={page.entry} />;
         case "brain-note":
