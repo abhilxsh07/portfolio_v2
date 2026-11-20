@@ -22,12 +22,6 @@ export const now = {
         "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers."
 };
 
-export const navigation = [
-    { label: "Work", href: "/work" },
-    { label: "Uses", href: "/uses" },
-    { label: "Contact", href: "/contact" }
-];
-
 export const projects = [
     {
         id: "cursus",

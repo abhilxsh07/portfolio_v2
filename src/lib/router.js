@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-import { fixedPages } from "../data/pages";
+import { livePages, previewPage } from "../data/pages";
 
 const movedPages = {
     "/stack": "/uses#stack",
@@ -37,7 +37,8 @@ export function useLocation() {
 
 export function resolve(path) {
     const normalized = normalize(path);
-    return fixedPages.find((page) => page.path === normalized) ?? null;
+    const page = livePages().find(({ path }) => path === normalized);
+    return page ?? (import.meta.env.DEV ? previewPage(normalized) : null);
 }
 
 export function isPage(url) {

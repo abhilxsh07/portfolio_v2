@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/check-ready.mjs",
     "build": "vite build && node scripts/build-pages.mjs",
     "lint": "eslint .",
     "preview": "vite preview"

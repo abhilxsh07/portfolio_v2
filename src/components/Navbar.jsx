@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { navigation as routes } from "../data/portfolio";
+import { navigation as routes } from "../data/pages";
 
 export default function Navbar({ path }) {
     const [menuOpen, setMenuOpen] = useState(false);

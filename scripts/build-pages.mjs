@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
-import { fixedPages, notFoundPage, SITE_URL } from "../src/data/pages.js";
+import { livePages, notFoundPage, SITE_URL } from "../src/data/pages.js";
 
 const index = readFileSync("dist/index.html", "utf8");
 
@@ -23,7 +23,7 @@ function pageHtml({ title, description, socialDescription = description, path })
         .replace(/<meta property="og:url" content="[^"]*"\s*\/?>/, () => url ? `<meta property="og:url" content="${url}" />` : "");
 }
 
-for (const page of fixedPages) {
+for (const page of livePages()) {
     const file = page.path === "/" ? "dist/index.html" : `dist${page.path}.html`;
     mkdirSync(dirname(file), { recursive: true });
     writeFileSync(file, pageHtml(page));

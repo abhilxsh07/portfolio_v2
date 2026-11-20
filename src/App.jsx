@@ -12,6 +12,8 @@ import Building from "./components/Building";
 import Uses from "./components/Uses";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
+import PageShell from "./components/PageShell";
+import Copy from "./components/Copy";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
@@ -26,8 +28,8 @@ import { notFoundPage, SITE_URL } from "./data/pages";
 const Terminal = lazy(() => import("./components/Terminal"));
 const DoomPopup = lazy(() => import("./components/DoomPopup"));
 
-function Page({ path, onOpenTerminal }) {
-    switch (path) {
+function Page({ page, onOpenTerminal }) {
+    switch (page?.id ?? page?.path) {
         case "/":
             return (
                 <>
@@ -60,7 +62,13 @@ function Page({ path, onOpenTerminal }) {
                 </div>
             );
         default:
-            return <NotFound />;
+            if (!page) return <NotFound />;
+            return (
+                <PageShell title={page.heading} intro={page.intro}>
+                    {page.id === "colophon" && <Copy k="colophon.body" />}
+                    {page.id === "blog" && <Copy k="blog.empty" />}
+                </PageShell>
+            );
     }
 }
 
@@ -72,6 +80,7 @@ export default function App() {
     if (terminalOpen && !terminalLoaded) setTerminalLoaded(true);
     if (doomOpen && !doomLoaded) setDoomLoaded(true);
     const { path, hash } = useLocation();
+    const page = resolve(path);
     const mainRef = useRef(null);
     const lastPath = useRef(path);
 
@@ -127,8 +136,8 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        const page = resolve(path) ?? notFoundPage;
-        const { title, description, socialDescription = description } = page;
+        const meta = page ?? notFoundPage;
+        const { title, description, socialDescription = description } = meta;
         document.title = title;
         document.querySelector('meta[name="description"]').content = description;
         document.querySelector('meta[property="og:title"]').content = title;
@@ -138,15 +147,15 @@ export default function App() {
 
         const canonical = document.querySelector('link[rel="canonical"]');
         const ogUrl = document.querySelector('meta[property="og:url"]');
-        if (page.path) {
+        if (meta.path) {
             const link = canonical ?? document.createElement("link");
-            const meta = ogUrl ?? document.createElement("meta");
+            const url = ogUrl ?? document.createElement("meta");
             link.rel = "canonical";
-            link.href = SITE_URL + page.path;
-            meta.setAttribute("property", "og:url");
-            meta.content = link.href;
+            link.href = SITE_URL + meta.path;
+            url.setAttribute("property", "og:url");
+            url.content = link.href;
             if (!canonical) document.head.append(link);
-            if (!ogUrl) document.head.append(meta);
+            if (!ogUrl) document.head.append(url);
         } else {
             canonical?.remove();
             ogUrl?.remove();
@@ -161,7 +170,7 @@ export default function App() {
         }
         // Move screen readers to the new page, not the link that was clicked.
         if (changedPage) mainRef.current?.focus({ preventScroll: true });
-    }, [path, hash]);
+    }, [page, path, hash]);
 
     return (
         <MotionConfig reducedMotion="user">
@@ -170,7 +179,7 @@ export default function App() {
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
-                    <Page path={path} onOpenTerminal={openTerminal} />
+                    <Page page={page} onOpenTerminal={openTerminal} />
                 </main>
 
                 <Footer />
