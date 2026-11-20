@@ -1,9 +1,10 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Copy from "./Copy";
 import PageShell from "./PageShell";
 import { brainRegions } from "../data/brain";
 import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
 import { resolve } from "../lib/router";
+import { readVisited, writeVisited } from "../lib/brainVisited";
 
 const files = import.meta.glob("../generated/brain/*.json", { import: "default" });
 const bodies = Object.fromEntries(Object.entries(files).map(([file, load]) => [
@@ -34,6 +35,11 @@ export default function BrainNote({ note }) {
     const backlinks = note.backlinks
         .map(({ kind, slug }) => resolve(`${kind === "note" ? BRAIN_PATH : BLOG_PATH}/${slug}`))
         .filter(Boolean);
+
+    useEffect(() => {
+        const visited = readVisited();
+        if (!visited.includes(slug)) writeVisited([...visited, slug]);
+    }, [slug]);
 
     return (
         <PageShell
