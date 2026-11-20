@@ -1,4 +1,4 @@
-import { uses, usesIntro } from "../data/portfolio";
+import { legacyUses, usesIntro } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 
 export default function Uses() {
@@ -10,7 +10,7 @@ export default function Uses() {
                     {usesIntro}
                 </p>
                 <div className="space-y-12">
-                    {uses.map(({ heading, items }) => (
+                    {legacyUses.map(({ heading, items }) => (
                         <div key={heading} className="grid md:grid-cols-[170px_1fr] gap-3 md:gap-6">
                             <h2 className="font-mono text-sm text-green-400">{heading}</h2>
                             <ul className="space-y-3 max-w-2xl">

@@ -228,7 +228,7 @@ export const experience = [
 export const usesIntro = "The hardware and tools I actually use day to day.";
 
 // The /uses page. Only things I actually open most days.
-export const uses = [
+export const legacyUses = [
     {
         heading: "Machine",
         items: [
@@ -248,6 +248,70 @@ export const uses = [
     {
         heading: "Off-screen",
         items: ["Autodesk SketchBook for drawing.", "DaVinci Resolve for cutting video."]
+    }
+];
+
+export const uses = [
+    {
+        id: "laptop",
+        heading: null,
+        doodle: "doodle-laptop.svg",
+        items: [
+            { name: "Acer Nitro V 15 (i5-13420H, 32 GB DDR5, RTX 4050 6 GB, Windows 11)", href: null, since: null, text: null, desk: "laptop" },
+            { name: "Nothing Phone (3)", href: "https://in.nothing.tech/products/phone-3", since: null, text: null, desk: "phone" }
+        ]
+    },
+    {
+        id: "code",
+        heading: null,
+        doodle: "doodle-pen.svg",
+        items: [
+            { name: "Visual Studio (for sable)", href: "https://visualstudio.microsoft.com/vs/", since: null, text: null },
+            { name: "WebStorm", href: "https://www.jetbrains.com/webstorm/", since: null, text: null },
+            { name: "PyCharm", href: "https://www.jetbrains.com/pycharm/", since: null, text: null },
+            { name: "CLion", href: "https://www.jetbrains.com/clion/", since: null, text: null },
+            { name: "uv", href: "https://docs.astral.sh/uv/", since: null, text: null },
+            { name: "Git", href: "https://git-scm.com/", since: null, text: null },
+            { name: "Docker", href: null, since: null, text: null }
+        ]
+    },
+    {
+        id: "drawing",
+        heading: null,
+        doodle: "doodle-brush.svg",
+        items: [
+            { name: "Autodesk SketchBook", href: "https://www.sketchbook.com/", since: null, text: null, desk: "brush" },
+            { name: "DaVinci Resolve", href: "https://www.blackmagicdesign.com/products/davinciresolve", since: null, text: null },
+            { name: "Figma", href: "https://www.figma.com/design/", since: null, text: null }
+        ]
+    },
+    {
+        id: "fuel",
+        heading: null,
+        doodle: "doodle-mug.svg",
+        items: [
+            { name: "Coffee (Nescafé Classic, Everyday whitener, sugar)", href: null, since: null, text: null, desk: "mug" }
+        ]
+    },
+    {
+        id: "stack",
+        heading: null,
+        doodle: "doodle-book.svg",
+        items: [
+            { name: "Windows apps (C++, WinUI 3, PDFium, Direct2D)", href: null, since: null, text: null },
+            { name: "Web apps (Next.js, TypeScript, Supabase, Postgres with pgvector)", href: null, since: null, text: null },
+            { name: "Quick sites (React, Vite, Tailwind, Motion)", href: null, since: null, text: null },
+            { name: "Event backends (PHP, MySQL)", href: null, since: null, text: null },
+            { name: "Python (uv)", href: "https://docs.astral.sh/uv/", since: null, text: null }
+        ]
+    },
+    {
+        id: "retired",
+        heading: null,
+        doodle: "doodle-book.svg",
+        items: [
+            { name: "pip and venv", href: null, since: null, text: null, retired: true }
+        ]
     }
 ];
 

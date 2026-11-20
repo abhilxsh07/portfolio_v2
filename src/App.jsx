@@ -10,6 +10,7 @@ import EarlierWork from "./components/EarlierWork";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
 import Uses from "./components/Uses";
+import UsesV2 from "./components/UsesV2";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import PageShell from "./components/PageShell";
@@ -55,6 +56,8 @@ function Page({ page, onOpenTerminal }) {
                     <Skills />
                 </div>
             );
+        case "uses-v2":
+            return <UsesV2 />;
         case "/contact":
             return (
                 <div className="pt-10">
