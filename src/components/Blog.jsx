@@ -1,4 +1,5 @@
 import Copy from "./Copy";
+import DoodleBox from "./DoodleBox";
 import PageShell from "./PageShell";
 import { BLOG_PATH } from "../data/pages";
 import content from "../generated/index.json";
@@ -29,6 +30,7 @@ export default function Blog() {
                     </section>
                 ))}
             </div>
+            <DoodleBox />
         </PageShell>
     );
 }
