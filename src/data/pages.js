@@ -32,6 +32,10 @@ const newPages = [
     description: page.description ?? ""
 }));
 
+export function markdownPath(path) {
+    return (path === "/" ? "/index" : path) + ".md";
+}
+
 export function livePages() {
     const openPages = newPages.filter(({ id }) => ready[id]);
     return [...fixedPages.filter(({ path }) => !openPages.some((page) => page.path === path)), ...openPages];

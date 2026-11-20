@@ -26,7 +26,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { MotionConfig } from "motion/react";
 import { useLocation, navigate, isPage, resolve, scrollToHash } from "./lib/router";
-import { notFoundPage, SITE_URL } from "./data/pages";
+import { markdownPath, notFoundPage, SITE_URL } from "./data/pages";
 
 // Neither of these is needed until someone opens them. Once loaded they stay mounted,
 // so the terminal keeps its history and Doom keeps its window between opens.
@@ -153,6 +153,7 @@ export default function App() {
         const { title, description, socialDescription = description } = meta;
         document.title = title;
         document.querySelector('meta[name="description"]').content = description;
+        document.querySelector('meta[property="og:type"]').content = meta.entry ? "article" : "website";
         document.querySelector('meta[property="og:title"]').content = title;
         document.querySelector('meta[property="og:description"]').content = socialDescription;
         document.querySelector('meta[name="twitter:title"]').content = title;
@@ -160,6 +161,7 @@ export default function App() {
 
         const canonical = document.querySelector('link[rel="canonical"]');
         const ogUrl = document.querySelector('meta[property="og:url"]');
+        const markdown = document.querySelector('link[rel="alternate"][type="text/markdown"]');
         if (meta.path) {
             const link = canonical ?? document.createElement("link");
             const url = ogUrl ?? document.createElement("meta");
@@ -169,9 +171,17 @@ export default function App() {
             url.content = link.href;
             if (!canonical) document.head.append(link);
             if (!ogUrl) document.head.append(url);
+            if (!import.meta.env.DEV) {
+                const alternate = markdown ?? document.createElement("link");
+                alternate.rel = "alternate";
+                alternate.type = "text/markdown";
+                alternate.href = SITE_URL + markdownPath(meta.path);
+                if (!markdown) document.head.append(alternate);
+            }
         } else {
             canonical?.remove();
             ogUrl?.remove();
+            markdown?.remove();
         }
 
         const changedPage = lastPath.current !== path;
