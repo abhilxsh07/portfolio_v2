@@ -231,6 +231,8 @@ export const experience = [
         description: null
     }
 ];
+export const usesIntro = "The hardware and tools I actually use day to day.";
+
 // The /uses page. Only things I actually open most days.
 export const uses = [
     {

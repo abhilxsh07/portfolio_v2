@@ -18,7 +18,8 @@ import StarsBackground from "./components/ui/StarsBackground";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { MotionConfig } from "motion/react";
-import { pages, useLocation, navigate, isPage, scrollToHash } from "./lib/router";
+import { useLocation, navigate, isPage, resolve, scrollToHash } from "./lib/router";
+import { notFoundPage, SITE_URL } from "./data/pages";
 
 // Neither of these is needed until someone opens them. Once loaded they stay mounted,
 // so the terminal keeps its history and Doom keeps its window between opens.
@@ -126,10 +127,30 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        document.title = pages[path] ?? "Not found · Abhilash Kar";
-        document
-            .querySelector('link[rel="canonical"]')
-            ?.setAttribute("href", `https://abhilashkar.dev${path === "/" ? "/" : path}`);
+        const page = resolve(path) ?? notFoundPage;
+        const { title, description, socialDescription = description } = page;
+        document.title = title;
+        document.querySelector('meta[name="description"]').content = description;
+        document.querySelector('meta[property="og:title"]').content = title;
+        document.querySelector('meta[property="og:description"]').content = socialDescription;
+        document.querySelector('meta[name="twitter:title"]').content = title;
+        document.querySelector('meta[name="twitter:description"]').content = socialDescription;
+
+        const canonical = document.querySelector('link[rel="canonical"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (page.path) {
+            const link = canonical ?? document.createElement("link");
+            const meta = ogUrl ?? document.createElement("meta");
+            link.rel = "canonical";
+            link.href = SITE_URL + page.path;
+            meta.setAttribute("property", "og:url");
+            meta.content = link.href;
+            if (!canonical) document.head.append(link);
+            if (!ogUrl) document.head.append(meta);
+        } else {
+            canonical?.remove();
+            ogUrl?.remove();
+        }
 
         const changedPage = lastPath.current !== path;
         lastPath.current = path;

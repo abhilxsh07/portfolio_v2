@@ -1,4 +1,4 @@
-import { uses } from "../data/portfolio";
+import { uses, usesIntro } from "../data/portfolio";
 import SectionHeading from "./SectionHeading";
 
 export default function Uses() {
@@ -7,7 +7,7 @@ export default function Uses() {
             <div className="max-w-5xl mx-auto">
                 <SectionHeading as="h1" title="Uses" />
                 <p className="text-sm text-neutral-300 leading-relaxed max-w-2xl -mt-4 mb-12">
-                    The hardware and tools I actually use day to day.
+                    {usesIntro}
                 </p>
                 <div className="space-y-12">
                     {uses.map(({ heading, items }) => (

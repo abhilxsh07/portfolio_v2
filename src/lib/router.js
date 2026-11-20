@@ -1,11 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-export const pages = {
-    "/": "Abhilash Kar — Full-stack developer · Forma Labs",
-    "/work": "Work · Abhilash Kar",
-    "/uses": "Uses · Abhilash Kar",
-    "/contact": "Contact · Abhilash Kar"
-};
+import { fixedPages } from "../data/pages";
 
 const movedPages = {
     "/stack": "/uses#stack",
@@ -40,9 +35,14 @@ export function useLocation() {
     };
 }
 
+export function resolve(path) {
+    const normalized = normalize(path);
+    return fixedPages.find((page) => page.path === normalized) ?? null;
+}
+
 export function isPage(url) {
     const path = normalize(url.pathname);
-    return url.origin === window.location.origin && (Object.hasOwn(pages, path) || Object.hasOwn(movedPages, path));
+    return url.origin === window.location.origin && (resolve(path) !== null || Object.hasOwn(movedPages, path));
 }
 
 export function scrollToHash(hash, behavior = "auto") {
