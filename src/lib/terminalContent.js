@@ -6,7 +6,7 @@ import {
     learning,
     experience,
     now,
-    legacyUses,
+    uses,
     getProject,
     contactLinks
 } from "../data/portfolio.js";
@@ -60,9 +60,13 @@ export function getPortfolioOutput(command) {
         case "now":
             return [line(`now (updated ${now.updated})`, "text-green-400"), line(now.text)];
         case "uses":
-            return legacyUses.flatMap(({ heading, items }) => [
-                line(heading, "text-green-400"),
-                ...items.map((item) => line(`  ${item}`))
+            return uses.flatMap(({ heading, items }) => [
+                ...(heading === null ? [] : [line(heading, "text-green-400")]),
+                ...items.map(({ name, href, since, text, retired }) => line(
+                    `  ${name}${text ? ` — ${text}` : ""}${since ? ` (${since})` : ""}`,
+                    retired ? "text-neutral-400" : "text-neutral-300",
+                    href
+                ))
             ]);
         case "contact":
             return contactLinks.map((link) => line(link.label, "text-neutral-300", link.href));
