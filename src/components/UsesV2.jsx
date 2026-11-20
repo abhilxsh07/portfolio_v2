@@ -14,7 +14,7 @@ export default function UsesV2() {
             <Desk onPoint={setPointed} onFocus={setFocused} />
             <div className="space-y-12">
                 {uses.map(({ id, heading, doodle, items }) => (
-                    <section key={id} id={id} className="space-y-4">
+                    <section key={id} id={id === "stack" ? id : `uses-${id}-section`} className="space-y-4">
                         <h2 className="flex items-center gap-3 font-mono text-sm text-green-400">
                             <img src={`/drawings/${doodle}`} alt="" className="h-9 w-12 object-contain" />
                             <Copy k={`uses.${id}.heading`} value={heading} />
