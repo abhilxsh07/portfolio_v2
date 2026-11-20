@@ -1,0 +1,82 @@
+import { lazy, Suspense } from "react";
+import Copy from "./Copy";
+import PageShell from "./PageShell";
+import { brainRegions } from "../data/brain";
+import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
+import { resolve } from "../lib/router";
+
+const files = import.meta.glob("../generated/brain/*.json", { import: "default" });
+const bodies = Object.fromEntries(Object.entries(files).map(([file, load]) => [
+    file,
+    lazy(async () => {
+        const { html } = await load();
+        return {
+            default: function NoteBody() {
+                return (
+                    <div
+                        className="space-y-4 break-words leading-relaxed [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-green-400 [&_h2]:font-mono [&_ol]:list-decimal [&_ol]:pl-6 [&_pre]:overflow-x-auto [&_ul]:list-disc [&_ul]:pl-6"
+                        dangerouslySetInnerHTML={{ __html: html }}
+                    />
+                );
+            }
+        };
+    })
+]));
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
+
+export default function BrainNote({ note }) {
+    const { slug, title, region, state, pencilled, inked, minutes, tags } = note;
+    const { doodle } = brainRegions.find(({ id }) => id === region);
+    const pencil = state === "pencil";
+    const tone = pencil ? "text-[#a3a3a3]" : "text-[#e5e5e5]";
+    const Body = bodies[`../generated/brain/${slug}.json`];
+    const backlinks = note.backlinks
+        .map(({ kind, slug }) => resolve(`${kind === "note" ? BRAIN_PATH : BLOG_PATH}/${slug}`))
+        .filter(Boolean);
+
+    return (
+        <PageShell
+            title={title}
+            headingColor={tone}
+            beforeTitle={
+                <div className="mb-3 flex items-center gap-3">
+                    <img src={`/drawings/${doodle}`} alt="" className="h-10 w-14 object-contain" />
+                    {pencil && <img src="/drawings/pencil-note.svg" alt="Pencil" className="h-10 w-14 object-contain" />}
+                </div>
+            }
+        >
+            <p className="-mt-6 mb-5 font-mono text-xs text-neutral-400">
+                {"pencilled "}
+                <time dateTime={pencilled}>{dateFormat.format(new Date(pencilled + "T00:00:00Z"))}</time>
+                {inked && (
+                    <>
+                        {" · inked "}
+                        <time dateTime={inked}>{dateFormat.format(new Date(inked + "T00:00:00Z"))}</time>
+                    </>
+                )}
+                {` · ${minutes} min`}
+            </p>
+            {tags.length > 0 && (
+                <ul aria-label="Tags" className="mb-7 flex flex-wrap gap-3 font-mono text-xs text-neutral-400">
+                    {tags.map((tag) => <li key={tag}>{tag}</li>)}
+                </ul>
+            )}
+            <article className={tone}>
+                <Suspense fallback={null}>
+                    <Body />
+                </Suspense>
+            </article>
+            {backlinks.length > 0 && (
+                <section className="mt-10 border-t border-neutral-800 pt-5">
+                    <h2 className="mb-3 font-mono text-sm text-green-400"><Copy k="brain.backlinks" /></h2>
+                    <ul className="space-y-2">
+                        {backlinks.map(({ path, heading }) => (
+                            <li key={path}><a href={path} className="text-sm text-neutral-300 underline underline-offset-4 hover:text-green-400">{heading}</a></li>
+                        ))}
+                    </ul>
+                </section>
+            )}
+        </PageShell>
+    );
+}

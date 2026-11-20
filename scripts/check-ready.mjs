@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { copy } from "../src/data/copy.js";
 import { uses } from "../src/data/portfolio.js";
 import { ready } from "../src/data/ready.js";
+import { brainRegions } from "../src/data/brain.js";
 
 const copyGroups = {
     "uses-v2": ["uses"],
@@ -13,7 +14,7 @@ const copyGroups = {
 
 const drawings = {
     "uses-v2": ["desk.svg", "doodle-laptop.svg", "doodle-pen.svg", "doodle-mug.svg", "doodle-phone.svg", "doodle-book.svg", "doodle-brush.svg"],
-    brain: ["brain-outline.svg", "pencil-note.svg", "red-pen-circle.svg", "doodle-laptop.svg", "doodle-brush.svg", "doodle-book.svg", "doodle-mug.svg"],
+    brain: ["brain-outline.svg", "pencil-note.svg", "red-pen-circle.svg", ...brainRegions.map(({ doodle }) => doodle)],
     blog: ["floor.svg", "first-doodle.json"],
     log: [],
     colophon: []

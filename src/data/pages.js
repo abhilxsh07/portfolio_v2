@@ -4,7 +4,7 @@ import { ready } from "./ready.js";
 
 export const SITE_URL = "https://abhilashkar.dev";
 export const BRAIN_PATH = "/brain";
-const BLOG_PATH = "/blog";
+export const BLOG_PATH = "/blog";
 
 const fixedPages = [
     {

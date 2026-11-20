@@ -14,6 +14,8 @@ import UsesV2 from "./components/UsesV2";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import PageShell from "./components/PageShell";
+import Brain from "./components/Brain";
+import BrainNote from "./components/BrainNote";
 import Copy from "./components/Copy";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
@@ -58,6 +60,10 @@ function Page({ page, onOpenTerminal }) {
             );
         case "uses-v2":
             return <UsesV2 />;
+        case "brain":
+            return <Brain title={page.heading} />;
+        case "brain-note":
+            return <BrainNote note={page.entry} />;
         case "/contact":
             return (
                 <div className="pt-10">
