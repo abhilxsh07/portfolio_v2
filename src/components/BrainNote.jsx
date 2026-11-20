@@ -1,10 +1,13 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Copy from "./Copy";
 import PageShell from "./PageShell";
 import { brainRegions } from "../data/brain";
 import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
 import { resolve } from "../lib/router";
 import { readVisited, writeVisited } from "../lib/brainVisited";
+import content from "../generated/index.json";
+
+const BrainMap = lazy(() => import("./BrainMap"));
 
 const files = import.meta.glob("../generated/brain/*.json", { import: "default" });
 const bodies = Object.fromEntries(Object.entries(files).map(([file, load]) => [
@@ -28,6 +31,7 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "sh
 
 export default function BrainNote({ note }) {
     const { slug, title, region, state, pencilled, inked, minutes, tags } = note;
+    const [newlyOpened] = useState(() => readVisited().includes(slug) ? null : slug);
     const { doodle } = brainRegions.find(({ id }) => id === region);
     const pencil = state === "pencil";
     const tone = pencil ? "text-[#a3a3a3]" : "text-[#e5e5e5]";
@@ -82,6 +86,13 @@ export default function BrainNote({ note }) {
                         ))}
                     </ul>
                 </section>
+            )}
+            {content.map && (
+                <div className="mt-10">
+                    <Suspense fallback={null}>
+                        <BrainMap map={content.map} centre={`note:${slug}`} newlyOpened={newlyOpened} />
+                    </Suspense>
+                </div>
             )}
         </PageShell>
     );

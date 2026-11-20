@@ -28,14 +28,11 @@ export function normalize(path) {
 
 export function useLocation() {
     const href = useSyncExternalStore(subscribe, () => {
-        const path = window.location.pathname;
-        return movedPages[normalize(path)] ?? path + window.location.hash;
+        const { pathname, search, hash } = window.location;
+        return movedPages[normalize(pathname)] ?? pathname + search + hash;
     });
-    const hashAt = href.indexOf("#");
-    return {
-        path: normalize(hashAt === -1 ? href : href.slice(0, hashAt)),
-        hash: hashAt === -1 ? "" : href.slice(hashAt)
-    };
+    const { pathname, search, hash } = new URL(href, window.location.origin);
+    return { path: normalize(pathname), search, hash };
 }
 
 export function resolve(path) {

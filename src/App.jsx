@@ -31,7 +31,7 @@ import { notFoundPage, SITE_URL } from "./data/pages";
 const Terminal = lazy(() => import("./components/Terminal"));
 const DoomPopup = lazy(() => import("./components/DoomPopup"));
 
-function Page({ page, onOpenTerminal }) {
+function Page({ page, search, onOpenTerminal }) {
     switch (page?.id ?? page?.path) {
         case "/":
             return (
@@ -61,9 +61,9 @@ function Page({ page, onOpenTerminal }) {
         case "uses-v2":
             return <UsesV2 />;
         case "brain":
-            return <Brain title={page.heading} />;
+            return <Brain title={page.heading} search={search} />;
         case "brain-note":
-            return <BrainNote note={page.entry} />;
+            return <BrainNote key={page.entry.slug} note={page.entry} />;
         case "/contact":
             return (
                 <div className="pt-10">
@@ -88,7 +88,7 @@ export default function App() {
     const [doomLoaded, setDoomLoaded] = useState(false);
     if (terminalOpen && !terminalLoaded) setTerminalLoaded(true);
     if (doomOpen && !doomLoaded) setDoomLoaded(true);
-    const { path, hash } = useLocation();
+    const { path, search, hash } = useLocation();
     const page = resolve(path);
     const mainRef = useRef(null);
     const lastPath = useRef(path);
@@ -188,7 +188,7 @@ export default function App() {
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
-                    <Page page={page} onOpenTerminal={openTerminal} />
+                    <Page page={page} search={search} onOpenTerminal={openTerminal} />
                 </main>
 
                 <Footer />
