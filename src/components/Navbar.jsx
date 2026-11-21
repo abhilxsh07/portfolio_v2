@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { IconMenu2, IconX } from "@tabler/icons-react";
-import { navigation as routes } from "../data/pages";
+import { navigation } from "../data/pages";
+
+const routes = navigation(import.meta.env.DEV);
 
 export default function Navbar({ path }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -35,8 +37,15 @@ export default function Navbar({ path }) {
         };
     }, [menuOpen]);
 
-    const linkClass = (href) =>
-        `font-mono text-sm py-2 transition-colors ${path === href ? "text-white" : "text-neutral-400 hover:text-white"}`;
+    const links = routes.map(({ label, href, path: routePath }) => {
+        const current = path === routePath || path === href ? "page" : path.startsWith(routePath + "/") ? "location" : undefined;
+        return {
+            label,
+            href,
+            current,
+            className: `font-mono text-sm py-2 transition-colors ${current ? "text-white" : "text-neutral-400 hover:text-white"}`
+        };
+    });
 
     return (
         <motion.nav
@@ -59,12 +68,12 @@ export default function Navbar({ path }) {
                 </a>
 
                 <div className="hidden md:flex items-center gap-5 lg:gap-8">
-                    {routes.map((route) => (
+                    {links.map((route) => (
                         <a
                             key={route.href}
                             href={route.href}
-                            aria-current={path === route.href ? "page" : undefined}
-                            className={linkClass(route.href)}
+                            aria-current={route.current}
+                            className={route.className}
                         >
                             {route.label}
                         </a>
@@ -93,13 +102,13 @@ export default function Navbar({ path }) {
                         className="md:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800/60 overflow-hidden"
                     >
                         <div className="flex flex-col px-6 py-4 gap-4">
-                            {routes.map((route) => (
+                            {links.map((route) => (
                                 <a
                                     key={route.href}
                                     href={route.href}
-                                    aria-current={path === route.href ? "page" : undefined}
+                                    aria-current={route.current}
                                     onClick={() => setMenuOpen(false)}
-                                    className={linkClass(route.href)}
+                                    className={route.className}
                                 >
                                     {route.label}
                                 </a>

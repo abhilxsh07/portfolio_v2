@@ -4,7 +4,7 @@ import { IconX } from "@tabler/icons-react";
 import { profile } from "../data/portfolio";
 import { getPortfolioOutput } from "../lib/terminalContent";
 import { isPage, navigate, resolve } from "../lib/router";
-import { BRAIN_PATH } from "../data/pages";
+import { BLOG_PATH, BRAIN_MAP_PATH, BRAIN_PATH } from "../data/pages";
 import content from "../generated/index.json";
 
 const brainWord = BRAIN_PATH.slice(1);
@@ -12,6 +12,15 @@ const listNotes = `ls ${brainWord}`;
 const catNote = `cat ${brainWord}/`;
 const openMap = `open ${brainWord} --map`;
 const hasBrain = resolve(BRAIN_PATH) !== null;
+const hasBlog = resolve(BLOG_PATH) !== null;
+const pageCommands = new Map([
+    [brainWord, BRAIN_MAP_PATH],
+    ["map", BRAIN_MAP_PATH],
+    [`open ${brainWord}`, BRAIN_MAP_PATH],
+    [openMap, BRAIN_MAP_PATH],
+    ["blog", BLOG_PATH],
+    ["open blog", BLOG_PATH]
+]);
 
 // Site pages open in place and close the terminal; everything else opens in a new tab.
 const isSitePage = (href) => href.startsWith("#") || isPage(new URL(href, window.location.href));
@@ -32,9 +41,14 @@ const COMMANDS = [
     { name: "skills", desc: "- View my tech stack" },
     { name: "uses", desc: "- My machine and the tools I use" },
     ...(hasBrain ? [
+        { name: brainWord, desc: "- Open the Brain map" },
         { name: listNotes, desc: "- List notes" },
         { name: catNote + "<slug>", desc: "- Read a note" },
         { name: openMap, desc: "- Open the map" }
+    ] : []),
+    ...(hasBlog ? [
+        { name: "blog", desc: "- Open the blog" },
+        { name: "ls blog", desc: "- List posts" }
     ] : []),
     { name: "whoami", desc: "- Who are you?" },
     { name: "cls", desc: "- Clear terminal" },
@@ -42,7 +56,8 @@ const COMMANDS = [
 ];
 
 function getOutput(cmd) {
-    if (hasBrain && cmd === listNotes) {
+    if (hasBrain && cmd.replace(/\/$/, "") === listNotes) {
+        if (!content.notes.length) return [{ text: "No notes yet.", color: "text-neutral-400" }];
         return content.notes.map(({ slug }) => ({
             text: slug,
             color: "text-neutral-300",
@@ -54,18 +69,30 @@ function getOutput(cmd) {
         const note = resolve(`${BRAIN_PATH}/${slug}`)?.entry;
         if (!note) return [{ text: "Note not found", color: "text-neutral-400" }];
         return [
-            { text: note.title, color: "text-green-400" },
+            { text: note.title, color: "text-green-400", href: `${BRAIN_PATH}/${note.slug}` },
             { text: note.state, color: "text-neutral-300" },
             ...(note.hint ? [{ text: note.hint, color: "text-neutral-300" }] : [])
         ];
+    }
+    if (hasBlog && cmd.replace(/\/$/, "") === "ls blog") {
+        if (!content.posts.length) return [{ text: "No posts yet.", color: "text-neutral-400" }];
+        return content.posts.map(({ slug, title }) => ({
+            text: title,
+            color: "text-neutral-300",
+            href: `${BLOG_PATH}/${slug}`
+        }));
     }
     const portfolioOutput = getPortfolioOutput(cmd);
     if (portfolioOutput) return portfolioOutput;
     switch (cmd) {
         case "help":
             return COMMANDS.map((command) => ({ text: `  ${command.name.padEnd(14)} ${command.desc}`, color: "text-neutral-300" }));
-        case "ls":
-            return [{ text: "projects/  skills.json  experience.txt  uses.txt  resume.txt", color: "text-neutral-300" }];
+        case "ls": {
+            const files = ["projects/", "skills.json", "experience.txt", "uses.txt", "resume.txt"];
+            if (hasBrain) files.push(brainWord + "/");
+            if (hasBlog) files.push("blog/");
+            return [{ text: files.join("  "), color: "text-neutral-300" }];
+        }
         case "ping":
             return [{ text: "PONG — you're connected to my portfolio.", color: "text-green-400" }];
         case "neofetch":
@@ -309,7 +336,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     }
 
     const executeCommand = useCallback((cmd) => {
-        const trimmed = cmd.trim().toLowerCase();
+        const trimmed = cmd.trim().toLowerCase().replace(/\s+/g, " ");
         if (!trimmed) return;
 
         if (trimmed === "cls") {
@@ -328,6 +355,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         if (hasBrain && trimmed === catNote + "<slug>") {
             setInput(catNote);
             setShowPalette(false);
+            inputRef.current?.focus();
             return;
         }
 
@@ -387,8 +415,11 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             return;
         }
 
-        const openingMap = hasBrain && trimmed === openMap;
-        const output = openingMap ? [] : getOutput(trimmed);
+        const href = pageCommands.get(trimmed);
+        const canOpen = href && isSitePage(href);
+        const output = href
+            ? (canOpen ? [] : [{ text: "This page isn’t published yet.", color: "text-neutral-400" }])
+            : getOutput(trimmed);
         setHistory((prev) => [
             ...prev,
             { type: "command", cmd: trimmed },
@@ -398,9 +429,9 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         setCmdIndex(-1);
         setInput("");
         setShowPalette(false);
-        if (openingMap) {
+        if (canOpen) {
             onClose();
-            navigate(`${BRAIN_PATH}?view=map`);
+            navigate(href);
         }
     }, [onClose, onOpenDoom, isDoomOpen, isBrewing]);
 

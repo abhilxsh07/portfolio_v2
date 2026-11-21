@@ -4,6 +4,7 @@ import { ready } from "./ready.js";
 
 export const SITE_URL = "https://abhilashkar.dev";
 export const BRAIN_PATH = "/brain";
+export const BRAIN_MAP_PATH = `${BRAIN_PATH}?view=map`;
 export const BLOG_PATH = "/blog";
 
 const fixedPages = [
@@ -41,13 +42,16 @@ export function livePages() {
     return [...fixedPages.filter(({ path }) => !openPages.some((page) => page.path === path)), ...openPages];
 }
 
-export const navigation = [
-    { label: "Work", href: "/work" },
-    { label: brainName, href: BRAIN_PATH },
-    { label: "Blog", href: BLOG_PATH },
-    { label: "Uses", href: "/uses" },
-    { label: "Contact", href: "/contact" }
-].filter(({ href }) => livePages().some(({ path }) => path === href));
+export function navigation(preview) {
+    const live = new Set(livePages().map(({ path }) => path));
+    return [
+        { label: "Work", path: "/work", href: "/work" },
+        { label: brainName, path: BRAIN_PATH, href: BRAIN_MAP_PATH },
+        { label: "Blog", path: BLOG_PATH, href: BLOG_PATH },
+        { label: "Uses", path: "/uses", href: preview ? "/uses-v2" : "/uses" },
+        { label: "Contact", path: "/contact", href: "/contact" }
+    ].filter(({ path }) => preview || live.has(path));
+}
 
 export function previewPage(path) {
     if (path === "/uses-v2") return newPages[0];
