@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef, lazy, Suspense } from "react";
+import { useState, useCallback, useEffect, useLayoutEffect, useRef, lazy, Suspense } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import WorkPreviews from "./components/WorkPreviews";
@@ -34,6 +34,40 @@ const Blog = lazy(() => import("./components/Blog"));
 const BlogPost = lazy(() => import("./components/BlogPost"));
 const SiteLog = lazy(() => import("./components/SiteLog"));
 const Colophon = lazy(() => import("./components/Colophon"));
+
+function PagePosition({ path, hash, mainRef }) {
+    const lastPath = useRef(null);
+
+    useLayoutEffect(() => {
+        const arriving = lastPath.current !== path;
+        const changedPage = lastPath.current !== null && arriving;
+        lastPath.current = path;
+        if (changedPage) mainRef.current?.focus({ preventScroll: true });
+        if (hash) scrollToHash(hash, arriving ? "instant" : "auto");
+        else if (changedPage) window.scrollTo({ top: 0, behavior: "instant" });
+    }, [path, hash, mainRef]);
+
+    // On a fresh load the font swap can push the section below its original position.
+    useEffect(() => {
+        const initialUrl = window.location.href;
+        const initialHash = window.location.hash;
+        if (!initialHash) return;
+        let moved = false;
+        const onScroll = () => (moved = true);
+        window.addEventListener("wheel", onScroll, { passive: true, once: true });
+        window.addEventListener("touchmove", onScroll, { passive: true, once: true });
+        document.fonts.ready.then(() => {
+            if (!moved && window.location.href === initialUrl) scrollToHash(initialHash, "instant");
+        });
+        return () => {
+            moved = true;
+            window.removeEventListener("wheel", onScroll);
+            window.removeEventListener("touchmove", onScroll);
+        };
+    }, []);
+
+    return null;
+}
 
 function Page({ page, search, onOpenTerminal }) {
     const showSlots = import.meta.env.DEV && new URLSearchParams(search).has("slots");
@@ -98,7 +132,6 @@ export default function App() {
     const { path, search, hash } = useLocation();
     const page = resolve(path);
     const mainRef = useRef(null);
-    const lastPath = useRef(path);
 
     const openTerminal = useCallback(() => setTerminalOpen(true), []);
     const closeTerminal = useCallback(() => setTerminalOpen(false), []);
@@ -114,25 +147,6 @@ export default function App() {
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
-    // On a fresh load with a #hash, the first scroll happens before the web fonts swap in,
-    // and the swap pushes the target down. Aim again once they're loaded, unless the
-    // visitor has already scrolled somewhere else.
-    useEffect(() => {
-        const { hash: initialHash } = window.location;
-        if (!initialHash || !document.fonts) return;
-        let moved = false;
-        const onWheel = () => (moved = true);
-        window.addEventListener("wheel", onWheel, { passive: true, once: true });
-        window.addEventListener("touchmove", onWheel, { passive: true, once: true });
-        document.fonts.ready.then(() => {
-            if (!moved && window.location.hash === initialHash) scrollToHash(initialHash, "instant");
-        });
-        return () => {
-            window.removeEventListener("wheel", onWheel);
-            window.removeEventListener("touchmove", onWheel);
-        };
     }, []);
 
     // Keep page-to-page links inside the app instead of reloading everything.
@@ -186,17 +200,7 @@ export default function App() {
             ogUrl?.remove();
             markdown?.remove();
         }
-
-        const changedPage = lastPath.current !== path;
-        lastPath.current = path;
-        if (hash) {
-            scrollToHash(hash, changedPage ? "instant" : "auto");
-        } else if (changedPage) {
-            window.scrollTo({ top: 0, behavior: "instant" });
-        }
-        // Move screen readers to the new page, not the link that was clicked.
-        if (changedPage) mainRef.current?.focus({ preventScroll: true });
-    }, [page, path, hash]);
+    }, [page]);
 
     return (
         <MotionConfig reducedMotion="user">
@@ -207,6 +211,7 @@ export default function App() {
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
                     <Suspense fallback={null}>
                         <Page page={page} search={search} onOpenTerminal={openTerminal} />
+                        <PagePosition path={path} hash={hash} mainRef={mainRef} />
                     </Suspense>
                 </main>
 

@@ -47,7 +47,9 @@ export function isPage(url) {
 }
 
 export function scrollToHash(hash, behavior = "auto") {
-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    // Decode bad escapes without throwing, and keep literal + and & in the fragment.
+    const fragment = hash.slice(1).replaceAll("+", "%2B").replaceAll("&", "%26");
+    const target = document.getElementById(new URLSearchParams(`id=${fragment}`).get("id"));
     if (!target) return;
     // A target inside a closed <details> has no layout box, so open its containers first.
     for (let box = target.parentElement?.closest("details"); box; box = box.parentElement?.closest("details")) {

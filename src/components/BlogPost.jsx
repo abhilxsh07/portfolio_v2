@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
 import { BRAIN_PATH } from "../data/pages";
@@ -30,7 +30,7 @@ export default function BlogPost({ post }) {
                 <time dateTime={date}>{dateFormat.format(new Date(date + "T00:00:00Z"))}</time>
                 {` · ${minutes} min`}
             </p>
-            <Suspense fallback={null}><Body /></Suspense>
+            <Body />
             {notes.length > 0 && (
                 <section className="mt-10 border-t border-neutral-800 pt-5">
                     <h2 className="mb-3 font-mono text-sm text-green-400">Notes</h2>

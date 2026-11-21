@@ -69,9 +69,7 @@ export default function BrainNote({ note }) {
                 </ul>
             )}
             <article className={tone}>
-                <Suspense fallback={null}>
-                    <Body />
-                </Suspense>
+                <Body />
             </article>
             {backlinks.length > 0 && (
                 <section className="mt-10 border-t border-neutral-800 pt-5">
