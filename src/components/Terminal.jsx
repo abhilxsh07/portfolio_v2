@@ -251,22 +251,21 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     const [isBrewing, setIsBrewing] = useState(false);
 
     const inputRef = useRef(null);
+    const dialogRef = useRef(null);
     const scrollRef = useRef(null);
     const paletteScrollRef = useRef(null);
     const selectedItemRef = useRef(null);
 
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            setTimeout(() => inputRef.current?.focus(), 100);
-        }
-    }, [isOpen]);
-
     const previousFocus = useRef(null);
     useEffect(() => {
         if (isOpen) {
-            previousFocus.current = document.activeElement;
+            previousFocus.current ??= document.activeElement;
+            inputRef.current?.focus({ preventScroll: true });
         } else if (previousFocus.current) {
-            previousFocus.current.focus?.();
+            const focused = document.activeElement;
+            if (focused === document.body || dialogRef.current?.contains(focused)) {
+                previousFocus.current.focus({ preventScroll: true });
+            }
             previousFocus.current = null;
         }
     }, [isOpen]);
@@ -290,10 +289,11 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (e.defaultPrevented) return;
             if (e.key === "Escape" && isOpen) onClose();
 
             if (e.key === "Tab" && isOpen) {
-                const terminal = document.querySelector('[role="dialog"][aria-label="Interactive terminal"]');
+                const terminal = dialogRef.current;
                 if (!terminal) return;
                 const focusable = terminal.querySelectorAll('a[href], input, button, [tabindex]:not([tabindex="-1"])');
                 if (focusable.length === 0) return;
@@ -339,16 +339,18 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         const trimmed = cmd.trim().toLowerCase().replace(/\s+/g, " ");
         if (!trimmed) return;
 
-        if (trimmed === "cls") {
+        if (trimmed === "cls" || trimmed === "clear") {
             setHistory([]);
             setIsBrewing(false);
             setInput("");
+            setShowPalette(false);
             return;
         }
 
         if (trimmed === "exit" || trimmed === "close") {
             onClose();
             setInput("");
+            setShowPalette(false);
             return;
         }
 
@@ -374,10 +376,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 ]);
             } else {
                 const doomOutput = [
-                    { text: "> Loading doom.wad...", color: "text-neutral-400" },
-                    { text: "  [OK] Renderer initialized", color: "text-green-500" },
-                    { text: "  [OK] Audio subsystem ready", color: "text-green-500" },
-                    { text: "  [OK] DOOM is running", color: "text-green-500" }
+                    { text: isDoomOpen ? "DOOM window is open." : "Opening the DOOM window.", color: "text-neutral-300" }
                 ];
                 setHistory((prev) => [
                     ...prev,
@@ -385,6 +384,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     { type: "output", lines: doomOutput }
                 ]);
                 if (!isDoomOpen) onOpenDoom?.();
+                onClose();
             }
             setCmdHistory((prev) => [trimmed, ...prev]);
             setCmdIndex(-1);
@@ -449,18 +449,18 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             }
             if (e.key === "ArrowDown") {
                 e.preventDefault();
-                setPaletteIndex((prev) => Math.min(filteredCommands.length - 1, prev + 1));
+                setPaletteIndex((prev) => Math.min(Math.max(0, filteredCommands.length - 1), prev + 1));
                 return;
             }
             if (e.key === "Enter") {
                 e.preventDefault();
                 const selected = filteredCommands[paletteIndex];
-                if (selected) {
-                    executeCommand(selected.name);
-                }
+                executeCommand(selected?.name ?? input.slice(1));
                 return;
             }
             if (e.key === "Escape") {
+                e.preventDefault();
+                setInput("");
                 setShowPalette(false);
                 return;
             }
@@ -497,11 +497,12 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
+                    ref={dialogRef}
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 20, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                    className="fixed bottom-6 right-6 w-[min(500px,calc(100vw-3rem))] max-h-[400px] bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl shadow-black/50 z-50 flex flex-col"
+                    className="fixed bottom-6 right-6 z-[70] flex max-h-[min(400px,calc(100dvh-3rem))] w-[min(500px,calc(100vw-3rem))] flex-col rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl shadow-black/50"
                     role="dialog"
                     aria-label="Interactive terminal"
                     aria-modal="true"
@@ -523,7 +524,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     </div>
                     <div
                         ref={scrollRef}
-                        className="flex-1 overflow-y-auto p-4 bg-neutral-950 font-mono text-sm space-y-2 min-h-0"
+                        className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-neutral-950 p-4 font-mono text-sm [overflow-wrap:anywhere]"
                     >
                         {history.map((entry, i) => {
                             if (entry.type === "command") {
@@ -557,18 +558,19 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     </div>
                     <div className="relative shrink-0">
                         <AnimatePresence>
-                            {showPalette && filteredCommands.length > 0 && (
+                            {showPalette && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 5 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 5 }}
                                     ref={paletteScrollRef}
-                                    className="absolute bottom-full left-0 right-0 border-t border-neutral-800 bg-neutral-900 rounded-t-lg max-h-[240px] overflow-y-auto z-20"
+                                    className="absolute bottom-full left-0 right-0 z-20 max-h-[min(15rem,calc(100dvh-10rem))] overflow-y-auto rounded-t-lg border-t border-neutral-800 bg-neutral-900"
                                 >
                                     <div className="px-3 py-1.5 flex justify-between sticky top-0 bg-neutral-900 z-10">
                                         <span className="text-[10px] text-neutral-600 uppercase tracking-wider">Commands</span>
                                         <span className="text-[10px] text-neutral-600">↑↓ navigate · Enter select</span>
                                     </div>
+                                    {filteredCommands.length === 0 && <p className="px-3 py-2 text-sm text-neutral-300">No matching commands</p>}
                                     {filteredCommands.map((cmd, i) => (
                                         <button
                                             key={cmd.name}
@@ -595,8 +597,8 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                 value={input}
                                 onChange={(e) => updateInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                placeholder='type command or press /'
-                                className="flex-1 bg-transparent text-white font-mono text-sm placeholder-neutral-600 outline-none"
+                                placeholder="Type a command or press /"
+                                className="min-w-0 flex-1 bg-transparent font-mono text-sm text-white outline-none placeholder:text-neutral-400"
                                 aria-label="Terminal command input"
                             />
                         </div>
