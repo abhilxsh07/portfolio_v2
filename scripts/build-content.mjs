@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, unlinkSync, writeFile
 import matter from "gray-matter";
 import { Marked } from "marked";
 import markedFootnote from "marked-footnote";
+import { brainRegions } from "../src/data/brain.js";
 import { BRAIN_PATH } from "../src/data/pages.js";
 import { ready } from "../src/data/ready.js";
 import { copy } from "../src/data/copy.js";
@@ -10,9 +11,15 @@ import { layoutBrain } from "./layout-brain.mjs";
 const development = process.argv.includes("--dev");
 const content = new URL("../src/content/", import.meta.url);
 const output = new URL("../src/generated/", import.meta.url);
+const regions = new Set(brainRegions.map(({ id }) => id));
 
-function date(value) {
-    return value instanceof Date ? value.toISOString().slice(0, 10) : value ?? null;
+function date(value, field, file) {
+    const text = value instanceof Date && Number.isFinite(value.getTime()) ? value.toISOString().slice(0, 10) : value;
+    const parsed = new Date(`${text}T00:00:00Z`);
+    if (typeof text !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(text) || !Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== text) {
+        throw new Error(`Expected ${field} in YYYY-MM-DD format: ${file}`);
+    }
+    return text;
 }
 
 function readEntries(folder) {
@@ -23,24 +30,35 @@ function readEntries(folder) {
     const slugs = new Set();
     for (const file of readdirSync(directory).sort()) {
         if (!file.endsWith(".md")) continue;
+        const path = `${folder}/${file}`;
         const filename = file.slice(0, -3);
         const slug = blog ? filename.replace(/^\d{4}-\d{2}-\d{2}-/, "") : filename;
         if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) || (blog && slug === filename) || slugs.has(slug)) {
-            throw new Error(`Invalid or repeated slug: ${folder}/${file}`);
+            throw new Error(`Invalid or repeated slug: ${path}`);
         }
         const { data, content: markdown } = matter(readFileSync(new URL(file, directory), "utf8"));
         if (typeof data.title !== "string" || !data.title.trim()) {
-            throw new Error(`Missing title: ${folder}/${file}`);
+            throw new Error(`Missing title: ${path}`);
+        }
+        const tags = data.tags ?? [];
+        if (!Array.isArray(tags) || tags.some((tag) => typeof tag !== "string")) {
+            throw new Error(`Expected tags to be a list of strings: ${path}`);
+        }
+        if (data.draft != null && typeof data.draft !== "boolean") {
+            throw new Error(`Expected draft to be true or false: ${path}`);
+        }
+        if (!blog && (!regions.has(data.region) || !["pencil", "ink"].includes(data.state))) {
+            throw new Error(`Invalid note region or state: ${path}`);
         }
         slugs.add(slug);
-        const shared = { slug, title: data.title, tags: data.tags ?? [], draft: data.draft === true };
+        const shared = { slug, title: data.title, tags: [...new Set(tags)], draft: data.draft === true };
         const details = blog
-            ? { date: date(data.date), summary: data.summary ?? null }
+            ? { date: date(data.date, "date", path), summary: data.summary ?? null }
             : {
                 region: data.region,
                 state: data.state,
-                pencilled: date(data.pencilled),
-                inked: date(data.inked),
+                pencilled: date(data.pencilled, "pencilled", path),
+                inked: data.inked == null ? null : date(data.inked, "inked", path),
                 hint: data.hint ?? null
             };
         entries.push({ ...shared, ...details, markdown });
