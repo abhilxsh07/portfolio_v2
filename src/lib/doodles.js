@@ -6,10 +6,24 @@ const maxDoodles = 40;
 const pause = 700;
 const thickness = 2.5;
 
+function validStrokes(strokes) {
+    return Array.isArray(strokes) && strokes.length > 0 && strokes.every((stroke) => (
+        Array.isArray(stroke) && stroke.length > 0 && stroke.every((point) => (
+            Array.isArray(point) && Number.isFinite(point[0]) && Number.isFinite(point[1]) &&
+            (point[2] === undefined || (Number.isFinite(point[2]) && point[2] > 0))
+        ))
+    ));
+}
+
 function readDoodles() {
     try {
         const stored = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
-        return Array.isArray(stored) ? stored.slice(-maxDoodles).filter((item) => Array.isArray(item?.strokes)) : [];
+        if (!Array.isArray(stored)) return [];
+        return stored.slice(-maxDoodles).filter((item) => (
+            item && typeof item.id === "string" && typeof item.ink === "string" &&
+            [item.x, item.y, item.angle, item.width, item.createdAt].every(Number.isFinite) &&
+            item.width > 0 && validStrokes(item.strokes)
+        ));
     } catch {
         return [];
     }
@@ -279,7 +293,7 @@ export function startDoodles(canvas, setCount, reduced, showFloor) {
     fetch("/drawings/first-doodle.json", { signal: controller.signal })
         .then((response) => response.ok ? response.json() : null)
         .then((entry) => {
-            if (!entry || controller.signal.aborted) return;
+            if (!entry || controller.signal.aborted || (entry.placeholder && !showFloor) || !validStrokes(entry.strokes)) return;
             restore(entry, true);
             setCount(doodles.length);
             draw();
@@ -292,6 +306,7 @@ export function startDoodles(canvas, setCount, reduced, showFloor) {
         begin(event, ink) {
             if (stroke) return;
             clearTimeout(timer);
+            if (group && group.ink !== ink) drop();
             group ??= { ink, strokes: [] };
             const points = [point(event)];
             group.strokes.push(points);
@@ -344,6 +359,7 @@ export function startDoodles(canvas, setCount, reduced, showFloor) {
         },
         save() {
             canvas.toBlob((blob) => {
+                if (!blob) return;
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
                 link.href = url;
