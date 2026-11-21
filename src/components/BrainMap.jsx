@@ -1,7 +1,9 @@
 import { useId, useRef, useState } from "react";
 import { motion } from "motion/react";
 import Copy from "./Copy";
+import { copy } from "../data/copy";
 import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
+import { ready } from "../data/ready";
 import { readVisited, writeVisited } from "../lib/brainVisited";
 import useReducedMotion from "../hooks/useReducedMotion";
 
@@ -19,7 +21,7 @@ function hash(slug) {
     return [...slug].reduce((value, letter) => (value * 31 + letter.charCodeAt(0)) >>> 0, 0);
 }
 
-export default function BrainMap({ map, centre, newlyOpened }) {
+export default function BrainMap({ map, centre, newlyOpened, showSlots }) {
     const reduced = useReducedMotion();
     const ids = useId();
     const [visited, setVisited] = useState(readVisited);
@@ -28,6 +30,7 @@ export default function BrainMap({ map, centre, newlyOpened }) {
     const [tapped, setTapped] = useState(null);
     const pointer = useRef(null);
     const active = tapped ?? pointed ?? focused;
+    const showDrawings = ready.brain || showSlots;
     const positions = new Map(map.nodes.map((node) => [node.id, node]));
 
     const neighbours = (id) => {
@@ -46,7 +49,7 @@ export default function BrainMap({ map, centre, newlyOpened }) {
     const listed = map.nodes.filter(({ kind, title }) => kind === "note" && title);
     const opened = listed.filter(({ slug }) => visited.includes(slug)).length;
     let viewBox = `0 0 ${width} ${height}`;
-    if (centre) {
+    if (nodes.length && (centre || !showDrawings)) {
         const left = Math.max(0, Math.min(...nodes.map(({ x }) => x)) - 72);
         const top = Math.max(0, Math.min(...nodes.map(({ y }) => y)) - 58);
         const right = Math.min(width, Math.max(...nodes.map(({ x }) => x)) + 100);
@@ -58,7 +61,7 @@ export default function BrainMap({ map, centre, newlyOpened }) {
         <div>
             <svg
                 viewBox={viewBox}
-                className={centre ? "h-44 w-full" : "aspect-[4/5] w-full md:aspect-[19/13]"}
+                className={`w-full rounded-lg border border-neutral-800 bg-neutral-950 ${centre ? "h-44" : "aspect-[4/3] md:aspect-[19/13]"}`}
                 aria-label="Notes map"
                 onPointerLeave={() => setPointed(null)}
             >
@@ -69,11 +72,13 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                         <feComposite in2="SourceAlpha" operator="in" />
                         <feGaussianBlur stdDeviation=".65" />
                     </filter>
-                    <mask id={ids + "-mark"} maskContentUnits="objectBoundingBox" style={{ maskType: "alpha" }}>
-                        <image href="/drawings/red-pen-circle.svg" width="1" height="1" preserveAspectRatio="none" />
-                    </mask>
+                    {showDrawings && (
+                        <mask id={ids + "-mark"} maskContentUnits="objectBoundingBox" style={{ maskType: "alpha" }}>
+                            <image href="/drawings/red-pen-circle.svg" width="1" height="1" preserveAspectRatio="none" />
+                        </mask>
+                    )}
                 </defs>
-                <image href="/drawings/brain-outline.svg" width={width} height={height} opacity=".45" />
+                {showDrawings && <image href="/drawings/brain-outline.svg" width={width} height={height} opacity=".45" />}
                 <g aria-hidden="true">
                     {edges.map(([from, to]) => {
                         const a = positions.get(from);
@@ -85,16 +90,16 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                 {nodes.map(({ id, kind, slug, title, x, y, size, degree, draft, label }) => {
                     const post = kind === "post";
                     const lit = nearby?.has(id);
-                    const colour = lit ? "#4ade80" : "#d4d4d4";
+                    const colour = lit ? "#4ade80" : draft ? "#cbb397" : "#d4d4d4";
                     const seen = title && visited.includes(slug);
                     const fresh = newlyOpened === slug;
                     const rotation = hash(slug) % 21 - 10;
-                    const href = `${post ? BLOG_PATH : BRAIN_PATH}/${slug}`;
+                    const href = `${post ? BLOG_PATH : BRAIN_PATH}/${slug}${showSlots ? "?slots=1" : ""}`;
                     const mark = (
                         <>
                             <circle r={size + 10} fill="transparent" />
                             {draft ? (
-                                <path d="M-4-4 4 4 M-4 4 4-4" stroke={colour} strokeWidth="1.5" fill="none" opacity={title ? ".72" : ".55"} />
+                                <path d="M-5-5 5 5 M-5 5 5-5" stroke={colour} strokeWidth="2" fill="none" opacity={title ? ".9" : ".55"} />
                             ) : post ? (
                                 <rect x={-size / 2} y={-size / 2} width={size} height={size} fill={colour} />
                             ) : (
@@ -111,12 +116,12 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                                     pointerEvents="none"
                                 />
                             )}
-                            {seen && !post && (
+                            {(seen || fresh) && !post && (showDrawings ? (
                                 <rect x={-size - 6} y={-size - 5} width={(size + 6) * 2} height={(size + 5) * 2}
                                     fill="#f87171" mask={`url(#${ids}-mark)`} transform={`rotate(${rotation})`} pointerEvents="none" />
-                            )}
+                            ) : <circle r={size + 4} fill="none" stroke="#cbb397" opacity=".75" pointerEvents="none" />)}
                             {title && (
-                                <text x={label?.x ?? size + 5} y={label?.y ?? 4} fill={colour} fontSize="12" className={`font-mono ${degree >= 3 || id === active ? "" : "hidden md:block"}`} pointerEvents="none">
+                                <text x={label?.x ?? size + 5} y={label?.y ?? 4} fill={colour} className={`font-mono text-[16px] md:text-[12px] ${degree >= 3 || id === active ? "" : "hidden md:block"}`} pointerEvents="none">
                                     {title}
                                 </text>
                             )}
@@ -149,18 +154,18 @@ export default function BrainMap({ map, centre, newlyOpened }) {
                 })}
             </svg>
             {!centre && (
-                <div className="flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-neutral-400">
-                    <p><Copy k="brain.opened" /> <span>{opened} of {listed.length}</span></p>
+                <div className="mt-2 flex flex-wrap items-center justify-between gap-x-4 font-mono text-xs text-neutral-400">
+                    <p>{copy.brain.opened !== null || showSlots ? <Copy k="brain.opened" /> : "Notes opened"} <span>{opened} of {listed.length}</span></p>
                     <button
                         type="button"
-                        aria-label="Clear opened notes"
-                        className="min-h-11 px-2 hover:text-green-400"
+                        disabled={opened === 0}
+                        className="min-h-11 px-2 enabled:hover:text-green-400 disabled:opacity-50"
                         onClick={() => {
                             writeVisited([]);
                             setVisited([]);
                         }}
                     >
-                        <Copy k="brain.rubOut" />
+                        {copy.brain.rubOut !== null || showSlots ? <Copy k="brain.rubOut" /> : "Clear opened notes"}
                     </button>
                 </div>
             )}

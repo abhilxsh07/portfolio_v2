@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from "react";
 import PageShell from "./PageShell";
 import { brainRegions } from "../data/brain";
+import { copy } from "../data/copy";
 import { BRAIN_PATH } from "../data/pages";
 import content from "../generated/index.json";
 import { navigate } from "../lib/router";
@@ -27,7 +28,7 @@ function BrainList() {
                 if (!group.length) return null;
                 return (
                     <section key={id}>
-                        <h2 className="mb-3 font-mono text-sm text-green-400">{label}</h2>
+                        <h2 className="mb-2 border-b border-pencil/25 pb-2 font-serif text-xl italic text-paper">{label}</h2>
                         <ul className="divide-y divide-neutral-800/60">
                             {group.map(({ slug, title, hint, state, draft }) => (
                                 <li key={slug}>
@@ -47,7 +48,7 @@ function BrainList() {
     );
 }
 
-export default function Brain({ title, search }) {
+export default function Brain({ title, search, showSlots }) {
     const [preferred, setPreferred] = useState(readView);
     const requested = new URLSearchParams(search).get("view");
     const view = requested === "map" || requested === "list" ? requested : preferred;
@@ -59,11 +60,15 @@ export default function Brain({ title, search }) {
         } catch {
             // The tab still changes for this visit.
         }
-        if (requested && requested !== next) navigate(`${BRAIN_PATH}?view=${next}`);
+        if (requested && requested !== next) {
+            const params = new URLSearchParams(search);
+            params.set("view", next);
+            navigate(`${BRAIN_PATH}?${params}`);
+        }
     }
 
     return (
-        <PageShell title={title} intro="brain.intro">
+        <PageShell title={title} intro={copy.brain.intro !== null || showSlots ? "brain.intro" : null}>
             {content.map ? (
                 <>
                     <div role="tablist" aria-label="Note views" className="-ml-3 mb-4 flex gap-3 px-3" onPointerEnter={loadMap} onFocus={loadMap}>
@@ -86,7 +91,7 @@ export default function Brain({ title, search }) {
                                     document.getElementById(`notes-${next}-tab`).focus();
                                 }}
                             >
-                                {tab}
+                                {tab === "list" ? "List" : "Map"}
                             </button>
                         ))}
                     </div>
@@ -96,7 +101,7 @@ export default function Brain({ title, search }) {
                     <div role="tabpanel" id="notes-map-panel" aria-labelledby="notes-map-tab" hidden={view !== "map"}>
                         {view === "map" && (
                             <Suspense fallback={null}>
-                                <BrainMap map={content.map} />
+                                <BrainMap map={content.map} showSlots={showSlots} />
                             </Suspense>
                         )}
                     </div>

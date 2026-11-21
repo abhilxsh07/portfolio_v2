@@ -30,7 +30,7 @@ export default function UsesV2({ showSlots }) {
                         id={id === "stack" ? id : `uses-${id}-section`}
                         className="grid gap-3 py-5 sm:grid-cols-[8.5rem_minmax(0,1fr)] sm:gap-5 sm:py-6"
                     >
-                        <h2 className="flex items-start gap-2.5 pt-1 font-mono text-sm text-green-400">
+                        <h2 className="flex items-start gap-2.5 pt-1 font-serif text-xl italic text-paper">
                             {(ready["uses-v2"] || showSlots) && <img src={`/drawings/${doodle}`} alt="" className="h-6 w-7 shrink-0 object-contain" />}
                             {heading !== null || showSlots
                                 ? <Copy k={`uses.${id}.heading`} value={heading} />

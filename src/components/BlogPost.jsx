@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
-import { BRAIN_PATH } from "../data/pages";
+import { BLOG_PATH, BRAIN_PATH } from "../data/pages";
 import { resolve } from "../lib/router";
 
 const files = import.meta.glob("../generated/blog/*.json", { import: "default" });
@@ -25,7 +25,9 @@ export default function BlogPost({ post }) {
     const notes = links.map((note) => resolve(`${BRAIN_PATH}/${note}`)).filter(Boolean);
 
     return (
-        <PageShell title={title} headingColor="text-[#e5e5e5]">
+        <PageShell title={title} beforeTitle={
+            <a href={BLOG_PATH} className="mb-4 inline-flex min-h-11 items-center font-mono text-xs text-pencil hover:text-green-400">Back to Blog</a>
+        }>
             <p className="-mt-6 mb-7 font-mono text-xs text-neutral-400">
                 <time dateTime={date}>{dateFormat.format(new Date(date + "T00:00:00Z"))}</time>
                 {` · ${minutes} min`}

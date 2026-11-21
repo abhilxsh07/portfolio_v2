@@ -18,7 +18,7 @@ export default function DoodleBox({ showSlots }) {
 
     return (
         <section ref={box} aria-labelledby="doodle-box-title" className="mt-9">
-            <h2 id="doodle-box-title" className="mb-3 font-mono text-base text-neutral-200">Doodle box</h2>
+            <h2 id="doodle-box-title" className="mb-3 font-serif text-2xl italic text-paper">Doodle box</h2>
             <div className="min-h-[240px] md:min-h-[320px]">
                 {near && <Suspense fallback={null}><DoodleCanvas showSlots={showSlots} /></Suspense>}
             </div>

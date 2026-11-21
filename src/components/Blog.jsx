@@ -13,7 +13,7 @@ export default function Blog({ showSlots }) {
     return (
         <PageShell title="Blog" intro={copy.blog.intro || showSlots ? "blog.intro" : null}>
             {posts.length === 0 ? (
-                <p className="border-y border-neutral-800 py-4 text-sm text-neutral-400">
+                <p className="border-t border-pencil/25 pt-4 text-sm text-neutral-400">
                     {copy.blog.empty !== null || showSlots ? <Copy k="blog.empty" /> : "No posts yet."}
                 </p>
             ) : (

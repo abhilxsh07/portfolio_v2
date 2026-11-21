@@ -15,7 +15,7 @@ npm run dev
 
 ## Content
 
-The top navigation shows Brain, Blog and the new Uses page in local development. Production links follow the flags in `src/data/ready.js`. The router lives in `src/lib/router.js`, and the production build writes HTML for the live routes. Hash links that point inside a collapsed `<details>` (Earlier work, the case studies) open it before scrolling.
+The top navigation shows Brain, Blog and the new Uses page in local development. Add `?slots=1` to a preview URL to see the copy and drawings that still need filling in. Production links follow the flags in `src/data/ready.js`. The router lives in `src/lib/router.js`, and the production build writes HTML for the live routes. Hash links that point inside a collapsed `<details>` (Earlier work, the case studies) open it before scrolling.
 
 Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. On project cards, `role` is the "my part" line, `proof` is the "outcome" line, and `note` holds status or credit text. Leave missing URLs as `null`; the card just drops that link.
 
@@ -41,7 +41,7 @@ If the dev server is running, run `node scripts/build-content.mjs --dev` from th
 
 ## Work page
 
-Each case study has a card and a short write-up inside "Inside …: how it works". sable also has the full architecture map behind "Explore the full architecture", which is lazy-loaded so it isn't in the main bundle. [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
+Each case study has a card and a short write-up in its expandable section. The sable architecture map loads when you select "Explore the full architecture". [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
 
 ## Terminal
 

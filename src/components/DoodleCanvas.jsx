@@ -43,7 +43,7 @@ export default function DoodleCanvas({ showSlots }) {
                 role="img"
                 aria-label={`Doodle box, ${count} ${count === 1 ? "doodle" : "doodles"}`}
                 aria-describedby="doodle-hint"
-                className="block h-[240px] w-full cursor-crosshair touch-none bg-neutral-900/50 md:h-[320px]"
+                className="block h-[240px] w-full cursor-crosshair touch-none bg-neutral-950 bg-[radial-gradient(circle,rgb(203_179_151/.19)_1px,transparent_1px)] bg-size-[18px_18px] md:h-[320px]"
                 onPointerDown={(event) => {
                     if (event.button === 0) actions.current?.begin(event, ink);
                 }}
