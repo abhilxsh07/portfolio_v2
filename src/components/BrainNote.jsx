@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Copy from "./Copy";
 import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
@@ -29,7 +29,6 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "sh
 
 export default function BrainNote({ note, showSlots }) {
     const { slug, title, region, state, pencilled, inked, minutes, tags } = note;
-    const [newlyOpened] = useState(() => readVisited().includes(slug) ? null : slug);
     const { doodle } = brainRegions.find(({ id }) => id === region);
     const pencil = state === "pencil";
     const tone = pencil ? "text-[#a3a3a3]" : "text-[#e5e5e5]";
@@ -93,7 +92,7 @@ export default function BrainNote({ note, showSlots }) {
                 <section aria-labelledby="note-map-heading" className="mt-10">
                     <h2 id="note-map-heading" className="mb-4 font-serif text-xl italic text-paper">Note map</h2>
                     <Suspense fallback={null}>
-                        <BrainMap map={content.map} centre={`note:${slug}`} newlyOpened={newlyOpened} showSlots={showSlots} />
+                        <BrainMap map={content.map} centre={`note:${slug}`} showSlots={showSlots} />
                     </Suspense>
                 </section>
             )}

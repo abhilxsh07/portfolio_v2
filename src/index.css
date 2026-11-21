@@ -24,18 +24,7 @@ main :where(p, li) {
     background: radial-gradient(ellipse at 78% 40%, rgb(92 66 47 / 20%), transparent 57%);
 }
 
-.brain-map-surface {
-    background-color: #0e1712;
-    background-image:
-        linear-gradient(to right, rgb(145 176 150 / 12%) 1px, transparent 1px),
-        linear-gradient(to bottom, rgb(145 176 150 / 12%) 1px, transparent 1px),
-        linear-gradient(to right, rgb(145 176 150 / 5%) 1px, transparent 1px),
-        linear-gradient(to bottom, rgb(145 176 150 / 5%) 1px, transparent 1px);
-    background-position: center;
-    background-size: 112px 112px, 112px 112px, 28px 28px, 28px 28px;
-}
-
-.brain-map-surface a:focus-visible .brain-map-hit {
+.brain-map a:focus-visible .brain-map-hit {
     stroke: #86efac;
     vector-effect: non-scaling-stroke;
 }

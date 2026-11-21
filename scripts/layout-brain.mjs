@@ -3,10 +3,10 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import { brainScene } from "../src/data/brain.js";
 
 const regions = {
-    code: { x: 332, y: 299, rx: 230, ry: 236 },
-    make: { x: 808, y: 304, rx: 230, ry: 236 },
-    work: { x: 570, y: 626, rx: 365, ry: 74 },
-    life: { x: 570, y: 486, rx: 71, ry: 63 }
+    code: { x: 275, y: 239, rx: 226, ry: 187 },
+    make: { x: 823, y: 228, rx: 205, ry: 169 },
+    work: { x: 543, y: 492, rx: 389, ry: 88 },
+    life: { x: 554, y: 320, rx: 76, ry: 62 }
 };
 
 function insideRegion(x, y, region) {
@@ -32,7 +32,7 @@ function insideRegion(x, y, region) {
 }
 
 function spreadNodes(nodes) {
-    const gap = 56;
+    const gap = 60;
     for (let pass = 0; pass < 32; pass++) {
         let moved = false;
         for (let i = 0; i < nodes.length; i++) {
@@ -62,14 +62,15 @@ function placeLabels(nodes) {
     for (const node of labels) {
         const { x, y, size, title } = node;
         const textWidth = title.length * labelSize * .62;
-        const gap = size + 9;
+        const gap = size + 10;
         const choices = [
-            [gap, 5], [-gap - textWidth, 5], [-textWidth / 2, -gap], [-textWidth / 2, gap + labelSize],
-            [gap, -gap], [-gap - textWidth, -gap], [gap, gap + labelSize], [-gap - textWidth, gap + labelSize]
+            [gap, 5, "start"], [-gap, 5, "end"], [0, -gap, "middle"], [0, gap + labelSize, "middle"],
+            [gap, -gap, "start"], [-gap, -gap, "end"], [gap, gap + labelSize, "start"], [-gap, gap + labelSize, "end"]
         ];
         let best = Infinity;
-        for (const [dx, dy] of choices) {
-            const box = [x + dx - 4, y + dy - labelSize, x + dx + textWidth + 4, y + dy + 5];
+        for (const [dx, dy, anchor] of choices) {
+            const start = x + dx - (anchor === "end" ? textWidth : anchor === "middle" ? textWidth / 2 : 0);
+            const box = [start - 4, y + dy - labelSize, start + textWidth + 4, y + dy + 5];
             const [left, top, right, bottom] = box;
             let overlap = left < 12 || right > width - 12 || top < 12 || bottom > height - 12 ? 10000 : 0;
             for (const [a, b, c, d] of boxes) {
@@ -77,7 +78,7 @@ function placeLabels(nodes) {
             }
             if (overlap < best) {
                 best = overlap;
-                node.label = { x: dx, y: dy };
+                node.label = { x: dx, y: dy, anchor };
                 node.labelBox = box;
             }
             if (!overlap) break;

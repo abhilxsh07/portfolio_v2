@@ -14,7 +14,7 @@ const copyGroups = {
 
 const drawings = {
     "uses-v2": ["desk.svg", "doodle-laptop.svg", "doodle-pen.svg", "doodle-mug.svg", "doodle-phone.svg", "doodle-book.svg", "doodle-brush.svg"],
-    brain: ["brain-outline.svg", "pencil-note.svg", "red-pen-circle.svg", ...brainRegions.map(({ doodle }) => doodle)],
+    brain: ["pencil-note.svg", ...brainRegions.map(({ doodle }) => doodle)],
     blog: ["floor.svg", "first-doodle.json"],
     log: [],
     colophon: []

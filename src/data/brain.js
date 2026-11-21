@@ -1,4 +1,4 @@
-export const brainScene = { width: 1140, height: 780, labelSize: 15 };
+export const brainScene = { width: 1120, height: 640, labelSize: 16 };
 
 export const brainRegions = [
     { id: "life", label: "Life", doodle: "doodle-phone.svg" },
