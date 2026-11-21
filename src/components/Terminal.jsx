@@ -507,7 +507,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     aria-label="Interactive terminal"
                     aria-modal="true"
                 >
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
+                    <div className="flex shrink-0 items-center justify-between border-b border-neutral-800 px-4 py-1">
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-sm text-white font-medium">
                                 <span className="text-neutral-400">&gt;_</span> terminal
@@ -517,7 +517,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                         <button
                             onClick={onClose}
                             aria-label="Close terminal"
-                            className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                            className="-mr-2 grid size-11 cursor-pointer place-items-center rounded text-neutral-400 transition-colors hover:text-white"
                         >
                             <IconX className="w-4 h-4" />
                         </button>
@@ -567,8 +567,8 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                     className="absolute bottom-full left-0 right-0 z-20 max-h-[min(15rem,calc(100dvh-10rem))] overflow-y-auto rounded-t-lg border-t border-neutral-800 bg-neutral-900"
                                 >
                                     <div className="px-3 py-1.5 flex justify-between sticky top-0 bg-neutral-900 z-10">
-                                        <span className="text-[10px] text-neutral-600 uppercase tracking-wider">Commands</span>
-                                        <span className="text-[10px] text-neutral-600">↑↓ navigate · Enter select</span>
+                                        <span className="text-xs text-neutral-400">Commands</span>
+                                        <span className="text-xs text-neutral-400">↑↓ navigate · Enter select</span>
                                     </div>
                                     {filteredCommands.length === 0 && <p className="px-3 py-2 text-sm text-neutral-300">No matching commands</p>}
                                     {filteredCommands.map((cmd, i) => (
