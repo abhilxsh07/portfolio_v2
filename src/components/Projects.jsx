@@ -162,7 +162,7 @@ function SableFeature() {
     return (
         <Feature
             project={project}
-            label={`featured · ${project.status.toLowerCase()}`}
+            label={project.status}
             large
             summary="Inside sable: how it works"
             gallery={
@@ -195,11 +195,11 @@ function SableFeature() {
                 branches={sableBranches}
             />
             <Decisions items={sableDecisions} />
-            <Prose title="Limits and what's next">
+            <Prose title="In the public alpha">
                 <p>
-                    It's Windows-only, which is the point of going native. OCR, redaction and adding passwords are out
-                    for now. v1.0.0-alpha.1 has notes and markup, form filling, Fill & Sign and page organizing. Before a
-                    stable release it still needs a run on a clean PC and on real ARM hardware, and signed installers.
+                    v1.0.0-alpha.1 has notes and markup, form filling, Fill & Sign and page organizing. On GitHub,
+                    there are installers and portable builds for x64 and ARM64 Windows. OCR, redaction and adding
+                    passwords are out for now.
                 </p>
             </Prose>
             <ArchitectureExplorer tourId="sable" name="sable" />
@@ -212,7 +212,7 @@ function CursusCaseStudy() {
     return (
         <Feature
             project={project}
-            label={`case study · ${project.status.toLowerCase()}`}
+            label={project.status}
             summary="Inside Cursus: how it works"
             gallery={<CursusOverview />}
         >
@@ -258,7 +258,7 @@ export default function Projects() {
     return (
         <section id="projects" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-7xl mx-auto">
-                <SectionHeading as="h1" title="Work" note="Selected projects" />
+                <SectionHeading as="h1" title="Work" />
                 <nav aria-label="On this page" className="-mt-6 mb-8 flex flex-wrap gap-x-5 font-mono text-xs">
                     {jumpLinks.map(([label, href]) => (
                         <a key={href} href={`/work${href}`} className="min-h-11 inline-flex items-center text-neutral-400 hover:text-green-400 transition-colors">

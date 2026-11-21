@@ -1,12 +1,13 @@
 import { useSyncExternalStore } from "react";
 
-export const pages = {
-    "/": "Abhilash Kar — Full-stack developer · Forma Labs",
-    "/work": "Work · Abhilash Kar",
-    "/stack": "Stack · Abhilash Kar",
-    "/experience": "Experience · Abhilash Kar",
-    "/uses": "Uses · Abhilash Kar",
-    "/contact": "Contact · Abhilash Kar"
+import { contentPages, livePages, previewPage } from "../data/pages";
+import content from "../generated/index.json";
+
+const pages = [...livePages(), ...contentPages(content, import.meta.env.DEV)];
+
+const movedPages = {
+    "/stack": "/uses#stack",
+    "/experience": "/work#experience"
 };
 
 const listeners = new Set();
@@ -26,20 +27,29 @@ export function normalize(path) {
 }
 
 export function useLocation() {
-    const href = useSyncExternalStore(subscribe, () => window.location.pathname + window.location.hash);
-    const hashAt = href.indexOf("#");
-    return {
-        path: normalize(hashAt === -1 ? href : href.slice(0, hashAt)),
-        hash: hashAt === -1 ? "" : href.slice(hashAt)
-    };
+    const href = useSyncExternalStore(subscribe, () => {
+        const { pathname, search, hash } = window.location;
+        return movedPages[normalize(pathname)] ?? pathname + search + hash;
+    });
+    const { pathname, search, hash } = new URL(href, window.location.origin);
+    return { path: normalize(pathname), search, hash };
+}
+
+export function resolve(path) {
+    const normalized = normalize(path);
+    const page = pages.find(({ path }) => path === normalized);
+    return page ?? (import.meta.env.DEV ? previewPage(normalized) : null);
 }
 
 export function isPage(url) {
-    return url.origin === window.location.origin && normalize(url.pathname) in pages;
+    const path = normalize(url.pathname);
+    return url.origin === window.location.origin && (resolve(path) !== null || Object.hasOwn(movedPages, path));
 }
 
 export function scrollToHash(hash, behavior = "auto") {
-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    // Decode bad escapes without throwing, and keep literal + and & in the fragment.
+    const fragment = hash.slice(1).replaceAll("+", "%2B").replaceAll("&", "%26");
+    const target = document.getElementById(new URLSearchParams(`id=${fragment}`).get("id"));
     if (!target) return;
     // A target inside a closed <details> has no layout box, so open its containers first.
     for (let box = target.parentElement?.closest("details"); box; box = box.parentElement?.closest("details")) {
@@ -52,6 +62,12 @@ export function scrollToHash(hash, behavior = "auto") {
 
 export function navigate(to) {
     const url = new URL(to, window.location.href);
+    const moved = movedPages[normalize(url.pathname)];
+    if (moved) {
+        const [path, hash] = moved.split("#");
+        url.pathname = path;
+        url.hash = hash;
+    }
     if (url.href === window.location.href) {
         // Clicking the link for the page you're already on just takes you back to the spot.
         if (url.hash) scrollToHash(url.hash);

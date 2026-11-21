@@ -5,14 +5,14 @@ export default function Experience() {
     return (
         <section id="experience" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-5xl mx-auto">
-                <SectionHeading as="h1" title="Experience" />
+                <SectionHeading title="Experience" />
                 <p className="text-sm text-neutral-300 leading-relaxed max-w-2xl -mt-4 mb-10">{experienceIntro}</p>
                 <div className="border-l border-neutral-800 ml-1 space-y-8">
                     {experience.map((entry) => (
                         <article key={entry.id} className="relative pl-7">
                             <span aria-hidden="true" className="absolute -left-[5px] top-2 w-2 h-2 rounded-full bg-green-400" />
                             <div className="flex flex-wrap justify-between gap-2">
-                                <h2 className="font-mono text-base text-white">{entry.title} <span className="text-neutral-400">/ {entry.company}</span></h2>
+                                <h3 className="font-mono text-base text-white">{entry.title} <span className="text-neutral-400">/ {entry.company}</span></h3>
                                 <span className="text-xs text-neutral-400 font-mono">{entry.date || entry.status}</span>
                             </div>
                             {entry.description && <p className="text-sm text-neutral-300 leading-relaxed max-w-3xl mt-3">{entry.description}</p>}

@@ -15,19 +15,37 @@ npm run dev
 
 ## Content
 
-The site has six pages: `/`, `/work`, `/stack`, `/experience`, `/uses` and `/contact`. Uses is linked from the footer, not the main nav. `src/lib/router.js` handles them without a routing library, and `vercel.json` sends every path to `index.html`. Hash links that point inside a collapsed `<details>` (Earlier work, the case studies) open it before scrolling.
+The top navigation shows Brain, Blog and the new Uses page in local development. Add `?slots=1` to a preview URL to see the copy and drawings that still need filling in. Production links follow the flags in `src/data/ready.js`. The router lives in `src/lib/router.js`, and the production build writes HTML for the live routes. Hash links that point inside a collapsed `<details>` (Earlier work, the case studies) open it before scrolling.
 
 Edit profile, projects, skills, and experience in `src/data/portfolio.js`. The page and terminal share those records. On project cards, `role` is the "my part" line, `proof` is the "outcome" line, and `note` holds status or credit text. Leave missing URLs as `null`; the card just drops that link.
 
 sable screenshots live in `src/assets/sable/` (development build, November 2026, sample document; the highlight, underline and note were made in sable itself). Cursus is shown with an illustration, `src/components/CursusOverview.jsx`, not a screenshot; the old captures in `src/assets/cursus/` aren't used. Metadata is in `index.html`; the social image is `public/og-preview.png`.
 
+## Blog posts
+
+Create a Markdown file under `src/content/blog/` named `YYYY-MM-DD-post-slug.md`, for example `2026-11-21-first-post.md`. Start with this frontmatter and write the post below the second `---`.
+
+```md
+---
+title: "My first post"
+date: 2026-11-21
+summary: "One sentence about the post."
+tags: []
+draft: true
+---
+
+Write the post here.
+```
+
+If the dev server is running, run `node scripts/build-content.mjs --dev` from the project directory and refresh `/blog`. `npm run dev` also rebuilds the content on startup. Set `draft: false` when the post is ready to publish. The Blog flag in `src/data/ready.js` controls whether the section goes live.
+
 ## Work page
 
-Each case study has a card and a short write-up inside "Inside …: how it works". sable also has the full architecture map behind "Explore the full architecture", which is lazy-loaded so it isn't in the main bundle. [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
+Each case study has a card and a short write-up in its expandable section. The sable architecture map loads when you select "Explore the full architecture". [WALKTHROUGHS.md](WALKTHROUGHS.md) has the details.
 
 ## Terminal
 
-Click terminal or press Ctrl+K (Cmd+K on macOS). Type `help` for commands or `/` to search. Escape closes it. Doom opens in a separate sandboxed window on desktop. Both load the first time they're opened and stay mounted after that.
+Click terminal or press Ctrl+K (Cmd+K on macOS). Type `help` for commands or `/` to search. In the local preview, `brain` opens the map, `ls brain` lists notes, `cat brain/hi-stranger` shows a note’s details, and `blog` opens the Blog. Escape closes the terminal. Doom opens in a separate sandboxed window on desktop. Both load the first time they're opened and stay mounted after that.
 
 ## Deployment
 

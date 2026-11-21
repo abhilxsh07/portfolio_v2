@@ -11,22 +11,29 @@ const DEFAULT_H = 480;
 const DOOM_URL = "https://thedoggybrad.github.io/doom_on_js-dos/";
 
 const HANDLES = [
-    { id: "n",  cls: "top-0 left-2 right-2 h-1.5 cursor-n-resize",         dx: 0, dy: 1, dw: 0, dh: 1 },
-    { id: "s",  cls: "bottom-0 left-2 right-2 h-1.5 cursor-s-resize",      dx: 0, dy: 0, dw: 0, dh: -1 },
-    { id: "w",  cls: "top-2 bottom-2 left-0 w-1.5 cursor-w-resize",        dx: 1, dy: 0, dw: 1, dh: 0 },
-    { id: "e",  cls: "top-2 bottom-2 right-0 w-1.5 cursor-e-resize",       dx: 0, dy: 0, dw: -1, dh: 0 },
-    { id: "nw", cls: "top-0 left-0 w-3 h-3 cursor-nw-resize",              dx: 1, dy: 1, dw: 1, dh: 1 },
-    { id: "ne", cls: "top-0 right-0 w-3 h-3 cursor-ne-resize",             dx: 0, dy: 1, dw: -1, dh: 1 },
-    { id: "sw", cls: "bottom-0 left-0 w-3 h-3 cursor-sw-resize",           dx: 1, dy: 0, dw: 1, dh: -1 },
-    { id: "se", cls: "bottom-0 right-0 w-3 h-3 cursor-se-resize",          dx: 0, dy: 0, dw: -1, dh: -1 },
+    { id: "n", cls: "top-0 left-2 right-2 h-1.5 cursor-n-resize" },
+    { id: "s", cls: "bottom-0 left-2 right-2 h-1.5 cursor-s-resize" },
+    { id: "w", cls: "top-2 bottom-2 left-0 w-1.5 cursor-w-resize" },
+    { id: "e", cls: "top-2 bottom-2 right-0 w-1.5 cursor-e-resize" },
+    { id: "nw", cls: "top-0 left-0 w-3 h-3 cursor-nw-resize" },
+    { id: "ne", cls: "top-0 right-0 w-3 h-3 cursor-ne-resize" },
+    { id: "sw", cls: "bottom-0 left-0 w-3 h-3 cursor-sw-resize" },
+    { id: "se", cls: "bottom-0 right-0 w-3 h-3 cursor-se-resize" }
 ];
 
 function clamp(val, min, max) {
-    return Math.min(Math.max(val, min), max);
+    return Math.max(min, Math.min(val, max));
+}
+
+function centeredPosition() {
+    return {
+        x: Math.max(0, Math.round((window.innerWidth - DEFAULT_W) / 2)),
+        y: Math.max(0, Math.round((window.innerHeight - DEFAULT_H) / 2))
+    };
 }
 
 export default function DoomPopup({ isOpen, onClose }) {
-    const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [pos, setPos] = useState(centeredPosition);
     const [size, setSize] = useState({ w: DEFAULT_W, h: DEFAULT_H });
     const [isMinimized, setIsMinimized] = useState(false);
     const [isMaximized, setIsMaximized] = useState(false);
@@ -38,16 +45,14 @@ export default function DoomPopup({ isOpen, onClose }) {
     const preMax = useRef({ x: 0, y: 0, w: DEFAULT_W, h: DEFAULT_H });
     const dragStart = useRef({ mx: 0, my: 0, px: 0, py: 0 });
     const resizeStart = useRef(null);
-    const iframeRef = useRef(null);
+    const titleBar = useRef(null);
 
     // Reset geometry when the window opens.
     const [wasOpen, setWasOpen] = useState(isOpen);
     if (wasOpen !== isOpen) {
         setWasOpen(isOpen);
         if (isOpen) {
-            const cx = Math.round((window.innerWidth - DEFAULT_W) / 2);
-            const cy = Math.round((window.innerHeight - DEFAULT_H) / 2);
-            setPos({ x: Math.max(0, cx), y: Math.max(0, cy) });
+            setPos(centeredPosition());
             setSize({ w: DEFAULT_W, h: DEFAULT_H });
             setIsMinimized(false);
             setIsMaximized(false);
@@ -59,9 +64,11 @@ export default function DoomPopup({ isOpen, onClose }) {
     const previousFocus = useRef(null);
     useEffect(() => {
         if (isOpen) {
-            previousFocus.current = document.activeElement;
+            previousFocus.current ??= document.activeElement;
+            titleBar.current?.focus({ preventScroll: true });
         } else if (previousFocus.current) {
-            previousFocus.current.focus?.();
+            if (previousFocus.current.isConnected) previousFocus.current.focus({ preventScroll: true });
+            else document.getElementById("main-content")?.focus({ preventScroll: true });
             previousFocus.current = null;
         }
     }, [isOpen]);
@@ -108,38 +115,17 @@ export default function DoomPopup({ isOpen, onClose }) {
                 newW = clamp(s.w + dxMouse, MIN_W, window.innerWidth - s.x);
             }
             if (handle.id.includes("w")) {
-                const delta = clamp(s.w - dxMouse, MIN_W, window.innerWidth) - s.w;
-                newW = s.w - delta;
-                newX = s.x + delta;
-
-                newW = clamp(s.w + dxMouse * -1 + (s.w + dxMouse * -1 < MIN_W ? MIN_W - (s.w + dxMouse * -1) : 0), MIN_W, window.innerWidth);
-
-                const proposedW = s.w - dxMouse;
-                if (proposedW >= MIN_W) {
-                    newW = proposedW;
-                    newX = s.x + dxMouse;
-                } else {
-                    newW = MIN_W;
-                    newX = s.x + (s.w - MIN_W);
-                }
+                newX = clamp(s.x + dxMouse, 0, s.x + s.w - MIN_W);
+                newW = s.w + s.x - newX;
             }
 
             if (handle.id.includes("s")) {
                 newH = clamp(s.h + dyMouse, MIN_H, window.innerHeight - s.y);
             }
             if (handle.id.includes("n")) {
-                const proposedH = s.h - dyMouse;
-                if (proposedH >= MIN_H) {
-                    newH = proposedH;
-                    newY = s.y + dyMouse;
-                } else {
-                    newH = MIN_H;
-                    newY = s.y + (s.h - MIN_H);
-                }
+                newY = clamp(s.y + dyMouse, 0, s.y + s.h - MIN_H);
+                newH = s.h + s.y - newY;
             }
-
-            newX = Math.max(0, newX);
-            newY = Math.max(0, newY);
 
             setPos({ x: newX, y: newY });
             setSize({ w: newW, h: newH });
@@ -156,7 +142,7 @@ export default function DoomPopup({ isOpen, onClose }) {
     }, [pos, size, isMaximized, isMinimized]);
 
     const onTitleBarKeyDown = useCallback((e) => {
-        if (isMaximized) return;
+        if (isMaximized || e.target !== e.currentTarget) return;
         const deltas = {
             ArrowLeft: [-20, 0],
             ArrowRight: [20, 0],
@@ -222,10 +208,10 @@ export default function DoomPopup({ isOpen, onClose }) {
                     role="dialog"
                     aria-label="DOOM game window"
                     style={{
-                        left: isMaximized ? 0 : pos.x,
-                        top: isMaximized ? 0 : pos.y,
-                        width: isMaximized ? "100vw" : size.w,
-                        height: isMinimized ? "auto" : (isMaximized ? "100vh" : size.h),
+                        left: isMaximized ? 0 : `clamp(0px, ${pos.x}px, 100vw - min(${size.w}px, 100vw))`,
+                        top: isMaximized ? 0 : `clamp(0px, ${pos.y}px, 100dvh - ${HEADER_H}px)`,
+                        width: isMaximized ? "100vw" : `min(${size.w}px, 100vw)`,
+                        height: isMinimized ? "auto" : (isMaximized ? "100dvh" : `min(${size.h}px, 100dvh)`),
                     }}
                 >
                     {!isMaximized && !isMinimized && HANDLES.map((h) => (
@@ -236,6 +222,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                         />
                     ))}
                     <div
+                        ref={titleBar}
                         className={`flex items-center justify-between px-3 py-2 bg-neutral-800 border-b border-neutral-700 shrink-0 select-none focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-500 ${
                             isDragging ? "cursor-grabbing" : "cursor-grab"
                         }`}
@@ -252,7 +239,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                         <div className="flex items-center gap-1.5">
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMinimize(); }}
-                                aria-label="Minimize"
+                                aria-label={isMinimized ? "Restore game" : "Minimize game"}
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -260,7 +247,7 @@ export default function DoomPopup({ isOpen, onClose }) {
                             </button>
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleMaximize(); }}
-                                aria-label="Maximize"
+                                aria-label={isMaximized ? "Restore window size" : "Maximize game"}
                                 className="w-6 h-6 rounded flex items-center justify-center text-neutral-400 hover:text-white hover:bg-neutral-700 transition-colors cursor-pointer"
                                 onMouseDown={(e) => e.stopPropagation()}
                             >
@@ -276,55 +263,51 @@ export default function DoomPopup({ isOpen, onClose }) {
                             </button>
                         </div>
                     </div>
-                    {!isMinimized && (
-                        <div className="flex-1 bg-black relative min-h-0">
-                            {showOverlay && (
-                                <div className="absolute inset-0 z-20" />
-                            )}
+                    <div className="flex-1 bg-black relative min-h-0" hidden={isMinimized}>
+                        {showOverlay && (
+                            <div className="absolute inset-0 z-20" />
+                        )}
 
-                            {loadError ? (
-                                /* Error state */
-                                <div className="flex flex-col items-center justify-center h-full gap-4 p-6">
-                                    <IconAlertTriangle className="w-10 h-10 text-neutral-400" />
-                                    <p className="text-sm text-neutral-300 font-mono text-center">
-                                        Failed to load DOOM
-                                    </p>
-                                    <p className="text-xs text-neutral-400 font-mono text-center">
-                                        Check your connection and try again.
-                                    </p>
-                                    <button
-                                        onClick={handleRetry}
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors text-sm font-medium font-mono cursor-pointer"
-                                    >
-                                        <IconRefresh className="w-4 h-4" />
-                                        Retry
-                                    </button>
-                                </div>
-                            ) : (
-                                /* DOOM iframe */
-                                <>
-                                    {!iframeLoaded && (
-                                        <div className="absolute inset-0 flex items-center justify-center z-10">
-                                            <span className="text-sm text-neutral-400 font-mono">Loading DOOM...</span>
-                                        </div>
-                                    )}
-                                    <iframe
-                                        ref={iframeRef}
-                                        key={loadError ? "retry" : "doom"}
-                                        src={DOOM_URL}
-                                        title="DOOM"
-                                        className="w-full h-full border-0"
-                                        style={{ display: iframeLoaded ? "block" : "block", opacity: iframeLoaded ? 1 : 0 }}
-                                        sandbox="allow-scripts allow-same-origin"
-                                        referrerPolicy="no-referrer"
-                                        allow="autoplay; fullscreen; gamepad"
-                                        onLoad={() => setIframeLoaded(true)}
-                                        onError={() => setLoadError(true)}
-                                    />
-                                </>
-                            )}
-                        </div>
-                    )}
+                        {loadError ? (
+                            /* Error state */
+                            <div className="flex flex-col items-center justify-center h-full gap-4 p-6">
+                                <IconAlertTriangle className="w-10 h-10 text-neutral-400" />
+                                <p className="text-sm text-neutral-300 font-mono text-center">
+                                    Failed to load DOOM
+                                </p>
+                                <p className="text-xs text-neutral-400 font-mono text-center">
+                                    Check your connection and try again.
+                                </p>
+                                <button
+                                    onClick={handleRetry}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-700 bg-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors text-sm font-medium font-mono cursor-pointer"
+                                >
+                                    <IconRefresh className="w-4 h-4" />
+                                    Retry
+                                </button>
+                            </div>
+                        ) : (
+                            /* DOOM iframe */
+                            <>
+                                {!iframeLoaded && (
+                                    <div className="absolute inset-0 flex items-center justify-center z-10">
+                                        <span className="text-sm text-neutral-400 font-mono">Loading DOOM...</span>
+                                    </div>
+                                )}
+                                <iframe
+                                    src={DOOM_URL}
+                                    title="DOOM"
+                                    className="w-full h-full border-0"
+                                    style={{ opacity: iframeLoaded ? 1 : 0 }}
+                                    sandbox="allow-scripts allow-same-origin"
+                                    referrerPolicy="no-referrer"
+                                    allow="autoplay; fullscreen; gamepad"
+                                    onLoad={() => setIframeLoaded(true)}
+                                    onError={() => setLoadError(true)}
+                                />
+                            </>
+                        )}
+                    </div>
                 </motion.div>
             )}
         </AnimatePresence>

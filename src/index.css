@@ -5,12 +5,28 @@
 @theme {
     --font-mono: 'JetBrains Mono', monospace;
     --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --color-paper: #f1e8db;
+    --color-pencil: #cbb397;
 }
 
 html {
     scroll-behavior: smooth;
     /* Clears the fixed navbar for #anchors and for keyboard focus, which scroll-margin on the targets didn't cover */
     scroll-padding-top: 6rem;
+}
+
+main :where(p, li) {
+    text-wrap: pretty;
+}
+
+.home-hero {
+    background: radial-gradient(ellipse at 78% 40%, rgb(92 66 47 / 20%), transparent 57%);
+}
+
+.brain-map a:focus-visible .brain-map-hit {
+    stroke: #86efac;
+    vector-effect: non-scaling-stroke;
 }
 
 .screen-gallery-dialog::backdrop {

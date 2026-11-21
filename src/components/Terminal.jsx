@@ -3,7 +3,24 @@ import { motion, AnimatePresence } from "motion/react";
 import { IconX } from "@tabler/icons-react";
 import { profile } from "../data/portfolio";
 import { getPortfolioOutput } from "../lib/terminalContent";
-import { isPage } from "../lib/router";
+import { isPage, navigate, resolve } from "../lib/router";
+import { BLOG_PATH, BRAIN_MAP_PATH, BRAIN_PATH } from "../data/pages";
+import content from "../generated/index.json";
+
+const brainWord = BRAIN_PATH.slice(1);
+const listNotes = `ls ${brainWord}`;
+const catNote = `cat ${brainWord}/`;
+const openMap = `open ${brainWord} --map`;
+const hasBrain = resolve(BRAIN_PATH) !== null;
+const hasBlog = resolve(BLOG_PATH) !== null;
+const pageCommands = new Map([
+    [brainWord, BRAIN_MAP_PATH],
+    ["map", BRAIN_MAP_PATH],
+    [`open ${brainWord}`, BRAIN_MAP_PATH],
+    [openMap, BRAIN_MAP_PATH],
+    ["blog", BLOG_PATH],
+    ["open blog", BLOG_PATH]
+]);
 
 // Site pages open in place and close the terminal; everything else opens in a new tab.
 const isSitePage = (href) => href.startsWith("#") || isPage(new URL(href, window.location.href));
@@ -23,19 +40,59 @@ const COMMANDS = [
     { name: "projects", desc: "- See my work" },
     { name: "skills", desc: "- View my tech stack" },
     { name: "uses", desc: "- My machine and the tools I use" },
+    ...(hasBrain ? [
+        { name: brainWord, desc: "- Open the Brain map" },
+        { name: listNotes, desc: "- List notes" },
+        { name: catNote + "<slug>", desc: "- Read a note" },
+        { name: openMap, desc: "- Open the map" }
+    ] : []),
+    ...(hasBlog ? [
+        { name: "blog", desc: "- Open the blog" },
+        { name: "ls blog", desc: "- List posts" }
+    ] : []),
     { name: "whoami", desc: "- Who are you?" },
     { name: "cls", desc: "- Clear terminal" },
     { name: "exit", desc: "- Close terminal" }
 ];
 
 function getOutput(cmd) {
+    if (hasBrain && cmd.replace(/\/$/, "") === listNotes) {
+        if (!content.notes.length) return [{ text: "No notes yet.", color: "text-neutral-400" }];
+        return content.notes.map(({ slug }) => ({
+            text: slug,
+            color: "text-neutral-300",
+            href: `${BRAIN_PATH}/${slug}`
+        }));
+    }
+    if (hasBrain && cmd.startsWith(catNote)) {
+        const slug = cmd.slice(catNote.length);
+        const note = resolve(`${BRAIN_PATH}/${slug}`)?.entry;
+        if (!note) return [{ text: "Note not found", color: "text-neutral-400" }];
+        return [
+            { text: note.title, color: "text-green-400", href: `${BRAIN_PATH}/${note.slug}` },
+            { text: note.state, color: "text-neutral-300" },
+            ...(note.hint ? [{ text: note.hint, color: "text-neutral-300" }] : [])
+        ];
+    }
+    if (hasBlog && cmd.replace(/\/$/, "") === "ls blog") {
+        if (!content.posts.length) return [{ text: "No posts yet.", color: "text-neutral-400" }];
+        return content.posts.map(({ slug, title }) => ({
+            text: title,
+            color: "text-neutral-300",
+            href: `${BLOG_PATH}/${slug}`
+        }));
+    }
     const portfolioOutput = getPortfolioOutput(cmd);
     if (portfolioOutput) return portfolioOutput;
     switch (cmd) {
         case "help":
             return COMMANDS.map((command) => ({ text: `  ${command.name.padEnd(14)} ${command.desc}`, color: "text-neutral-300" }));
-        case "ls":
-            return [{ text: "projects/  skills.json  experience.txt  uses.txt  resume.txt", color: "text-neutral-300" }];
+        case "ls": {
+            const files = ["projects/", "skills.json", "experience.txt", "uses.txt", "resume.txt"];
+            if (hasBrain) files.push(brainWord + "/");
+            if (hasBlog) files.push("blog/");
+            return [{ text: files.join("  "), color: "text-neutral-300" }];
+        }
         case "ping":
             return [{ text: "PONG — you're connected to my portfolio.", color: "text-green-400" }];
         case "neofetch":
@@ -194,22 +251,21 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     const [isBrewing, setIsBrewing] = useState(false);
 
     const inputRef = useRef(null);
+    const dialogRef = useRef(null);
     const scrollRef = useRef(null);
     const paletteScrollRef = useRef(null);
     const selectedItemRef = useRef(null);
 
-    useEffect(() => {
-        if (isOpen && inputRef.current) {
-            setTimeout(() => inputRef.current?.focus(), 100);
-        }
-    }, [isOpen]);
-
     const previousFocus = useRef(null);
     useEffect(() => {
         if (isOpen) {
-            previousFocus.current = document.activeElement;
+            previousFocus.current ??= document.activeElement;
+            inputRef.current?.focus({ preventScroll: true });
         } else if (previousFocus.current) {
-            previousFocus.current.focus?.();
+            const focused = document.activeElement;
+            if (focused === document.body || dialogRef.current?.contains(focused)) {
+                previousFocus.current.focus({ preventScroll: true });
+            }
             previousFocus.current = null;
         }
     }, [isOpen]);
@@ -233,10 +289,11 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (e.defaultPrevented) return;
             if (e.key === "Escape" && isOpen) onClose();
 
             if (e.key === "Tab" && isOpen) {
-                const terminal = document.querySelector('[role="dialog"][aria-label="Interactive terminal"]');
+                const terminal = dialogRef.current;
                 if (!terminal) return;
                 const focusable = terminal.querySelectorAll('a[href], input, button, [tabindex]:not([tabindex="-1"])');
                 if (focusable.length === 0) return;
@@ -279,19 +336,28 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
     }
 
     const executeCommand = useCallback((cmd) => {
-        const trimmed = cmd.trim().toLowerCase();
+        const trimmed = cmd.trim().toLowerCase().replace(/\s+/g, " ");
         if (!trimmed) return;
 
-        if (trimmed === "cls") {
+        if (trimmed === "cls" || trimmed === "clear") {
             setHistory([]);
             setIsBrewing(false);
             setInput("");
+            setShowPalette(false);
             return;
         }
 
         if (trimmed === "exit" || trimmed === "close") {
             onClose();
             setInput("");
+            setShowPalette(false);
+            return;
+        }
+
+        if (hasBrain && trimmed === catNote + "<slug>") {
+            setInput(catNote);
+            setShowPalette(false);
+            inputRef.current?.focus();
             return;
         }
 
@@ -310,10 +376,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                 ]);
             } else {
                 const doomOutput = [
-                    { text: "> Loading doom.wad...", color: "text-neutral-400" },
-                    { text: "  [OK] Renderer initialized", color: "text-green-500" },
-                    { text: "  [OK] Audio subsystem ready", color: "text-green-500" },
-                    { text: "  [OK] DOOM is running", color: "text-green-500" }
+                    { text: isDoomOpen ? "DOOM window is open." : "Opening the DOOM window.", color: "text-neutral-300" }
                 ];
                 setHistory((prev) => [
                     ...prev,
@@ -321,6 +384,7 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     { type: "output", lines: doomOutput }
                 ]);
                 if (!isDoomOpen) onOpenDoom?.();
+                onClose();
             }
             setCmdHistory((prev) => [trimmed, ...prev]);
             setCmdIndex(-1);
@@ -351,16 +415,24 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             return;
         }
 
-        const output = getOutput(trimmed);
+        const href = pageCommands.get(trimmed);
+        const canOpen = href && isSitePage(href);
+        const output = href
+            ? (canOpen ? [] : [{ text: "This page isn’t published yet.", color: "text-neutral-400" }])
+            : getOutput(trimmed);
         setHistory((prev) => [
             ...prev,
             { type: "command", cmd: trimmed },
-            { type: "output", lines: output }
+            ...(output.length ? [{ type: "output", lines: output }] : [])
         ]);
         setCmdHistory((prev) => [trimmed, ...prev]);
         setCmdIndex(-1);
         setInput("");
         setShowPalette(false);
+        if (canOpen) {
+            onClose();
+            navigate(href);
+        }
     }, [onClose, onOpenDoom, isDoomOpen, isBrewing]);
 
     const handleCoffeeDone = useCallback(() => {
@@ -377,18 +449,18 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
             }
             if (e.key === "ArrowDown") {
                 e.preventDefault();
-                setPaletteIndex((prev) => Math.min(filteredCommands.length - 1, prev + 1));
+                setPaletteIndex((prev) => Math.min(Math.max(0, filteredCommands.length - 1), prev + 1));
                 return;
             }
             if (e.key === "Enter") {
                 e.preventDefault();
                 const selected = filteredCommands[paletteIndex];
-                if (selected) {
-                    executeCommand(selected.name);
-                }
+                executeCommand(selected?.name ?? input.slice(1));
                 return;
             }
             if (e.key === "Escape") {
+                e.preventDefault();
+                setInput("");
                 setShowPalette(false);
                 return;
             }
@@ -425,16 +497,17 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
+                    ref={dialogRef}
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 20, scale: 0.95 }}
                     transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                    className="fixed bottom-6 right-6 w-[min(500px,calc(100vw-3rem))] max-h-[400px] bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl shadow-black/50 z-50 flex flex-col"
+                    className="fixed bottom-6 right-6 z-[70] flex max-h-[min(400px,calc(100dvh-3rem))] w-[min(500px,calc(100vw-3rem))] flex-col rounded-xl border border-neutral-800 bg-neutral-900 shadow-2xl shadow-black/50"
                     role="dialog"
                     aria-label="Interactive terminal"
                     aria-modal="true"
                 >
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
+                    <div className="flex shrink-0 items-center justify-between border-b border-neutral-800 px-4 py-1">
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-sm text-white font-medium">
                                 <span className="text-neutral-400">&gt;_</span> terminal
@@ -444,14 +517,14 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                         <button
                             onClick={onClose}
                             aria-label="Close terminal"
-                            className="text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                            className="-mr-2 grid size-11 cursor-pointer place-items-center rounded text-neutral-400 transition-colors hover:text-white"
                         >
                             <IconX className="w-4 h-4" />
                         </button>
                     </div>
                     <div
                         ref={scrollRef}
-                        className="flex-1 overflow-y-auto p-4 bg-neutral-950 font-mono text-sm space-y-2 min-h-0"
+                        className="min-h-0 flex-1 space-y-2 overflow-y-auto bg-neutral-950 p-4 font-mono text-sm [overflow-wrap:anywhere]"
                     >
                         {history.map((entry, i) => {
                             if (entry.type === "command") {
@@ -485,18 +558,19 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                     </div>
                     <div className="relative shrink-0">
                         <AnimatePresence>
-                            {showPalette && filteredCommands.length > 0 && (
+                            {showPalette && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 5 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 5 }}
                                     ref={paletteScrollRef}
-                                    className="absolute bottom-full left-0 right-0 border-t border-neutral-800 bg-neutral-900 rounded-t-lg max-h-[240px] overflow-y-auto z-20"
+                                    className="absolute bottom-full left-0 right-0 z-20 max-h-[min(15rem,calc(100dvh-10rem))] overflow-y-auto rounded-t-lg border-t border-neutral-800 bg-neutral-900"
                                 >
                                     <div className="px-3 py-1.5 flex justify-between sticky top-0 bg-neutral-900 z-10">
-                                        <span className="text-[10px] text-neutral-600 uppercase tracking-wider">Commands</span>
-                                        <span className="text-[10px] text-neutral-600">↑↓ navigate · Enter select</span>
+                                        <span className="text-xs text-neutral-400">Commands</span>
+                                        <span className="text-xs text-neutral-400">↑↓ navigate · Enter select</span>
                                     </div>
+                                    {filteredCommands.length === 0 && <p className="px-3 py-2 text-sm text-neutral-300">No matching commands</p>}
                                     {filteredCommands.map((cmd, i) => (
                                         <button
                                             key={cmd.name}
@@ -523,8 +597,8 @@ export default function Terminal({ isOpen, onClose, onOpenDoom, isDoomOpen }) {
                                 value={input}
                                 onChange={(e) => updateInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                placeholder='type command or press /'
-                                className="flex-1 bg-transparent text-white font-mono text-sm placeholder-neutral-600 outline-none"
+                                placeholder="Type a command or press /"
+                                className="min-w-0 flex-1 bg-transparent font-mono text-sm text-white outline-none placeholder:text-neutral-400"
                                 aria-label="Terminal command input"
                             />
                         </div>

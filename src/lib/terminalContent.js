@@ -61,8 +61,12 @@ export function getPortfolioOutput(command) {
             return [line(`now (updated ${now.updated})`, "text-green-400"), line(now.text)];
         case "uses":
             return uses.flatMap(({ heading, items }) => [
-                line(heading, "text-green-400"),
-                ...items.map((item) => line(`  ${item}`))
+                ...(heading === null ? [] : [line(heading, "text-green-400")]),
+                ...items.map(({ name, href, since, text, retired }) => line(
+                    `  ${name}${text ? ` — ${text}` : ""}${since ? ` (${since})` : ""}`,
+                    retired ? "text-neutral-400" : "text-neutral-300",
+                    href
+                ))
             ]);
         case "contact":
             return contactLinks.map((link) => line(link.label, "text-neutral-300", link.href));

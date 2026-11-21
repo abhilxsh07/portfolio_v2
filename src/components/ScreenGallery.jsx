@@ -68,7 +68,7 @@ export default function ScreenGallery({ name, screens, caption, width = 1440, he
                         type="button"
                         onClick={() => dialog.current.close()}
                         aria-label={`Close ${name} screenshot`}
-                        className="rounded-lg p-2 text-neutral-300 hover:bg-neutral-800"
+                        className="grid size-11 shrink-0 place-items-center rounded-lg text-neutral-300 hover:bg-neutral-800"
                     >
                         <IconX size={20} />
                     </button>
@@ -85,7 +85,7 @@ export default function ScreenGallery({ name, screens, caption, width = 1440, he
                         type="button"
                         onClick={() => move(-1)}
                         aria-label={`Previous ${name} screenshot`}
-                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs hover:bg-neutral-800"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-xs hover:bg-neutral-800"
                     >
                         <IconArrowLeft size={16} /> Previous
                     </button>
@@ -94,7 +94,7 @@ export default function ScreenGallery({ name, screens, caption, width = 1440, he
                         type="button"
                         onClick={() => move(1)}
                         aria-label={`Next ${name} screenshot`}
-                        className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs hover:bg-neutral-800"
+                        className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-xs hover:bg-neutral-800"
                     >
                         Next <IconArrowRight size={16} />
                     </button>

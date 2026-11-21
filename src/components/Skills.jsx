@@ -3,10 +3,10 @@ import SectionHeading from "./SectionHeading";
 
 export default function Skills() {
     return (
-        <section id="skills" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
+        <section id="stack" className="relative z-10 px-6 md:px-16 lg:px-24 py-20">
             <div className="max-w-5xl mx-auto">
-                <SectionHeading as="h1" title="Stack" note="Tools used in these projects" />
-                <h2 className="text-sm font-mono text-white mb-3">Built with</h2>
+                <SectionHeading title="Stack" note="Tools used in these projects" />
+                <h3 className="text-sm font-mono text-white mb-3">Built with</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                     {builtWith.map(({ projectId, skills }) => (
                         <a
@@ -23,12 +23,12 @@ export default function Skills() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-8 mt-10">
                     <div>
-                        <h2 className="text-sm font-mono text-white mb-3">Also use</h2>
+                        <h3 className="text-sm font-mono text-white mb-3">Also use</h3>
                         <p className="text-sm text-neutral-400 leading-relaxed">{alsoUse.join(" · ")}</p>
                     </div>
                     {learning.length > 0 && (
                         <div>
-                            <h2 className="text-sm font-mono text-white mb-3">Learning</h2>
+                            <h3 className="text-sm font-mono text-white mb-3">Learning</h3>
                             <p className="text-sm text-neutral-400 leading-relaxed">{learning.join(" · ")}</p>
                         </div>
                     )}

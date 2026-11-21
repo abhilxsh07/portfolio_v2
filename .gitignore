@@ -11,6 +11,8 @@ node_modules
 .npm-cache
 dist
 dist-ssr
+/src/generated/*
+!/src/generated/site-log.json
 docs
 *.local
 

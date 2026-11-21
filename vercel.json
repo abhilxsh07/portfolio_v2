@@ -1,6 +1,16 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "cleanUrls": true,
   "redirects": [
+    {
+      "source": "/stack",
+      "destination": "/uses#stack",
+      "permanent": true
+    },
+    {
+      "source": "/experience",
+      "destination": "/work#experience",
+      "permanent": true
+    },
     {
       "source": "/resume",
       "destination": "/resume.pdf",
