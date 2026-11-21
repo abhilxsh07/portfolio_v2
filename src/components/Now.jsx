@@ -1,4 +1,6 @@
-import { now } from "../data/portfolio";
+import { getProject, now } from "../data/portfolio";
+
+const release = getProject("sable").downloadUrl;
 
 // "1 Nov 2026" reads better than the ISO date. The T00:00 keeps it from slipping a day in other timezones.
 const updated = new Date(`${now.updated}T00:00:00`).toLocaleDateString("en-GB", {
@@ -18,7 +20,10 @@ export default function Now() {
                         </h2>
                         <time dateTime={now.updated} className="font-mono text-xs text-pencil">{updated}</time>
                     </div>
-                    <p className="self-center text-sm leading-relaxed text-neutral-300">{now.text}</p>
+                    <p className="self-center text-sm leading-relaxed text-neutral-300">
+                        {now.text}{" "}
+                        <a href={release} className="whitespace-nowrap text-green-400 underline underline-offset-4 hover:text-green-300">View the GitHub release</a>
+                    </p>
                 </div>
             </div>
         </section>

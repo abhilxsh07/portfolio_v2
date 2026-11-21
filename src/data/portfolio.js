@@ -17,9 +17,9 @@ export const profile = {
 
 // Shows up on the home page and in the terminal. Bump the date whenever this changes.
 export const now = {
-    updated: "2026-11-19",
+    updated: "2026-11-21",
     text:
-        "sable v1.0.0-alpha.1 is out, with installers for x64 and ARM64. Next: a run on a clean PC, real ARM hardware and signed installers."
+        "I put sable's first public alpha up on GitHub. There are Windows installers and portable builds for both x64 and ARM64."
 };
 
 export const projects = [

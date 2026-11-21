@@ -195,11 +195,11 @@ function SableFeature() {
                 branches={sableBranches}
             />
             <Decisions items={sableDecisions} />
-            <Prose title="Limits and what's next">
+            <Prose title="In the public alpha">
                 <p>
-                    It's Windows-only, which is the point of going native. OCR, redaction and adding passwords are out
-                    for now. v1.0.0-alpha.1 has notes and markup, form filling, Fill & Sign and page organizing. Before a
-                    stable release it still needs a run on a clean PC and on real ARM hardware, and signed installers.
+                    v1.0.0-alpha.1 has notes and markup, form filling, Fill & Sign and page organizing. On GitHub,
+                    there are installers and portable builds for x64 and ARM64 Windows. OCR, redaction and adding
+                    passwords are out for now.
                 </p>
             </Prose>
             <ArchitectureExplorer tourId="sable" name="sable" />
