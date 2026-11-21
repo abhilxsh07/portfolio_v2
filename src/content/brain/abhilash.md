@@ -10,6 +10,6 @@ draft: true
 ---
 
 - [[sable]]
-- [[keep]]
+- [[hi-stranger]]
 - [[forma-labs]]
 - [[digital-art]]

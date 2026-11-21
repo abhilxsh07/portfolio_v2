@@ -10,5 +10,4 @@ draft: true
 ---
 
 - [[digital-art]]
-- [[keep]]
 - [[psychological-horror]]
