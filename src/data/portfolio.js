@@ -290,7 +290,7 @@ export const uses = [
         heading: null,
         doodle: "doodle-mug.svg",
         items: [
-            { name: "Coffee (Nescafé Classic, Everyday whitener, sugar)", href: null, since: null, text: null, desk: "mug" }
+            { name: "Blue Tokai Attikan Estate (medium-dark roast, ground)", href: "https://bluetokaicoffee.com/products/attikan-estate", since: null, text: null, desk: "mug" }
         ]
     },
     {
