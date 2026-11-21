@@ -74,13 +74,18 @@ function markdownBody(page, pages) {
     }
 }
 
+// Posts and inked notes are what the feed carries. Until there is one, there is no feed.
+export function feedPages(pages) {
+    return pages.filter(({ id, entry }) => id === "blog-post" || (id === "brain-note" && entry.state === "ink"));
+}
+
 export function writeDiscovery(pages) {
     const today = new Date().toISOString().slice(0, 10);
     const sitemap = pages.map((page) => `    <url><loc>${escapeText(SITE_URL + page.path)}</loc><lastmod>${dateOf(page) ?? today}</lastmod></url>`).join("\n");
     writeFileSync("dist/sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemap}\n</urlset>\n`);
 
     const home = pages.find(({ path }) => path === "/");
-    const items = pages.filter(({ id, entry }) => id === "blog-post" || (id === "brain-note" && entry.state === "ink"))
+    const items = feedPages(pages)
         .sort((a, b) => dateOf(b).localeCompare(dateOf(a)) || a.path.localeCompare(b.path))
         .map((page) => {
             const href = escapeText(SITE_URL + page.path);
@@ -95,18 +100,20 @@ export function writeDiscovery(pages) {
                 "        </item>"
             ].join("\n");
         });
-    writeFileSync("dist/rss.xml", [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<rss version="2.0">',
-        "    <channel>",
-        `        <title>${escapeText(siteTitle)}</title>`,
-        `        <link>${SITE_URL}/</link>`,
-        `        <description>${escapeText(home.description)}</description>`,
-        ...items,
-        "    </channel>",
-        "</rss>",
-        ""
-    ].join("\n"));
+    if (items.length) {
+        writeFileSync("dist/rss.xml", [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<rss version="2.0">',
+            "    <channel>",
+            `        <title>${escapeText(siteTitle)}</title>`,
+            `        <link>${SITE_URL}/</link>`,
+            `        <description>${escapeText(home.description)}</description>`,
+            ...items,
+            "    </channel>",
+            "</rss>",
+            ""
+        ].join("\n"));
+    }
 
     const listing = [`# ${siteTitle}`, "", `> ${home.description}`, ""];
     for (const page of pages) {

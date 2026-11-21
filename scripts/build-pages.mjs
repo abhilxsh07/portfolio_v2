@@ -1,10 +1,13 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { contentPages, livePages, markdownPath, notFoundPage, SITE_URL } from "../src/data/pages.js";
-import { escapeText, writeDiscovery } from "./site-text.mjs";
+import { escapeText, feedPages, writeDiscovery } from "./site-text.mjs";
 
 const index = readFileSync("dist/index.html", "utf8");
 const content = JSON.parse(readFileSync("src/generated/index.json", "utf8"));
+
+const pages = [...livePages(), ...contentPages(content)];
+const hasFeed = feedPages(pages).length > 0;
 
 function pageHtml({ title, description, socialDescription = description, path, entry }) {
     const pageTitle = escapeText(title);
@@ -20,12 +23,13 @@ function pageHtml({ title, description, socialDescription = description, path, e
         .replace(/<link rel="canonical" href="[^"]*"\s*\/?>/, () => url ? `<link rel="canonical" href="${url}" />` : "")
         .replace(/<meta property="og:url" content="[^"]*"\s*\/?>/, () => url ? `<meta property="og:url" content="${url}" />` : "")
         .replace('property="og:type" content="website"', `property="og:type" content="${entry ? "article" : "website"}"`)
-        .replace("</head>", () => path
-            ? `    <link rel="alternate" type="text/markdown" href="${escapeText(SITE_URL + markdownPath(path))}" />\n</head>`
-            : "</head>");
+        .replace("</head>", () => [
+            hasFeed && `    <link rel="alternate" type="application/rss+xml" title="Abhilash Kar" href="/rss.xml" />\n`,
+            path && `    <link rel="alternate" type="text/markdown" href="${escapeText(SITE_URL + markdownPath(path))}" />\n`,
+            "</head>"
+        ].filter(Boolean).join(""));
 }
 
-const pages = [...livePages(), ...contentPages(content)];
 for (const page of pages) {
     const file = page.path === "/" ? "dist/index.html" : `dist${page.path}.html`;
     mkdirSync(dirname(file), { recursive: true });
