@@ -4,7 +4,7 @@ import MarkdownBody from "./MarkdownBody";
 import PageShell from "./PageShell";
 import { brainRegions } from "../data/brain";
 import { copy } from "../data/copy";
-import { BRAIN_PATH, BLOG_PATH } from "../data/pages";
+import { BRAIN_PATH, BLOG_PATH, BRAIN_MAP_PATH } from "../data/pages";
 import { ready } from "../data/ready";
 import { resolve } from "../lib/router";
 import { readVisited, writeVisited } from "../lib/brainVisited";
@@ -48,9 +48,10 @@ export default function BrainNote({ note, showSlots }) {
         <PageShell
             title={title}
             headingColor={tone}
+            wide
             beforeTitle={
                 <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <a href={showSlots ? `${BRAIN_PATH}?slots=1` : BRAIN_PATH} className="inline-flex min-h-11 items-center font-mono text-xs text-pencil hover:text-green-400">Back to Brain</a>
+                    <a href={showSlots ? `${BRAIN_MAP_PATH}&slots=1` : BRAIN_MAP_PATH} className="inline-flex min-h-11 items-center font-mono text-xs text-pencil hover:text-green-400">Back to Brain map</a>
                     {showDrawings && <img src={`/drawings/${doodle}`} alt="" className="h-10 w-14 object-contain" />}
                     {showDrawings && pencil && <img src="/drawings/pencil-note.svg" alt="" className="h-10 w-14 object-contain" />}
                     {note.draft && <span className="font-mono text-xs text-neutral-400">Draft</span>}
@@ -73,11 +74,11 @@ export default function BrainNote({ note, showSlots }) {
                     {tags.map((tag) => <li key={tag}>{tag}</li>)}
                 </ul>
             )}
-            <article className={tone}>
+            <article className={`max-w-3xl md:text-lg ${tone}`}>
                 <Body />
             </article>
             {backlinks.length > 0 && (
-                <section className="mt-10 border-t border-neutral-800 pt-5">
+                <section className="mt-10 max-w-3xl border-t border-neutral-800 pt-5">
                     <h2 className="mb-3 font-serif text-xl italic text-paper">
                         {copy.brain.backlinks !== null || showSlots ? <Copy k="brain.backlinks" /> : "Linked from"}
                     </h2>
@@ -89,11 +90,12 @@ export default function BrainNote({ note, showSlots }) {
                 </section>
             )}
             {content.map && (
-                <div className="mt-10">
+                <section aria-labelledby="note-map-heading" className="mt-10">
+                    <h2 id="note-map-heading" className="mb-4 font-serif text-xl italic text-paper">Note map</h2>
                     <Suspense fallback={null}>
                         <BrainMap map={content.map} centre={`note:${slug}`} newlyOpened={newlyOpened} showSlots={showSlots} />
                     </Suspense>
-                </div>
+                </section>
             )}
         </PageShell>
     );

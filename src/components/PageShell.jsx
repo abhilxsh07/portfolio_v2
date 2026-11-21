@@ -1,10 +1,10 @@
 import Copy from "./Copy";
 import SectionHeading from "./SectionHeading";
 
-export default function PageShell({ title, intro, beforeTitle, headingColor = "text-paper", children }) {
+export default function PageShell({ title, intro, beforeTitle, headingColor = "text-paper", wide = false, children }) {
     return (
         <section className="relative z-10 px-6 pb-20 pt-28 md:px-16">
-            <div className="mx-auto max-w-3xl">
+            <div className={`mx-auto ${wide ? "max-w-6xl" : "max-w-3xl"}`}>
                 {beforeTitle}
                 <SectionHeading as="h1" title={title} headingClass={`font-mono ${headingColor}`} />
                 {intro && (

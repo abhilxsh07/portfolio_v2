@@ -22,7 +22,7 @@ const notes = [...content.notes].sort((a, b) => (b.inked ?? b.pencilled).localeC
 
 function BrainList() {
     return (
-        <div className="space-y-10">
+        <div className="max-w-3xl space-y-10">
             {brainRegions.map(({ id, label }) => {
                 const group = notes.filter(({ region }) => region === id);
                 if (!group.length) return null;
@@ -68,7 +68,7 @@ export default function Brain({ title, search, showSlots }) {
     }
 
     return (
-        <PageShell title={title} intro={copy.brain.intro !== null || showSlots ? "brain.intro" : null}>
+        <PageShell title={title} intro={copy.brain.intro !== null || showSlots ? "brain.intro" : null} wide>
             {content.map ? (
                 <>
                     <div role="tablist" aria-label="Note views" className="-ml-3 mb-4 flex gap-3 px-3" onPointerEnter={loadMap} onFocus={loadMap}>
