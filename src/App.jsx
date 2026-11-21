@@ -10,15 +10,8 @@ import EarlierWork from "./components/EarlierWork";
 import Experience from "./components/Experience";
 import Building from "./components/Building";
 import Uses from "./components/Uses";
-import UsesV2 from "./components/UsesV2";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
-import Brain from "./components/Brain";
-import BrainNote from "./components/BrainNote";
-import Blog from "./components/Blog";
-import BlogPost from "./components/BlogPost";
-import SiteLog from "./components/SiteLog";
-import Colophon from "./components/Colophon";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import StarsBackground from "./components/ui/StarsBackground";
@@ -32,6 +25,15 @@ import { markdownPath, notFoundPage, SITE_URL } from "./data/pages";
 // so the terminal keeps its history and Doom keeps its window between opens.
 const Terminal = lazy(() => import("./components/Terminal"));
 const DoomPopup = lazy(() => import("./components/DoomPopup"));
+
+// The newer pages only load when someone visits them.
+const UsesV2 = lazy(() => import("./components/UsesV2"));
+const Brain = lazy(() => import("./components/Brain"));
+const BrainNote = lazy(() => import("./components/BrainNote"));
+const Blog = lazy(() => import("./components/Blog"));
+const BlogPost = lazy(() => import("./components/BlogPost"));
+const SiteLog = lazy(() => import("./components/SiteLog"));
+const Colophon = lazy(() => import("./components/Colophon"));
 
 function Page({ page, search, onOpenTerminal }) {
     switch (page?.id ?? page?.path) {
@@ -202,7 +204,9 @@ export default function App() {
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
-                    <Page page={page} search={search} onOpenTerminal={openTerminal} />
+                    <Suspense fallback={null}>
+                        <Page page={page} search={search} onOpenTerminal={openTerminal} />
+                    </Suspense>
                 </main>
 
                 <Footer />
