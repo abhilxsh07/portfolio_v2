@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 
 const DoodleCanvas = lazy(() => import("./DoodleCanvas"));
 
-export default function DoodleBox() {
+export default function DoodleBox({ showSlots }) {
     const box = useRef(null);
     const [near, setNear] = useState(false);
 
@@ -17,8 +17,11 @@ export default function DoodleBox() {
     }, []);
 
     return (
-        <div ref={box} className="mt-14 min-h-[240px] md:min-h-[320px]">
-            {near && <Suspense fallback={null}><DoodleCanvas /></Suspense>}
-        </div>
+        <section ref={box} aria-labelledby="doodle-box-title" className="mt-9">
+            <h2 id="doodle-box-title" className="mb-3 font-mono text-base text-neutral-200">Doodle box</h2>
+            <div className="min-h-[240px] md:min-h-[320px]">
+                {near && <Suspense fallback={null}><DoodleCanvas showSlots={showSlots} /></Suspense>}
+            </div>
+        </section>
     );
 }

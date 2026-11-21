@@ -36,6 +36,7 @@ const SiteLog = lazy(() => import("./components/SiteLog"));
 const Colophon = lazy(() => import("./components/Colophon"));
 
 function Page({ page, search, onOpenTerminal }) {
+    const showSlots = import.meta.env.DEV && new URLSearchParams(search).has("slots");
     switch (page?.id ?? page?.path) {
         case "/":
             return (
@@ -63,11 +64,11 @@ function Page({ page, search, onOpenTerminal }) {
                 </div>
             );
         case "uses-v2":
-            return <UsesV2 />;
+            return <UsesV2 showSlots={showSlots} />;
         case "brain":
             return <Brain title={page.heading} search={search} />;
         case "blog":
-            return <Blog />;
+            return <Blog showSlots={showSlots} />;
         case "colophon":
             return <Colophon />;
         case "log":

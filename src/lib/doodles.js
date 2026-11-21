@@ -70,7 +70,7 @@ function makeBody(strokes, width) {
     return Body.create({ parts, friction: .65, restitution: .1, sleepThreshold: 35 });
 }
 
-export function startDoodles(canvas, setCount, reduced) {
+export function startDoodles(canvas, setCount, reduced, showFloor) {
     const context = canvas.getContext("2d");
     const engine = Engine.create({ enableSleeping: true });
     const runner = Runner.create();
@@ -116,7 +116,12 @@ export function startDoodles(canvas, setCount, reduced) {
         const { width, height, scale } = box;
         context.setTransform(scale, 0, 0, scale, 0, 0);
         context.clearRect(0, 0, width, height);
-        if (floor.complete && floor.naturalWidth) context.drawImage(floor, 0, height - 36, width, 36);
+        if (floor.complete && floor.naturalWidth) {
+            context.drawImage(floor, 0, height - 36, width, 36);
+        } else {
+            context.fillStyle = "#404040";
+            context.fillRect(0, height - 10, width, 1);
+        }
         const now = performance.now();
         for (const item of [...doodles, ...fades]) {
             const { body, ink, width, strokes, fadedAt } = item;
@@ -266,7 +271,7 @@ export function startDoodles(canvas, setCount, reduced) {
     }
 
     floor.onload = draw;
-    floor.src = "/drawings/floor.svg";
+    if (showFloor) floor.src = "/drawings/floor.svg";
     resize();
     for (const entry of saved.values()) restore(entry);
     setCount(doodles.length);
