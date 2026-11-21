@@ -5,6 +5,9 @@
 @theme {
     --font-mono: 'JetBrains Mono', monospace;
     --font-sans: 'Inter', system-ui, sans-serif;
+    --font-serif: Georgia, 'Times New Roman', serif;
+    --color-paper: #f1e8db;
+    --color-pencil: #cbb397;
 }
 
 html {
@@ -15,6 +18,10 @@ html {
 
 main :where(p, li) {
     text-wrap: pretty;
+}
+
+.home-hero {
+    background: radial-gradient(ellipse at 78% 40%, rgb(92 66 47 / 20%), transparent 57%);
 }
 
 .screen-gallery-dialog::backdrop {

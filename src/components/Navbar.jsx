@@ -43,28 +43,25 @@ export default function Navbar({ path }) {
             label,
             href,
             current,
-            className: `font-mono text-sm py-2 transition-colors ${current ? "text-white" : "text-neutral-400 hover:text-white"}`
+            className: `inline-flex min-h-11 items-center font-mono text-sm transition-colors ${current ? "text-paper underline decoration-pencil/60 underline-offset-8" : "text-neutral-400 hover:text-paper"}`
         };
     });
 
     return (
-        <motion.nav
+        <nav
             ref={navRef}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
             className="fixed top-0 left-0 right-0 z-50 bg-neutral-950/80 backdrop-blur-md border-b border-neutral-800/60"
             aria-label="Main navigation"
         >
-            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-2.5">
                 <a
                     href="/"
                     onClick={() => setMenuOpen(false)}
                     aria-current={path === "/" ? "page" : undefined}
-                    className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                    className="flex min-h-11 items-center gap-2 transition-opacity hover:opacity-80"
                 >
                     <img src="/favicon.svg" alt="" className="w-6 h-6 rounded" />
-                    <span className="font-mono text-sm text-neutral-300">abhilashkar.dev</span>
+                    <span className="font-mono text-sm text-paper">abhilashkar.dev</span>
                 </a>
 
                 <div className="hidden md:flex items-center gap-5 lg:gap-8">
@@ -117,6 +114,6 @@ export default function Navbar({ path }) {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.nav>
+        </nav>
     );
 }

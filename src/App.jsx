@@ -76,8 +76,8 @@ function Page({ page, search, onOpenTerminal }) {
             return (
                 <>
                     <Hero onOpenTerminal={onOpenTerminal} />
-                    <WorkPreviews />
                     <Now />
+                    <WorkPreviews />
                     <HomeLinks />
                 </>
             );
@@ -100,17 +100,17 @@ function Page({ page, search, onOpenTerminal }) {
         case "uses-v2":
             return <UsesV2 showSlots={showSlots} />;
         case "brain":
-            return <Brain title={page.heading} search={search} />;
+            return <Brain title={page.heading} search={search} showSlots={showSlots} />;
         case "blog":
             return <Blog showSlots={showSlots} />;
         case "colophon":
-            return <Colophon />;
+            return <Colophon showSlots={showSlots} />;
         case "log":
-            return <SiteLog />;
+            return <SiteLog showSlots={showSlots} />;
         case "blog-post":
             return <BlogPost post={page.entry} />;
         case "brain-note":
-            return <BrainNote key={page.entry.slug} note={page.entry} />;
+            return <BrainNote key={page.entry.slug} note={page.entry} showSlots={showSlots} />;
         case "/contact":
             return (
                 <div className="pt-10">
@@ -205,7 +205,7 @@ export default function App() {
     return (
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen bg-neutral-950 text-white">
-                <StarsBackground starCount={120} />
+                {path === "/" && <StarsBackground starCount={48} />}
                 <Navbar path={path} />
 
                 <main id="main-content" ref={mainRef} tabIndex={-1} className="outline-none">
@@ -215,7 +215,7 @@ export default function App() {
                     </Suspense>
                 </main>
 
-                <Footer />
+                <Footer onOpenTerminal={openTerminal} />
 
                 <BackToTop />
 

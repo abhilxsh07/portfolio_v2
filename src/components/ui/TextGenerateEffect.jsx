@@ -14,8 +14,8 @@ export default function TextGenerateEffect({
             {words.map((word, i) => (
                 <motion.span
                     key={i}
-                    initial={{ opacity: 0, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, filter: "blur(0px)" }}
+                    initial={{ opacity: 0.75 }}
+                    animate={{ opacity: 1 }}
                     transition={{
                         duration: wordDuration,
                         delay: startDelay + i * staggerDelay,
